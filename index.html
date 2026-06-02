@@ -1,0 +1,871 @@
+bash
+
+cat /mnt/user-data/outputs/workout_app.html
+Output
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Тренування">
+<meta name="theme-color" content="#0f0f0f">
+<title>Щоденник тренувань</title>
+<style>
+:root {
+  --bg: #0f0f0f;
+  --surface: #1a1a1a;
+  --surface2: #242424;
+  --border: #2e2e2e;
+  --accent: #c8ff47;
+  --accent-dim: rgba(200,255,71,0.12);
+  --blue: #47b8ff;
+  --blue-dim: rgba(71,184,255,0.12);
+  --orange: #ff7847;
+  --orange-dim: rgba(255,120,71,0.12);
+  --green: #47ff90;
+  --green-dim: rgba(71,255,144,0.1);
+  --text: #f0f0f0;
+  --text2: #999;
+  --text3: #555;
+  --danger: #ff4f4f;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bot: env(safe-area-inset-bottom, 0px);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, 'SF Pro Display', sans-serif;
+  font-size: 16px;
+  overscroll-behavior: none;
+}
+
+.app {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── SCREENS ── */
+.screen { display:none; flex-direction:column; height:100%; overflow:hidden; }
+.screen.active { display:flex; }
+
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 16px 24px;
+  padding-bottom: calc(24px + var(--safe-bot));
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  padding: calc(var(--safe-top) + 12px) 16px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0;
+  background: var(--bg);
+}
+.topbar h1 { font-size: 17px; font-weight: 600; flex: 1; }
+.topbar .subtitle { font-size: 12px; color: var(--text2); }
+.icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--text2);
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.back-btn {
+  display: flex; align-items: center; gap: 2px;
+  background: none; border: none;
+  color: var(--blue); font-size: 16px; cursor: pointer;
+  padding: 4px 0; flex-shrink: 0;
+}
+.back-btn svg { width:9px; height:16px; }
+
+/* ── PHASE SELECTOR ── */
+.phase-seg {
+  display: flex;
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 2px;
+  margin: 14px 16px 0;
+  flex-shrink: 0;
+}
+.phase-seg button {
+  flex: 1; height: 32px;
+  border: none; background: none;
+  border-radius: 8px;
+  font-size: 12px; font-weight: 500;
+  color: var(--text2); cursor: pointer;
+  transition: all .2s;
+}
+.phase-seg button.active {
+  background: var(--surface2);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+
+/* ── DAY CARDS (HOME) ── */
+.day-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+
+.day-card {
+  background: var(--surface);
+  border-radius: 16px;
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: opacity .15s;
+  -webkit-user-select: none;
+}
+.day-card:active { opacity: .7; }
+
+.day-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 700; flex-shrink: 0;
+}
+.icon-a { background: var(--blue-dim); color: var(--blue); }
+.icon-b { background: var(--accent-dim); color: var(--accent); }
+.icon-c { background: var(--orange-dim); color: var(--orange); }
+.icon-d { background: var(--green-dim); color: var(--green); }
+
+.day-info { flex: 1; min-width: 0; }
+.day-info strong { display: block; font-size: 15px; font-weight: 600; }
+.day-info span { font-size: 13px; color: var(--text2); }
+
+.day-meta { text-align: right; flex-shrink: 0; }
+.day-count { font-size: 11px; color: var(--text3); margin-bottom: 2px; }
+.day-arrow { color: var(--text3); font-size: 14px; }
+.day-done-badge { font-size: 11px; color: var(--green); font-weight: 600; }
+
+/* ── WEIGHT CARD ── */
+.weight-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+}
+.weight-card label { font-size: 14px; color: var(--text2); flex: 1; }
+.weight-card input {
+  width: 68px; height: 38px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 18px; font-weight: 600;
+  color: var(--text);
+  -moz-appearance: textfield;
+}
+.weight-card input::-webkit-outer-spin-button,
+.weight-card input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.weight-card .unit { font-size: 14px; color: var(--text2); }
+.save-btn {
+  height: 38px; padding: 0 14px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(200,255,71,0.25);
+  border-radius: 10px;
+  color: var(--accent); font-size: 14px; font-weight: 600;
+  cursor: pointer;
+}
+.saved-flash { font-size: 12px; color: var(--green); text-align: center; margin-top: 6px; height: 16px; }
+
+/* ── EXERCISE LIST (WORKOUT) ── */
+.ex-card {
+  background: var(--surface);
+  border-radius: 16px;
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.ex-card.all-done { border-color: rgba(71,255,144,0.3); }
+
+.ex-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 14px;
+  cursor: pointer;
+  -webkit-user-select: none;
+}
+.ex-num {
+  width: 26px; height: 26px; border-radius: 8px;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--text2);
+  flex-shrink: 0;
+}
+.ex-num.done { background: var(--green-dim); color: var(--green); }
+.ex-text { flex: 1; min-width: 0; }
+.ex-text strong { font-size: 14px; font-weight: 600; display: block; line-height: 1.3; }
+.ex-text small { font-size: 11px; color: var(--text2); line-height: 1.4; display: block; margin-top: 1px; }
+.ex-status { font-size: 12px; color: var(--text3); flex-shrink: 0; }
+.ex-status.done { color: var(--green); }
+
+.sets-container {
+  border-top: 0.5px solid var(--border);
+  padding: 10px 14px 12px;
+}
+.target-tag {
+  display: inline-block;
+  font-size: 11px; color: var(--text2);
+  background: var(--surface2);
+  border-radius: 6px;
+  padding: 3px 8px;
+  margin-bottom: 10px;
+}
+
+.set-row {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.set-row:last-child { margin-bottom: 0; }
+.set-lbl { font-size: 13px; color: var(--text2); width: 56px; flex-shrink: 0; }
+
+.num-grp { display: flex; align-items: center; gap: 4px; flex: 1; }
+.num-grp span { font-size: 12px; color: var(--text3); white-space: nowrap; }
+
+.numinput {
+  width: 62px; height: 40px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 17px; font-weight: 600;
+  color: var(--text);
+  -moz-appearance: textfield;
+}
+.numinput:focus { outline: none; border-color: var(--accent); }
+.numinput::-webkit-outer-spin-button,
+.numinput::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+.check-btn {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: all .15s;
+}
+.check-btn svg { width:18px; height:18px; color: var(--text3); }
+.check-btn.done { background: var(--green-dim); border-color: rgba(71,255,144,.3); }
+.check-btn.done svg { color: var(--green); }
+
+/* ── CARDIO BLOCK ── */
+.cardio-block {
+  background: var(--orange-dim);
+  border: 1px solid rgba(255,120,71,.2);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-top: 10px;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.cardio-icon { font-size: 26px; flex-shrink: 0; margin-top: -2px; }
+.cardio-text strong { font-size: 14px; font-weight: 600; color: var(--orange); display: block; margin-bottom: 2px; }
+.cardio-text span { font-size: 13px; color: var(--text2); }
+
+/* ── TIMER BAR ── */
+.timer-bar {
+  display: flex; align-items: center;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 0.5px solid var(--border);
+  gap: 12px;
+  flex-shrink: 0;
+}
+.timer-display {
+  font-size: 22px; font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent); flex: 1;
+}
+.progress-text { font-size: 13px; color: var(--text2); }
+
+/* ── FINISH BTN ── */
+.bottom-action {
+  padding: 12px 16px;
+  padding-bottom: calc(12px + var(--safe-bot));
+  background: var(--bg);
+  border-top: 0.5px solid var(--border);
+  flex-shrink: 0;
+}
+.finish-btn {
+  width: 100%; height: 52px;
+  background: var(--accent);
+  border: none;
+  border-radius: 14px;
+  font-size: 17px; font-weight: 700;
+  color: #0f0f0f;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity .15s;
+}
+.finish-btn:active { opacity: .8; }
+.finish-btn:disabled { opacity: .35; background: var(--surface2); color: var(--text2); }
+
+/* ── DONE SCREEN ── */
+.done-wrap {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 20px;
+  padding-bottom: calc(32px + var(--safe-bot));
+  text-align: center;
+}
+.done-emoji { font-size: 72px; margin-bottom: 20px; line-height: 1; }
+.done-wrap h2 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+.done-wrap p { font-size: 15px; color: var(--text2); margin-bottom: 28px; line-height: 1.6; }
+.done-stats {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 10px; width: 100%; margin-bottom: 28px;
+}
+.done-stat {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 14px 8px;
+  border: 1px solid var(--border);
+}
+.done-stat strong { display: block; font-size: 24px; font-weight: 700; color: var(--accent); }
+.done-stat small { font-size: 11px; color: var(--text2); margin-top: 2px; display: block; }
+.done-home-btn {
+  width: 100%; height: 52px;
+  background: var(--accent);
+  border: none; border-radius: 14px;
+  font-size: 17px; font-weight: 700; color: #0f0f0f;
+  cursor: pointer; margin-bottom: 10px;
+}
+.done-log-btn {
+  width: 100%; height: 48px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font-size: 16px; font-weight: 600; color: var(--text);
+  cursor: pointer;
+}
+
+/* ── LOG SCREEN ── */
+.stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-top: 16px;
+}
+.stat-tile {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+}
+.stat-tile p { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+.stat-tile strong { font-size: 28px; font-weight: 700; color: var(--text); }
+.stat-tile small { font-size: 12px; color: var(--text2); }
+
+.hist-item {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 13px 14px;
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  display: flex; gap: 12px; align-items: center;
+}
+.hist-date-col { text-align: center; min-width: 38px; }
+.hist-date-col .hday { font-size: 20px; font-weight: 700; color: var(--text); }
+.hist-date-col .hmon { font-size: 10px; color: var(--text2); text-transform: uppercase; }
+.hist-info { flex: 1; min-width: 0; }
+.hist-info strong { font-size: 14px; font-weight: 600; display: block; }
+.hist-info span { font-size: 12px; color: var(--text2); }
+.hist-check { color: var(--green); font-size: 20px; }
+
+.empty-state {
+  text-align: center; padding: 48px 20px;
+  color: var(--text2); font-size: 15px; line-height: 1.7;
+}
+.empty-state .big { font-size: 52px; display: block; margin-bottom: 12px; }
+
+/* ── INSTALL HINT ── */
+.install-hint {
+  background: var(--blue-dim);
+  border: 1px solid rgba(71,184,255,.2);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  font-size: 13px; color: var(--blue);
+  line-height: 1.5;
+}
+.install-hint strong { display: block; margin-bottom: 2px; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ══ HOME ══ -->
+<div class="screen active" id="s-home">
+  <div class="topbar">
+    <div style="flex:1">
+      <h1>Тренування 💪</h1>
+      <div class="subtitle" id="home-sub">Фаза 1 · Тижні 1–4</div>
+    </div>
+    <button class="icon-btn" onclick="go('s-log')" aria-label="Щоденник">📋</button>
+  </div>
+  <div class="phase-seg">
+    <button class="active" onclick="setPhase(1,this)">Тижні 1–4</button>
+    <button onclick="setPhase(2,this)">Тижні 5–8</button>
+    <button onclick="setPhase(3,this)">Тижні 9–12</button>
+  </div>
+  <div class="scroll-area" style="padding-top:8px">
+    <div class="day-list" id="day-list"></div>
+    <div class="weight-card">
+      <label>Вага тіла</label>
+      <input type="number" id="bw-input" value="118" step="0.1" inputmode="decimal">
+      <span class="unit">кг</span>
+      <button class="save-btn" onclick="saveBW()">Зберегти</button>
+    </div>
+    <div class="saved-flash" id="bw-flash"></div>
+    <div class="install-hint">
+      <strong>📱 Додай на головний екран</strong>
+      Safari → кнопка «Поділитись» ↑ → «На початковий екран» — і працює як застосунок!
+    </div>
+  </div>
+</div>
+
+<!-- ══ WORKOUT ══ -->
+<div class="screen" id="s-workout">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('s-home')">
+      <svg viewBox="0 0 9 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8,1 1,8 8,15"/></svg>
+      Назад
+    </button>
+    <h1 id="w-title" style="text-align:center">День А</h1>
+    <div style="width:50px"></div>
+  </div>
+  <div class="timer-bar">
+    <div class="timer-display" id="w-timer">0:00</div>
+    <div class="progress-text" id="w-progress">0 / 0 підходів</div>
+  </div>
+  <div class="scroll-area" id="ex-list"></div>
+  <div class="bottom-action">
+    <button class="finish-btn" id="finish-btn" onclick="finishWorkout()">
+      ✓ &nbsp;Завершити тренування
+    </button>
+  </div>
+</div>
+
+<!-- ══ DONE ══ -->
+<div class="screen" id="s-done">
+  <div class="done-wrap">
+    <div class="done-emoji">🏆</div>
+    <h2>Відмінно!</h2>
+    <p id="done-msg">Тренування завершено.<br>Відпочинок — частина прогресу.</p>
+    <div class="done-stats">
+      <div class="done-stat"><strong id="ds-sets">0</strong><small>підходів</small></div>
+      <div class="done-stat"><strong id="ds-time">0:00</strong><small>хвилин</small></div>
+      <div class="done-stat"><strong id="ds-vol">0</strong><small>кг обсяг</small></div>
+    </div>
+    <button class="done-home-btn" onclick="go('s-home')">На головну</button>
+    <button class="done-log-btn" onclick="go('s-log')">Щоденник</button>
+  </div>
+</div>
+
+<!-- ══ LOG ══ -->
+<div class="screen" id="s-log">
+  <div class="topbar">
+    <button class="back-btn" onclick="go('s-home')">
+      <svg viewBox="0 0 9 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8,1 1,8 8,15"/></svg>
+      Назад
+    </button>
+    <h1>Щоденник</h1>
+    <div style="width:50px"></div>
+  </div>
+  <div class="scroll-area">
+    <div class="stats-grid" id="log-stats"></div>
+    <div id="log-list"></div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+// ── DATA ──────────────────────────────────────────────────
+const PLAN = {
+  1: [
+    { id:'A', icon:'А', cls:'icon-a', name:'День А — Спина + Біцепс', day:'Понеділок',
+      exercises:[
+        {n:'Тяга горизонт. блоку до поясу',    t:'Лопатки зводиш в кінці руху',      sets:3, reps:15, kg:30,  note:'30→35→40→40 кг'},
+        {n:'Тяга верт. блоку широким хватом',  t:'Лікті тягнуть вниз, без розгойдування', sets:3, reps:12, kg:40, note:'40→45→50→50 кг'},
+        {n:'Тяга гантелі в нахилі (одна рука)',t:'Спина паралельна підлозі',         sets:3, reps:12, kg:12,  note:'12→14→16→16 кг'},
+        {n:'Гіперекстензія',                   t:'Тільки до горизонталі!',            sets:3, reps:15, kg:0,   note:'без ваги'},
+        {n:'Згинач — біцепс (EZ/гантелі)',     t:'Лікті нерухомі біля тулуба',       sets:3, reps:12, kg:14,  note:'14→16→18→18 кг'},
+        {n:'Підйом ніг лежачи (поперем.)',      t:'Поперек притиснутий до підлоги',   sets:3, reps:20, kg:0,   note:'без ваги'},
+      ], cardio:'🚴 Велотренажер або орбітрек — 20 хв, пульс 130–145 уд/хв'},
+    { id:'B', icon:'Б', cls:'icon-b', name:'День Б — Ноги + Прес', day:'Середа',
+      exercises:[
+        {n:'Присідання зі штангою',           t:'Коліна за носками, спина рівна',    sets:4, reps:15, kg:20,  note:'20→25→30→30 кг'},
+        {n:'Випади кроком',                   t:'Заднє коліно майже торкається підлоги', sets:3, reps:10, kg:0, note:'без ваги → 8 кг'},
+        {n:'Жим ногами',                      t:'Коліна не випрямляти до кінця',     sets:3, reps:15, kg:50,  note:'50→60→70→70 кг'},
+        {n:'Румунська тяга (гантелі)',         t:'Спина рівна, відчуваєш задню поверхню', sets:3, reps:12, kg:16, note:'16→18→20→20 кг'},
+        {n:'Гомілки стоячи',                  t:'Повна амплітуда вгору і вниз',      sets:4, reps:20, kg:0,   note:'без ваги або 30 кг'},
+        {n:'Скручування на підлозі',          t:'Не тягни за шию — працює прес',     sets:3, reps:20, kg:0,   note:'без ваги'},
+        {n:'Планка',                          t:'Тіло — одна лінія, не задирай сідниці', sets:3, reps:-1, kg:0, note:'3 × 30 сек'},
+      ], cardio:'🚶 Бігова доріжка — 20 хв, 6–6,5 км/год, пульс 130–140'},
+    { id:'C', icon:'В', cls:'icon-c', name:'День В — Груди + Плечі', day:'П\'ятниця',
+      exercises:[
+        {n:'Жим штанги лежачи 30° нахил',    t:'Лопатки зведені та притиснуті',     sets:4, reps:12, kg:30,  note:'30→35→40→40 кг'},
+        {n:'Жим гантелей горизонтально',     t:'В нижній точці лікті нижче плечей', sets:3, reps:12, kg:14,  note:'14→16→18→18 кг'},
+        {n:'Розведення (бабочка) в тренажері',t:'Рух повільний, відчуваєш груди',   sets:3, reps:15, kg:20,  note:'20→25→30→30 кг'},
+        {n:'Жим гантелей сидячи (плечі)',    t:'Лікті трохи вперед від лінії плечей', sets:3, reps:12, kg:10, note:'10→12→14→14 кг'},
+        {n:'Махи в сторони (гантелі)',       t:'Рух до рівня плечей, лікоть зігнутий', sets:3, reps:15, kg:5, note:'5→6→7→7 кг'},
+        {n:'Відтискання від підлоги',        t:'Тіло пряме; важко — з колін',       sets:3, reps:-1, kg:0,   note:'3 × максимум'},
+        {n:'Розгинання трицепса на блоці',   t:'Лікті нерухомі, притиснуті до тулуба', sets:3, reps:12, kg:15, note:'15→20→25→25 кг'},
+      ], cardio:'🌀 Орбітрек — 20–25 хв, пульс 130–145 уд/хв'},
+    { id:'D', icon:'Г', cls:'icon-d', name:'День Г — Кардіо + Стретч', day:'Субота',
+      exercises:[
+        {n:'Орбітрек або велосипед',          t:'Пульс 125–135 уд/хв',              sets:1, reps:-1, kg:0,   note:'30–35 хв'},
+        {n:'Стретч — квадрицепс',             t:'Тримай 30–40 сек, без болю',        sets:3, reps:-1, kg:0,   note:'3 × 40 сек'},
+        {n:'Стретч — задня поверхня стегна',  t:'Плавно, без ривків',                sets:3, reps:-1, kg:0,   note:'3 × 40 сек'},
+        {n:'Стретч — груди та плечі',         t:'Руки за спиною, розкрий груди',     sets:3, reps:-1, kg:0,   note:'3 × 40 сек'},
+        {n:'Стретч — поперек',                t:'Лежачи, коліна до грудей',          sets:3, reps:-1, kg:0,   note:'3 × 40 сек'},
+      ], cardio:''},
+  ],
+  2: [
+    { id:'A', icon:'А', cls:'icon-a', name:'День А — Спина + Біцепс', day:'Понеділок',
+      exercises:[
+        {n:'Тяга горизонт. блоку до поясу',   t:'4 підходи, вага вища',    sets:4, reps:12, kg:45, note:'45→47,5→50→52,5 кг'},
+        {n:'Тяга верт. блоку широким хватом', t:'Лікті тягнуть вниз',      sets:4, reps:10, kg:55, note:'55→57,5→60→62,5 кг'},
+        {n:'Тяга гантелі в нахилі (одна рука)',t:'Спина паралельна підлозі',sets:4, reps:10, kg:18, note:'18→20→22→24 кг'},
+        {n:'Гіперекстензія',                  t:'Тільки до горизонталі',   sets:3, reps:15, kg:5,  note:'+5 кг блін'},
+        {n:'Згинач — біцепс',                 t:'Лікті нерухомі',          sets:4, reps:10, kg:20, note:'20→22→24→26 кг'},
+        {n:'Молотки (нейтральний хват)',       t:'Плечова частина біцепса', sets:3, reps:12, kg:14, note:'14→16→18 кг'},
+        {n:'Скручування',                     t:'Не тягни за шию',         sets:3, reps:25, kg:0,  note:'3 × 25'},
+      ], cardio:'🚴 Велосипед або орбітрек — 30 хв, пульс 135–145 уд/хв'},
+    { id:'B', icon:'Б', cls:'icon-b', name:'День Б — Ноги + Прес', day:'Середа',
+      exercises:[
+        {n:'Присідання зі штангою',    t:'Коліна за носками', sets:4, reps:12, kg:35, note:'35→40→42,5→45 кг'},
+        {n:'Випади кроком (з гантелями)',t:'Заднє коліно до підлоги',sets:4, reps:10, kg:10, note:'10→12→14→16 кг'},
+        {n:'Жим ногами',               t:'Коліна не розгинати до кінця',sets:4, reps:12, kg:75, note:'75→80→85→90 кг'},
+        {n:'Румунська тяга (гантелі)',  t:'Спина рівна',sets:4, reps:10, kg:22, note:'22→24→26→28 кг'},
+        {n:'Гомілки стоячи',           t:'Повна амплітуда',sets:4, reps:20, kg:40, note:'40→45→50→55 кг'},
+        {n:'Скручування на підлозі',   t:'Не тягни за шию',sets:4, reps:25, kg:0,  note:'4 × 25'},
+        {n:'Планка',                   t:'Тіло — одна лінія',sets:3, reps:-1, kg:0, note:'3 × 45 сек'},
+      ], cardio:'🚶 Доріжка — 25 хв, 7 км/год або інтервали 1 хв біг / 1 хв хода'},
+    { id:'C', icon:'В', cls:'icon-c', name:'День В — Груди + Плечі', day:'П\'ятниця',
+      exercises:[
+        {n:'Жим штанги лежачи 30° нахил',   t:'Лопатки зведені',  sets:4, reps:10, kg:45, note:'45→47,5→50→52,5 кг'},
+        {n:'Жим гантелей горизонтально',    t:'Повна амплітуда',   sets:4, reps:10, kg:20, note:'20→22→24→26 кг'},
+        {n:'Розведення (бабочка)',          t:'Рух повільний',      sets:3, reps:12, kg:35, note:'35→40→45 кг'},
+        {n:'Жим гантелей сидячи (плечі)',   t:'Лікті вперед від плечей',sets:4, reps:10, kg:16, note:'16→18→20→22 кг'},
+        {n:'Махи в сторони',               t:'До рівня плечей',    sets:4, reps:12, kg:7,  note:'7→8→9→10 кг'},
+        {n:'Відтискання або брусья',        t:'Тіло пряме',         sets:4, reps:-1, kg:0,  note:'4 × максимум'},
+        {n:'Розгинання трицепса на блоці',  t:'Лікті нерухомі',    sets:4, reps:10, kg:28, note:'28→30→33→35 кг'},
+      ], cardio:'🌀 Орбітрек — 30 хв, пульс 135–145 уд/хв'},
+    { id:'D', icon:'Г', cls:'icon-d', name:'День Г — Кардіо + Стретч', day:'Субота',
+      exercises:[
+        {n:'Орбітрек або велосипед (інтервали)',t:'3 хв помірно / 1 хв інтенсивно',sets:1,reps:-1,kg:0,note:'40 хв'},
+        {n:'Стретч — квадрицепс',            t:'30–40 сек кожна нога',sets:3,reps:-1,kg:0,note:'3×40 сек'},
+        {n:'Стретч — задня поверхня стегна', t:'Без ривків',          sets:3,reps:-1,kg:0,note:'3×40 сек'},
+        {n:'Стретч — груди та плечі',        t:'Розкрий грудну клітку',sets:3,reps:-1,kg:0,note:'3×40 сек'},
+        {n:'Стретч — поперек',               t:'Коліна до грудей лежачи',sets:3,reps:-1,kg:0,note:'3×40 сек'},
+      ], cardio:''},
+  ],
+  3: [
+    { id:'A', icon:'А', cls:'icon-a', name:'День А — Спина + Біцепс', day:'Понеділок',
+      exercises:[
+        {n:'Тяга горизонт. блоку до поясу',   t:'Якість руху важливіша за вагу', sets:4,reps:10,kg:55,note:'55→57,5→60→62,5 кг'},
+        {n:'Тяга верт. блоку / Підтягування', t:'Якщо 5+ підтягувань — переходь на них!',sets:4,reps:8,kg:65,note:'65→67,5→70→70 кг'},
+        {n:'Тяга гантелі в нахилі',           t:'Спина паралельна підлозі',sets:4,reps:8,kg:26,note:'26→28→30→32 кг'},
+        {n:'Гіперекстензія',                  t:'До горизонталі',sets:4,reps:15,kg:10,note:'10 кг'},
+        {n:'⚡ Суперсет: Згинач + Молотки',   t:'Без відпочинку між ними!',sets:3,reps:10,kg:26,note:'26 кг + 18 кг'},
+        {n:'Підйом ніг у висі',               t:'Коліна підтягуєш до грудей',sets:3,reps:15,kg:0,note:'3 × 15'},
+      ], cardio:'🚴 Велосипед/орбітрек — 35 хв. Останні 5 хв — інтенсивно (пульс 155+)'},
+    { id:'B', icon:'Б', cls:'icon-b', name:'День Б — Ноги + Прес', day:'Середа',
+      exercises:[
+        {n:'Присідання зі штангою',    t:'5 підходів!', sets:5,reps:10,kg:47,note:'47,5→50→52,5→55 кг'},
+        {n:'Випади кроком',            t:'Заднє коліно до підлоги',sets:4,reps:12,kg:18,note:'18→20→22→24 кг'},
+        {n:'Жим ногами',               t:'Коліна не розгинати',sets:4,reps:10,kg:95,note:'95→100→105→110 кг'},
+        {n:'Румунська тяга',           t:'Спина рівна',sets:4,reps:8,kg:30,note:'30→32→34→36 кг'},
+        {n:'Гомілки стоячи',           t:'Повна амплітуда',sets:5,reps:20,kg:60,note:'60→65→70→70 кг'},
+        {n:'⚡ Суперсет: Скручування + Планка',t:'Без відпочинку між ними',sets:4,reps:30,kg:0,note:'4 × 30 + 60 сек'},
+      ], cardio:'🚶 30 хв інтервальна: 2 хв хода / 1 хв біг, × 10'},
+    { id:'C', icon:'В', cls:'icon-c', name:'День В — Груди + Плечі', day:'П\'ятниця',
+      exercises:[
+        {n:'Жим штанги лежачи 30° нахил',  t:'Лопатки зведені',sets:4,reps:8,kg:55,note:'55→57,5→60→62,5 кг'},
+        {n:'Жим гантелей горизонтально',   t:'Повна амплітуда',sets:4,reps:8,kg:28,note:'28→30→32→34 кг'},
+        {n:'Розведення (бабочка)',         t:'Рух повільний',sets:3,reps:15,kg:50,note:'50→55→60 кг'},
+        {n:'Жим гантелей сидячи (плечі)',  t:'Лікті вперед від плечей',sets:4,reps:8,kg:24,note:'24→26→28→30 кг'},
+        {n:'⚡ Суперсет: Махи боком + Махи перед',t:'Без відпочинку',sets:3,reps:12,kg:10,note:'10 кг + 7 кг'},
+        {n:'Відтискання від брусів',       t:'Тіло пряме',sets:4,reps:-1,kg:0,note:'4 × максимум'},
+        {n:'Розгинання трицепса на блоці', t:'Лікті нерухомі',sets:4,reps:8,kg:37,note:'37→40→42→45 кг'},
+      ], cardio:'🌀 Орбітрек — 35 хв, пульс 140–150 уд/хв'},
+    { id:'D', icon:'Г', cls:'icon-d', name:'День Г — Кардіо + Стретч', day:'Субота',
+      exercises:[
+        {n:'Орбітрек/велосипед (інтервали)',t:'4 хв помірно / 1 хв інтенсивно × 10',sets:1,reps:-1,kg:0,note:'50 хв'},
+        {n:'Стретч — квадрицепс',          t:'30–40 сек кожна нога',sets:3,reps:-1,kg:0,note:'3×40 сек'},
+        {n:'Стретч — задня поверхня стегна',t:'Без ривків',sets:3,reps:-1,kg:0,note:'3×40 сек'},
+        {n:'Стретч — груди та плечі',      t:'Розкрий грудну клітку',sets:3,reps:-1,kg:0,note:'3×40 сек'},
+        {n:'Стретч — поперек',             t:'Коліна до грудей',sets:3,reps:-1,kg:0,note:'3×40 сек'},
+      ], cardio:''},
+  ]
+};
+
+// ── STATE ─────────────────────────────────────────────────
+let phase = 1;
+let curDay = null;
+let setDone = {};
+let setKg = {};
+let setReps = {};
+let timerInt = null;
+let t0 = null;
+
+function ls(k){ try{ return JSON.parse(localStorage.getItem(k)) }catch(e){ return null } }
+function lss(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch(e){} }
+
+// ── NAVIGATION ────────────────────────────────────────────
+function go(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id === 's-log') renderLog();
+}
+
+// ── HOME ──────────────────────────────────────────────────
+function setPhase(n, btn){
+  phase = n;
+  document.querySelectorAll('.phase-seg button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHome();
+}
+
+function renderHome(){
+  const labels = {1:'Фаза 1 · Тижні 1–4', 2:'Фаза 2 · Тижні 5–8', 3:'Фаза 3 · Тижні 9–12'};
+  document.getElementById('home-sub').textContent = labels[phase];
+  const hist = ls('history') || [];
+  const dl = document.getElementById('day-list');
+  dl.innerHTML = PLAN[phase].map(d => {
+    const cnt = hist.filter(h => h.dayId === d.id && h.phase === phase).length;
+    return `<div class="day-card" onclick="startDay('${d.id}')">
+      <div class="day-icon ${d.cls}">${d.icon}</div>
+      <div class="day-info">
+        <strong>${d.name}</strong>
+        <span>${d.day}</span>
+      </div>
+      <div class="day-meta">
+        ${cnt > 0 ? `<div class="day-done-badge">✓ ${cnt}×</div>` : `<div class="day-count">${d.exercises.length} вправ</div>`}
+        <div class="day-arrow">›</div>
+      </div>
+    </div>`;
+  }).join('');
+  const bw = ls('bw');
+  if(bw) document.getElementById('bw-input').value = bw;
+}
+
+function saveBW(){
+  const v = parseFloat(document.getElementById('bw-input').value);
+  if(!v) return;
+  lss('bw', v);
+  const hist = ls('bw_hist') || [];
+  hist.push({ date: new Date().toLocaleDateString('uk'), kg: v });
+  lss('bw_hist', hist);
+  const f = document.getElementById('bw-flash');
+  f.textContent = '✓ Збережено';
+  setTimeout(() => f.textContent = '', 2000);
+  renderHome();
+}
+
+// ── WORKOUT ───────────────────────────────────────────────
+function startDay(dayId){
+  curDay = PLAN[phase].find(d => d.id === dayId);
+  setDone = {}; setKg = {}; setReps = {};
+  document.getElementById('w-title').textContent = curDay.icon + ' · ' + curDay.name.split('—')[1].trim();
+  t0 = Date.now();
+  clearInterval(timerInt);
+  timerInt = setInterval(tick, 1000);
+  renderExercises();
+  go('s-workout');
+}
+
+function tick(){
+  const el = document.getElementById('w-timer');
+  if(!el){ clearInterval(timerInt); return; }
+  const s = Math.floor((Date.now() - t0) / 1000);
+  el.textContent = Math.floor(s/60) + ':' + String(s%60).padStart(2,'0');
+  updateProgress();
+}
+
+function updateProgress(){
+  const total = curDay.exercises.reduce((a,e) => a + e.sets, 0);
+  const done = Object.values(setDone).filter(Boolean).length;
+  const el = document.getElementById('w-progress');
+  if(el) el.textContent = done + ' / ' + total + ' підходів';
+}
+
+function renderExercises(){
+  let html = '';
+  curDay.exercises.forEach((ex, ei) => {
+    const doneCnt = Array.from({length: ex.sets}, (_,si) => setDone[`${ei}-${si}`]).filter(Boolean).length;
+    const allDone = doneCnt === ex.sets;
+    let setsHtml = '';
+    for(let si = 0; si < ex.sets; si++){
+      const k = `${ei}-${si}`;
+      const checked = !!setDone[k];
+      const kg = setKg[k] !== undefined ? setKg[k] : ex.kg;
+      const reps = setReps[k] !== undefined ? setReps[k] : ex.reps;
+      const repsIsTime = ex.reps < 0;
+      setsHtml += `<div class="set-row">
+        <span class="set-lbl">${si+1} підхід</span>
+        <div class="num-grp">
+          ${ex.kg > 0 ? `<input type="number" class="numinput" value="${kg}" step="2.5" inputmode="decimal" onchange="saveKg(${ei},${si},this.value)" aria-label="Вага кг">
+          <span>кг</span>` : ''}
+          ${!repsIsTime && ex.reps > 0 ? `<input type="number" class="numinput" value="${reps}" step="1" inputmode="numeric" onchange="saveReps(${ei},${si},this.value)" aria-label="Повторень">
+          <span>пов.</span>` : `<span style="color:var(--text2);font-size:13px">${ex.note}</span>`}
+        </div>
+        <div class="check-btn ${checked?'done':''}" onclick="toggleSet(${ei},${si})" role="checkbox" aria-checked="${checked}" aria-label="Виконано">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,9 7,13 15,5"/></svg>
+        </div>
+      </div>`;
+    }
+    const open = allDone ? false : (doneCnt > 0 || ei === 0);
+    html += `<div class="ex-card ${allDone?'all-done':''}" id="exc${ei}">
+      <div class="ex-header" onclick="toggleEx(${ei})">
+        <div class="ex-num ${allDone?'done':''}">${allDone?'✓':ei+1}</div>
+        <div class="ex-text">
+          <strong>${ex.n}</strong>
+          <small>${ex.t}</small>
+        </div>
+        <div class="ex-status ${allDone?'done':''}">${doneCnt}/${ex.sets}</div>
+      </div>
+      <div class="sets-container" id="sets${ei}" style="display:${open?'block':'none'}">
+        <div class="target-tag">Ціль: ${ex.note}</div>
+        ${setsHtml}
+      </div>
+    </div>`;
+  });
+  if(curDay.cardio){
+    html += `<div class="cardio-block">
+      <div class="cardio-icon">${curDay.cardio.split(' ')[0]}</div>
+      <div class="cardio-text">
+        <strong>Кардіо після — обов'язково!</strong>
+        <span>${curDay.cardio.substring(2)}</span>
+      </div>
+    </div>`;
+  }
+  document.getElementById('ex-list').innerHTML = html;
+  updateProgress();
+}
+
+function toggleEx(ei){
+  const el = document.getElementById('sets' + ei);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function saveKg(ei, si, v){ setKg[`${ei}-${si}`] = parseFloat(v); }
+function saveReps(ei, si, v){ setReps[`${ei}-${si}`] = parseInt(v); }
+
+function toggleSet(ei, si){
+  const k = `${ei}-${si}`;
+  setDone[k] = !setDone[k];
+  const btn = document.querySelector(`#exc${ei} .sets-container .set-row:nth-child(${si+2}) .check-btn`);
+  // Re-render is simplest for correctness
+  const scrollY = document.getElementById('ex-list').scrollTop;
+  renderExercises();
+  document.getElementById('ex-list').scrollTop = scrollY;
+  // Auto-open next exercise
+  if(setDone[k]){
+    const ex = curDay.exercises[ei];
+    const allDone = Array.from({length:ex.sets},(_,s)=>setDone[`${ei}-${s}`]).every(Boolean);
+    if(allDone && ei+1 < curDay.exercises.length){
+      const next = document.getElementById('sets'+(ei+1));
+      if(next) next.style.display = 'block';
+    }
+  }
+}
+
+function finishWorkout(){
+  clearInterval(timerInt);
+  const elapsed = Math.floor((Date.now() - t0) / 1000);
+  const mins = Math.floor(elapsed/60);
+  const secs = elapsed % 60;
+  let vol = 0;
+  curDay.exercises.forEach((ex, ei) => {
+    for(let si=0; si<ex.sets; si++){
+      if(setDone[`${ei}-${si}`]){
+        const kg = setKg[`${ei}-${si}`] ?? ex.kg;
+        const reps = (ex.reps > 0) ? (setReps[`${ei}-${si}`] ?? ex.reps) : 0;
+        vol += kg * reps;
+      }
+    }
+  });
+  const totalSets = Object.values(setDone).filter(Boolean).length;
+  const hist = ls('history') || [];
+  const now = new Date();
+  hist.unshift({
+    dayId: curDay.id, phase,
+    dayName: curDay.name,
+    date: now.toLocaleDateString('uk'),
+    dateObj: now.toISOString(),
+    sets: totalSets,
+    seconds: elapsed,
+    volume: Math.round(vol),
+  });
+  lss('history', hist);
+
+  document.getElementById('ds-sets').textContent = totalSets;
+  document.getElementById('ds-time').textContent = mins + ':' + String(secs).padStart(2,'0');
+  document.getElementById('ds-vol').textContent = Math.round(vol);
+  const msgs = [
+    'Ще один крок до мети 105 кг!',
+    'Тіло скаже тобі дякую 💪',
+    'Відпочинок — частина прогресу.',
+    'Записано! Продовжуй у тому ж дусі.',
+  ];
+  document.getElementById('done-msg').textContent = msgs[Math.floor(Math.random() * msgs.length)];
+  go('s-done');
+}
+
+// ── LOG ───────────────────────────────────────────────────
+function renderLog(){
+  const hist = ls('history') || [];
+  const statEl = document.getElementById('log-stats');
+  const listEl = document.getElementById('log-list');
+  const totalVol = hist.reduce((a,h) => a+(h.volume||0), 0);
+  const totalSets = hist.reduce((a,h) => a+(h.sets||0), 0);
+  statEl.innerHTML = `
+    <div class="stat-tile"><p>Тренувань</p><strong>${hist.length}</strong></div>
+    <div class="stat-tile"><p>Підходів</p><strong>${totalSets}</strong></div>
+    <div class="stat-tile"><p>Обсяг загальний</p><strong>${(totalVol/1000).toFixed(1)}</strong><small>тонн</small></div>
+    <div class="stat-tile"><p>Поточна вага</p><strong>${ls('bw')||'—'}</strong><small>кг</small></div>
+  `;
+  if(hist.length === 0){
+    listEl.innerHTML = `<div class="empty-state"><span class="big">📓</span>Тут буде твоя<br>історія тренувань.<br>Почни перший день!</div>`;
+    return;
+  }
+  listEl.innerHTML = hist.slice(0,30).map(h => {
+    const d = new Date(h.dateObj || h.date);
+    const day = isNaN(d) ? h.date : d.getDate();
+    const mon = isNaN(d) ? '' : d.toLocaleString('uk', {month:'short'}).replace('.','');
+    const mins = Math.floor((h.seconds||0)/60);
+    return `<div class="hist-item">
+      <div class="hist-date-col"><div class="hday">${day}</div><div class="hmon">${mon}</div></div>
+      <div class="hist-info">
+        <strong>${h.dayName}</strong>
+        <span>${h.sets} підх. · ${mins} хв · ${h.volume} кг</span>
+      </div>
+      <div class="hist-check">✓</div>
+    </div>`;
+  }).join('');
+}
+
+// ── INIT ──────────────────────────────────────────────────
+renderHome();
+</script>
+</body>
+</html>
