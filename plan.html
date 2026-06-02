@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Програма тренувань — 12 тижнів</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #181818;
+    --surface2: #222222;
+    --border: #2e2e2e;
+    --accent: #e8ff47;
+    --accent2: #ff6b35;
+    --accent3: #47c8ff;
+    --text: #e8e8e8;
+    --muted: #777;
+    --danger: #ff4444;
+    --green: #44ff88;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--surface);
+    border-bottom: 3px solid var(--accent);
+    padding: 32px 40px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: 'TRAIN';
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 180px;
+    color: rgba(232,255,71,0.04);
+    position: absolute;
+    right: -20px;
+    top: -30px;
+    letter-spacing: -5px;
+    pointer-events: none;
+  }
+  .header-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: #fff;
+  }
+  .header h1 span { color: var(--accent); }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .meta-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .meta-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* NAVIGATION */
+  .nav {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-btn {
+    padding: 16px 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* CONTENT */
+  .content { padding: 32px 40px; max-width: 1200px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* PHASE HEADER */
+  .phase-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 32px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+  }
+  .phase-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 1;
+    color: var(--accent);
+    opacity: 0.3;
+    min-width: 80px;
+  }
+  .phase-info h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 1px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .phase-info p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 680px;
+  }
+  .phase-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    background: rgba(232,255,71,0.1);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  /* DAY CARDS */
+  .days-grid {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .day-letter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    line-height: 1;
+    min-width: 40px;
+  }
+  .day-A .day-letter { color: var(--accent3); }
+  .day-B .day-letter { color: var(--accent); }
+  .day-C .day-letter { color: var(--accent2); }
+  .day-D .day-letter { color: var(--green); }
+
+  .day-title {
+    flex: 1;
+  }
+  .day-title strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #fff;
+    display: block;
+  }
+  .day-title span {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .day-toggle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    transition: transform 0.3s;
+  }
+  .day-card.open .day-toggle { transform: rotate(180deg); }
+
+  .day-body { display: none; padding: 0 20px 20px; }
+  .day-card.open .day-body { display: block; }
+
+  /* WARMUP */
+  .warmup-block {
+    margin: 16px 0;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border-left: 3px solid var(--accent3);
+  }
+  .warmup-block h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .warmup-block p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  /* EXERCISE TABLE */
+  .ex-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .ex-table th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ex-table td {
+    padding: 12px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(46,46,46,0.5);
+    vertical-align: top;
+  }
+  .ex-table tr:last-child td { border-bottom: none; }
+  .ex-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .ex-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 24px;
+  }
+  .ex-name { font-weight: 600; color: #fff; }
+  .ex-tip { font-size: 11px; color: var(--muted); margin-top: 3px; font-style: italic; }
+
+  .weight-cell {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .weight-main { color: var(--accent); }
+  .sets-cell {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .rest-cell {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* CARDIO BLOCK */
+  .cardio-block {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: rgba(255,107,53,0.08);
+    border-left: 3px solid var(--accent2);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .cardio-icon { font-size: 20px; }
+  .cardio-text { font-size: 13px; }
+  .cardio-text strong { color: var(--accent2); }
+
+  /* WARNING */
+  .warning-block {
+    margin: 16px 0;
+    padding: 12px 16px;
+    background: rgba(255,68,68,0.08);
+    border-left: 3px solid var(--danger);
+  }
+  .warning-block h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--danger);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .warning-block p { font-size: 13px; color: var(--muted); }
+
+  /* PROGRESSION TABLE */
+  .prog-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+  .prog-table th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+  .prog-table td {
+    padding: 11px 14px;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .prog-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  .phase-1 td:first-child { border-left: 3px solid var(--green); }
+  .phase-2 td:first-child { border-left: 3px solid var(--accent); }
+  .phase-3 td:first-child { border-left: 3px solid var(--accent2); }
+
+  .w-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    display: inline-block;
+    margin: 1px;
+  }
+  .w-green { background: rgba(68,255,136,0.15); color: var(--green); }
+  .w-yellow { background: rgba(232,255,71,0.15); color: var(--accent); }
+  .w-orange { background: rgba(255,107,53,0.15); color: var(--accent2); }
+  .w-blue { background: rgba(71,200,255,0.15); color: var(--accent3); }
+
+  /* NUTRITION */
+  .nutrition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .nut-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+  .nut-card .nut-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .nut-card .nut-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .nut-card .nut-unit {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .meal-row {
+    display: grid;
+    grid-template-columns: 100px 1fr auto auto;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .meal-row:last-child { border-bottom: none; }
+  .meal-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    padding-top: 2px;
+  }
+  .meal-name { font-size: 13px; color: var(--text); }
+  .meal-kcal {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    text-align: right;
+  }
+  .meal-protein {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    white-space: nowrap;
+    text-align: right;
+    min-width: 50px;
+  }
+  .meal-header {
+    display: grid;
+    grid-template-columns: 100px 1fr auto auto;
+    gap: 16px;
+    padding: 8px 0;
+    margin-bottom: 4px;
+  }
+  .meal-header span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* RULES */
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .rule-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+  .rule-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--accent);
+    opacity: 0.2;
+    line-height: 1;
+    margin-bottom: -8px;
+  }
+  .rule-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .rule-text { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+  /* SCHEDULE */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .week-day {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .week-day-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .week-day-type {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    line-height: 1.1;
+  }
+  .week-day-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+  .type-A { color: var(--accent3); border-top: 3px solid var(--accent3); }
+  .type-B { color: var(--accent); border-top: 3px solid var(--accent); }
+  .type-C { color: var(--accent2); border-top: 3px solid var(--accent2); }
+  .type-D { color: var(--green); border-top: 3px solid var(--green); }
+  .type-rest { color: var(--muted); }
+
+  /* PRINT */
+  @media print {
+    .nav { display: none; }
+    .section { display: block !important; page-break-before: always; }
+    .section:first-child { page-break-before: auto; }
+    .day-body { display: block !important; }
+    body { background: white; color: black; }
+  }
+
+  @media (max-width: 700px) {
+    .header { padding: 20px; }
+    .header h1 { font-size: 36px; }
+    .nav { padding: 0 12px; }
+    .content { padding: 20px; }
+    .week-grid { grid-template-columns: repeat(4, 1fr); }
+    .meal-row { grid-template-columns: 80px 1fr; }
+    .meal-kcal, .meal-protein { display: none; }
+    .ex-table th:nth-child(5), .ex-table td:nth-child(5) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">Персональна програма тренувань</div>
+  <h1>ПЛАН НА <span>12 ТИЖНІВ</span></h1>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">Вік</span><span class="meta-value">40 р.</span></div>
+    <div class="meta-item"><span class="meta-label">Стартова вага</span><span class="meta-value">118 кг</span></div>
+    <div class="meta-item"><span class="meta-label">Ціль</span><span class="meta-value">105 кг</span></div>
+    <div class="meta-item"><span class="meta-label">Рівень</span><span class="meta-value">Відновлення</span></div>
+    <div class="meta-item"><span class="meta-label">Обладнання</span><span class="meta-value">Повний зал</span></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showSection('schedule')">Розклад</button>
+  <button class="nav-btn" onclick="showSection('phase1')">Фаза 1 — Тижні 1–4</button>
+  <button class="nav-btn" onclick="showSection('phase2')">Фаза 2 — Тижні 5–8</button>
+  <button class="nav-btn" onclick="showSection('phase3')">Фаза 3 — Тижні 9–12</button>
+  <button class="nav-btn" onclick="showSection('progression')">Прогресія ваг</button>
+  <button class="nav-btn" onclick="showSection('nutrition')">Харчування</button>
+</nav>
+
+<div class="content">
+
+<!-- SCHEDULE -->
+<div id="schedule" class="section active">
+  <div class="phase-header">
+    <div class="phase-num">W</div>
+    <div class="phase-info">
+      <div class="phase-badge">ТИЖНЕВИЙ РОЗКЛАД</div>
+      <h2>Структура тижня</h2>
+      <p>4 активних дні + 3 дні відновлення. Upper/Lower сплітт — кожна група м'язів отримує 2 стимули на тиждень. Оптимально для жироспалювання та збереження м'язів після 40.</p>
+    </div>
+  </div>
+
+  <div class="week-grid">
+    <div class="week-day type-A">
+      <div class="week-day-name">Пн</div>
+      <div class="week-day-type">ДЕНЬ A</div>
+      <div class="week-day-sub">Спина + Біцепс</div>
+    </div>
+    <div class="week-day type-rest">
+      <div class="week-day-name">Вт</div>
+      <div class="week-day-type" style="font-size:16px;color:var(--muted)">Відпочинок</div>
+      <div class="week-day-sub">прогулянка 30 хв</div>
+    </div>
+    <div class="week-day type-B">
+      <div class="week-day-name">Ср</div>
+      <div class="week-day-type">ДЕНЬ Б</div>
+      <div class="week-day-sub">Ноги + Прес</div>
+    </div>
+    <div class="week-day type-rest">
+      <div class="week-day-name">Чт</div>
+      <div class="week-day-type" style="font-size:16px;color:var(--muted)">Відпочинок</div>
+      <div class="week-day-sub">прогулянка 30 хв</div>
+    </div>
+    <div class="week-day type-C">
+      <div class="week-day-name">Пт</div>
+      <div class="week-day-type">ДЕНЬ В</div>
+      <div class="week-day-sub">Груди + Плечі</div>
+    </div>
+    <div class="week-day type-D">
+      <div class="week-day-name">Сб</div>
+      <div class="week-day-type">ДЕНЬ Г</div>
+      <div class="week-day-sub">Кардіо</div>
+    </div>
+    <div class="week-day type-rest">
+      <div class="week-day-name">Нд</div>
+      <div class="week-day-type" style="font-size:16px;color:var(--muted)">ВІДПОЧИНОК</div>
+      <div class="week-day-sub">повний</div>
+    </div>
+  </div>
+
+  <div class="rules-grid">
+    <div class="rule-card">
+      <div class="rule-num">01</div>
+      <div class="rule-title">⏱ Тривалість тренування</div>
+      <div class="rule-text">Силова частина: 50–60 хв. Кардіо після: 20–30 хв. Разом не більше 90 хв. Довше — гірше при жироспалюванні.</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">02</div>
+      <div class="rule-title">💓 Пульс під час кардіо</div>
+      <div class="rule-text">Жиросплавна зона: 65–75% від максимального. Для тебе це 130–145 уд/хв. Формула макс. ЧСС: 220 − 40 = 180.</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">03</div>
+      <div class="rule-title">📈 Прогресія</div>
+      <div class="rule-text">Якщо виконав верхню межу повторень чисто у всіх підходах — наступного тижня +2,5 кг. Не поспішай.</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">04</div>
+      <div class="rule-title">📓 Щоденник</div>
+      <div class="rule-text">Записуй кожне тренування: вправа, вага, підходи×повторення. Ти робив це у 2014 — продовжуй традицію!</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">05</div>
+      <div class="rule-title">⚖️ Контроль ваги</div>
+      <div class="rule-text">Зважуйся щопонеділка вранці натщесерце. Фіксуй обхвати раз на місяць (талія, стегна, груди, руки).</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-num">06</div>
+      <div class="rule-title">😴 Відновлення</div>
+      <div class="rule-text">Сон 7–8 годин — критично важливий для спалювання жиру та зростання сили. Не жертвуй сном заради тренування.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 1 -->
+<div id="phase1" class="section">
+  <div class="phase-header">
+    <div class="phase-num">1</div>
+    <div class="phase-info">
+      <div class="phase-badge">ТИЖНІ 1–4 · АДАПТАЦІЯ</div>
+      <h2>Відновлення техніки та адаптація</h2>
+      <p>Ваги легкі — 50–60% від можливого максимуму. Пріоритет — правильна техніка, без болю. Суглоби та зв'язки адаптуються повільніше, ніж м'язи. Не намагайся зробити "як раніше" з першого тижня — це головна помилка повернення.</p>
+    </div>
+  </div>
+
+  <div class="warning-block">
+    <h4>⚠️ Важливо для першого місяця</h4>
+    <p>Відчуття легкого м'язового болю через 1–2 дні після тренування (DOMS) — норма. Гострий біль у суглобах під час виконання — сигнал зупинитися та перевірити техніку. Зменш вагу, але не пропускай тренування.</p>
+  </div>
+
+  <div class="days-grid">
+
+    <!-- DAY A -->
+    <div class="day-card day-A" id="p1-dayA">
+      <div class="day-header" onclick="toggleDay('p1-dayA')">
+        <div class="day-letter">A</div>
+        <div class="day-title">
+          <strong>ДЕНЬ А — Спина + Біцепс</strong>
+          <span>Понеділок · Тижні 1–4</span>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="warmup-block">
+          <h4>🔥 Розминка (10 хв)</h4>
+          <p>Суглобова: кола руками вперед/назад 10 разів, обертання передпліч, нахили голови. Потім <strong>скакалка або орбітрек 7 хв</strong> у лeгкому темпі (пульс до 120).</p>
+        </div>
+        <table class="ex-table">
+          <tr><th>#</th><th>Вправа</th><th>Підходи × Повт.</th><th>Вага (тижні 1→4)</th><th>Відпочинок</th></tr>
+          <tr>
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Тяга горизонт. блоку до поясу</div><div class="ex-tip">Лопатки зводиш в кінці руху, не горбись</div></td>
+            <td class="sets-cell">3 × 15</td>
+            <td class="weight-cell"><span class="weight-main">30→35→40→40 кг</span></td>
+            <td class="rest-cell">75 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Тяга вертик. блоку широким хватом</div><div class="ex-tip">Лікті тягнуть вниз, не розгойдуйся</div></td>
+            <td class="sets-cell">3 × 12</td>
+            <td class="weight-cell"><span class="weight-main">40→45→50→50 кг</span></td>
+            <td class="rest-cell">90 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Тяга гантелі в нахилі (одна рука)</div><div class="ex-tip">Спина паралельна підлозі, лікоть іде вздовж тулуба вгору</div></td>
+            <td class="sets-cell">3 × 12 кожна</td>
+            <td class="weight-cell"><span class="weight-main">12→14→16→16 кг</span></td>
+            <td class="rest-cell">60 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">4</td>
+            <td><div class="ex-name">Гіперекстензія</div><div class="ex-tip">Тільки до горизонталі! Без перегинання</div></td>
+            <td class="sets-cell">3 × 15</td>
+            <td class="weight-cell"><span class="weight-main">без ваги</span></td>
+            <td class="rest-cell">60 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">5</td>
+            <td><div class="ex-name">Згинач (EZ-штанга або гантелі) — біцепс</div><div class="ex-tip">Лікті нерухомі біля тулуба, рух плавний</div></td>
+            <td class="sets-cell">3 × 12</td>
+            <td class="weight-cell"><span class="weight-main">14→16→18→18 кг</span></td>
+            <td class="rest-cell">60 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">6</td>
+            <td><div class="ex-name">Підйом ніг лежачи (поперемінно)</div><div class="ex-tip">Поперек притиснутий до підлоги</div></td>
+            <td class="sets-cell">3 × 20 кожна</td>
+            <td class="weight-cell"><span class="weight-main">без ваги</span></td>
+            <td class="rest-cell">45 сек</td>
+          </tr>
+        </table>
+        <div class="cardio-block">
+          <div class="cardio-icon">🚴</div>
+          <div class="cardio-text"><strong>Кардіо після (обов'язково!):</strong> Велотренажер або орбітрек — <strong>тижні 1–2: 20 хв, тижні 3–4: 25 хв</strong>. Пульс 130–145 уд/хв.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY B -->
+    <div class="day-card day-B" id="p1-dayB">
+      <div class="day-header" onclick="toggleDay('p1-dayB')">
+        <div class="day-letter">Б</div>
+        <div class="day-title">
+          <strong>ДЕНЬ Б — Ноги + Прес</strong>
+          <span>Середа · Тижні 1–4</span>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="warmup-block">
+          <h4>🔥 Розминка (10 хв)</h4>
+          <p>Суглобова: кола колінами, кола стегнами, кола гомілкостопами — по 10 разів. Потім <strong>доріжка 5 хв</strong> швидкою ходою (6 км/год).</p>
+        </div>
+        <table class="ex-table">
+          <tr><th>#</th><th>Вправа</th><th>Підходи × Повт.</th><th>Вага (тижні 1→4)</th><th>Відпочинок</th></tr>
+          <tr>
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Присідання зі штангою (або у Гака)</div><div class="ex-tip">Коліна за носками, спина рівна, сідниці відводиш назад</div></td>
+            <td class="sets-cell">4 × 15</td>
+            <td class="weight-cell"><span class="weight-main">20→25→30→30 кг</span></td>
+            <td class="rest-cell">90 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Випади кроком</div><div class="ex-tip">Коліно заднє майже торкається підлоги, тулуб прямий</div></td>
+            <td class="sets-cell">3 × 10 кожна</td>
+            <td class="weight-cell"><span class="weight-main">без ваги→гантелі 8 кг</span></td>
+            <td class="rest-cell">75 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Жим ногами (у тренажері)</div><div class="ex-tip">Коліна не випрямляй до кінця, стопи на ширині плечей</div></td>
+            <td class="sets-cell">3 × 15</td>
+            <td class="weight-cell"><span class="weight-main">50→60→70→70 кг</span></td>
+            <td class="rest-cell">90 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">4</td>
+            <td><div class="ex-name">Румунська тяга (гантелі)</div><div class="ex-tip">Спина рівна, гантелі вздовж ніг, відчуваєш задню поверхню стегна</div></td>
+            <td class="sets-cell">3 × 12</td>
+            <td class="weight-cell"><span class="weight-main">16→18→20→20 кг</span></td>
+            <td class="rest-cell">75 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">5</td>
+            <td><div class="ex-name">Гомілки стоячи</div><div class="ex-tip">Повна амплітуда: і вниз, і вгору до кінця</div></td>
+            <td class="sets-cell">4 × 20</td>
+            <td class="weight-cell"><span class="weight-main">без ваги або 30 кг</span></td>
+            <td class="rest-cell">45 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">6</td>
+            <td><div class="ex-name">Скручування на підлозі</div><div class="ex-tip">Не тягни за шию, працює прес — не інерція</div></td>
+            <td class="sets-cell">3 × 20</td>
+            <td class="weight-cell"><span class="weight-main">без ваги</span></td>
+            <td class="rest-cell">45 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">7</td>
+            <td><div class="ex-name">Планка</div><div class="ex-tip">Тіло — одна пряма лінія, не задирай сідниці</div></td>
+            <td class="sets-cell">3 × 30 сек</td>
+            <td class="weight-cell"><span class="weight-main">—</span></td>
+            <td class="rest-cell">45 сек</td>
+          </tr>
+        </table>
+        <div class="cardio-block">
+          <div class="cardio-icon">🚶</div>
+          <div class="cardio-text"><strong>Кардіо після:</strong> Бігова доріжка — <strong>20 хв</strong> швидкою ходою 6–6,5 км/год або легкий біг. Пульс 130–140 уд/хв.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY C -->
+    <div class="day-card day-C" id="p1-dayC">
+      <div class="day-header" onclick="toggleDay('p1-dayC')">
+        <div class="day-letter">В</div>
+        <div class="day-title">
+          <strong>ДЕНЬ В — Груди + Плечі + Трицепс</strong>
+          <span>П'ятниця · Тижні 1–4</span>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="warmup-block">
+          <h4>🔥 Розминка (10 хв)</h4>
+          <p>Суглобова: кола плечима вперед/назад, обертання в ліктях, замок за спиною. Потім <strong>скакалка 5 хв</strong> у спокійному темпі.</p>
+        </div>
+        <table class="ex-table">
+          <tr><th>#</th><th>Вправа</th><th>Підходи × Повт.</th><th>Вага (тижні 1→4)</th><th>Відпочинок</th></tr>
+          <tr>
+            <td class="ex-num">1</td>
+            <td><div class="ex-name">Жим штанги лежачи 30° нахил</div><div class="ex-tip">Лопатки зведені та притиснуті до лави, штанга до верхніх грудей</div></td>
+            <td class="sets-cell">4 × 12</td>
+            <td class="weight-cell"><span class="weight-main">30→35→40→40 кг</span></td>
+            <td class="rest-cell">90 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">2</td>
+            <td><div class="ex-name">Жим гантелей горизонтально</div><div class="ex-tip">В нижній точці лікті трохи нижче плечей</div></td>
+            <td class="sets-cell">3 × 12</td>
+            <td class="weight-cell"><span class="weight-main">14→16→18→18 кг</span></td>
+            <td class="rest-cell">75 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">3</td>
+            <td><div class="ex-name">Розведення (бабочка) в тренажері</div><div class="ex-tip">Рух повільний, відчуваєш розтяжку в грудях</div></td>
+            <td class="sets-cell">3 × 15</td>
+            <td class="weight-cell"><span class="weight-main">20→25→30→30 кг</span></td>
+            <td class="rest-cell">60 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">4</td>
+            <td><div class="ex-name">Жим гантелей сидячи (плечі)</div><div class="ex-tip">Лікті трохи вперед від лінії плечей, не закидай гантелі за голову</div></td>
+            <td class="sets-cell">3 × 12</td>
+            <td class="weight-cell"><span class="weight-main">10→12→14→14 кг</span></td>
+            <td class="rest-cell">75 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">5</td>
+            <td><div class="ex-name">Махи в сторони (гантелі)</div><div class="ex-tip">Легкий нахил вперед, лікоть трохи зігнутий, рух до рівня плечей</div></td>
+            <td class="sets-cell">3 × 15</td>
+            <td class="weight-cell"><span class="weight-main">5→6→7→7 кг</span></td>
+            <td class="rest-cell">45 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">6</td>
+            <td><div class="ex-name">Відтискання від підлоги</div><div class="ex-tip">Тіло пряме, не провалюй поперек; якщо важко — з колін</div></td>
+            <td class="sets-cell">3 × максимум</td>
+            <td class="weight-cell"><span class="weight-main">власна вага</span></td>
+            <td class="rest-cell">75 сек</td>
+          </tr>
+          <tr>
+            <td class="ex-num">7</td>
+            <td><div class="ex-name">Розгинання трицепса на блоці</div><div class="ex-tip">Лікті нерухомі, притиснуті до тулуба</div></td>
+            <td class="sets-cell">3 × 12</td>
+            <td class="weight-cell"><span class="weight-main">15→20→25→25 кг</span></td>
+            <td class="rest-cell">60 сек</td>
+          </tr>
+        </table>
+        <div class="cardio-block">
+          <div class="cardio-icon">🛸</div>
+          <div class="cardio-text"><strong>Кардіо після:</strong> Орбітрек — <strong>tижні 1–2: 20 хв, тижні 3–4: 25 хв</strong>. Пульс 130–145 уд/хв.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY D -->
+    <div class="day-card day-D" id="p1-dayD">
+      <div class="day-header" onclick="toggleDay('p1-dayD')">
+        <div class="day-letter">Г</div>
+        <div class="day-title">
+          <strong>ДЕНЬ Г — Кардіо + Мобільність</strong>
+          <span>Субота · Тижні 1–4</span>
+        </div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="warmup-block">
+          <h4>🕐 Тижні 1–4: 35 хв кардіо</h4>
+          <p><strong>5 хв</strong> — легка хода, розминка. <strong>30 хв</strong> — орбітрек або велосипед, пульс 125–135 уд/хв (нижня жиросплавна зона). <strong>10–15 хв</strong> — стретчинг: квадрицепс, стегно, груди, плечі, поперек. Тримай кожне положення 30–40 секунд.</p>
+        </div>
+        <div class="cardio-block">
+          <div class="cardio-icon">🔥</div>
+          <div class="cardio-text">Цей день дає +300–400 ккал до тижневого дефіциту. <strong>Не пропускай!</strong> Саме він буде вирішальним для темпу схуднення.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PHASE 2 -->
+<div id="phase2" class="section">
+  <div class="phase-header">
+    <div class="phase-num">2</div>
+    <div class="phase-info">
+      <div class="phase-badge">ТИЖНІ 5–8 · ПРОГРЕС</div>
+      <h2>Нарощування навантаження</h2>
+      <p>Тіло адаптувалося. Тепер збільшуємо ваги та об'єм. Додаємо 4-й підхід у ключових вправах. Кардіо зростає до 30 хв після силового. Ти маєш відчувати прогрес — і в дзеркалі, і у щоденнику.</p>
+    </div>
+  </div>
+
+  <div class="days-grid">
+    <div class="day-card day-A" id="p2-dayA">
+      <div class="day-header" onclick="toggleDay('p2-dayA')">
+        <div class="day-letter">A</div>
+        <div class="day-title"><strong>ДЕНЬ А — Спина + Біцепс</strong><span>Понеділок · Тижні 5–8</span></div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>#</th><th>Вправа</th><th>Підходи × Повт.</th><th>Вага (тижні 5→8)</th><th>Відпочинок</th></tr>
+          <tr><td class="ex-num">1</td><td><div class="ex-name">Тяга горизонт. блоку до поясу</div></td><td class="sets-cell">4 × 12</td><td class="weight-cell"><span class="weight-main">45→47,5→50→52,5 кг</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">2</td><td><div class="ex-name">Тяга вертик. блоку широким хватом</div></td><td class="sets-cell">4 × 10</td><td class="weight-cell"><span class="weight-main">55→57,5→60→62,5 кг</span></td><td class="rest-cell">90 сек</td></tr>
+          <tr><td class="ex-num">3</td><td><div class="ex-name">Тяга гантелі в нахилі</div></td><td class="sets-cell">4 × 10 кожна</td><td class="weight-cell"><span class="weight-main">18→20→22→24 кг</span></td><td class="rest-cell">60 сек</td></tr>
+          <tr><td class="ex-num">4</td><td><div class="ex-name">Гіперекстензія</div><td class="sets-cell">3 × 15</td><td class="weight-cell"><span class="weight-main">+5 кг блін</span></td><td class="rest-cell">60 сек</td></tr>
+          <tr><td class="ex-num">5</td><td><div class="ex-name">Згинач — біцепс (EZ або гантелі)</div></td><td class="sets-cell">4 × 10</td><td class="weight-cell"><span class="weight-main">20→22→24→26 кг</span></td><td class="rest-cell">60 сек</td></tr>
+          <tr><td class="ex-num">6</td><td><div class="ex-name">Молотки (гантелі, нейтральний хват)</div><div class="ex-tip">Новинка! Добре бʼє плечову частину біцепса</div></td><td class="sets-cell">3 × 12</td><td class="weight-cell"><span class="weight-main">14→16→18 кг</span></td><td class="rest-cell">60 сек</td></tr>
+          <tr><td class="ex-num">7</td><td><div class="ex-name">Скручування (прес)</div></td><td class="sets-cell">3 × 25</td><td class="weight-cell"><span class="weight-main">без ваги</span></td><td class="rest-cell">45 сек</td></tr>
+        </table>
+        <div class="cardio-block"><div class="cardio-icon">🚴</div><div class="cardio-text"><strong>Кардіо:</strong> 30 хв велосипед або орбітрек, пульс 135–145 уд/хв.</div></div>
+      </div>
+    </div>
+
+    <div class="day-card day-B" id="p2-dayB">
+      <div class="day-header" onclick="toggleDay('p2-dayB')">
+        <div class="day-letter">Б</div>
+        <div class="day-title"><strong>ДЕНЬ Б — Ноги + Прес</strong><span>Середа · Тижні 5–8</span></div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>#</th><th>Вправа</th><th>Підходи × Повт.</th><th>Вага (тижні 5→8)</th><th>Відпочинок</th></tr>
+          <tr><td class="ex-num">1</td><td><div class="ex-name">Присідання зі штангою</div></td><td class="sets-cell">4 × 12</td><td class="weight-cell"><span class="weight-main">35→40→42,5→45 кг</span></td><td class="rest-cell">90 сек</td></tr>
+          <tr><td class="ex-num">2</td><td><div class="ex-name">Випади кроком (з гантелями)</div></td><td class="sets-cell">4 × 10 кожна</td><td class="weight-cell"><span class="weight-main">10→12→14→16 кг</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">3</td><td><div class="ex-name">Жим ногами</div></td><td class="sets-cell">4 × 12</td><td class="weight-cell"><span class="weight-main">75→80→85→90 кг</span></td><td class="rest-cell">90 сек</td></tr>
+          <tr><td class="ex-num">4</td><td><div class="ex-name">Румунська тяга (гантелі)</div></td><td class="sets-cell">4 × 10</td><td class="weight-cell"><span class="weight-main">22→24→26→28 кг</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">5</td><td><div class="ex-name">Гомілки стоячи</div></td><td class="sets-cell">4 × 20</td><td class="weight-cell"><span class="weight-main">40→45→50→55 кг</span></td><td class="rest-cell">45 сек</td></tr>
+          <tr><td class="ex-num">6</td><td><div class="ex-name">Скручування на підлозі</div></td><td class="sets-cell">4 × 25</td><td class="weight-cell"><span class="weight-main">без ваги</span></td><td class="rest-cell">45 сек</td></tr>
+          <tr><td class="ex-num">7</td><td><div class="ex-name">Планка</div></td><td class="sets-cell">3 × 45 сек</td><td class="weight-cell"><span class="weight-main">—</span></td><td class="rest-cell">45 сек</td></tr>
+        </table>
+        <div class="cardio-block"><div class="cardio-icon">🚶</div><div class="cardio-text"><strong>Кардіо:</strong> 25 хв доріжка (7 км/год або інтервали: 1 хв біг / 1 хв хода).</div></div>
+      </div>
+    </div>
+
+    <div class="day-card day-C" id="p2-dayC">
+      <div class="day-header" onclick="toggleDay('p2-dayC')">
+        <div class="day-letter">В</div>
+        <div class="day-title"><strong>ДЕНЬ В — Груди + Плечі + Трицепс</strong><span>П'ятниця · Тижні 5–8</span></div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>#</th><th>Вправа</th><th>Підходи × Повт.</th><th>Вага (тижні 5→8)</th><th>Відпочинок</th></tr>
+          <tr><td class="ex-num">1</td><td><div class="ex-name">Жим штанги лежачи 30° нахил</div></td><td class="sets-cell">4 × 10</td><td class="weight-cell"><span class="weight-main">45→47,5→50→52,5 кг</span></td><td class="rest-cell">90 сек</td></tr>
+          <tr><td class="ex-num">2</td><td><div class="ex-name">Жим гантелей горизонтально</div></td><td class="sets-cell">4 × 10</td><td class="weight-cell"><span class="weight-main">20→22→24→26 кг</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">3</td><td><div class="ex-name">Розведення (бабочка) в тренажері</div></td><td class="sets-cell">3 × 12</td><td class="weight-cell"><span class="weight-main">35→40→45 кг</span></td><td class="rest-cell">60 сек</td></tr>
+          <tr><td class="ex-num">4</td><td><div class="ex-name">Жим гантелей сидячи (плечі)</div></td><td class="sets-cell">4 × 10</td><td class="weight-cell"><span class="weight-main">16→18→20→22 кг</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">5</td><td><div class="ex-name">Махи в сторони</div></td><td class="sets-cell">4 × 12</td><td class="weight-cell"><span class="weight-main">7→8→9→10 кг</span></td><td class="rest-cell">45 сек</td></tr>
+          <tr><td class="ex-num">6</td><td><div class="ex-name">Відтискання (або від брусів)</div></td><td class="sets-cell">4 × максимум</td><td class="weight-cell"><span class="weight-main">власна вага</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">7</td><td><div class="ex-name">Розгинання трицепса на блоці</div></td><td class="sets-cell">4 × 10</td><td class="weight-cell"><span class="weight-main">28→30→33→35 кг</span></td><td class="rest-cell">60 сек</td></tr>
+        </table>
+        <div class="cardio-block"><div class="cardio-icon">🛸</div><div class="cardio-text"><strong>Кардіо:</strong> 30 хв орбітрек, пульс 135–145 уд/хв.</div></div>
+      </div>
+    </div>
+
+    <div class="day-card day-D" id="p2-dayD">
+      <div class="day-header" onclick="toggleDay('p2-dayD')">
+        <div class="day-letter">Г</div>
+        <div class="day-title"><strong>ДЕНЬ Г — Кардіо + Мобільність</strong><span>Субота · Тижні 5–8</span></div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="warmup-block">
+          <h4>🕐 Тижні 5–8: 45 хв кардіо</h4>
+          <p><strong>5 хв</strong> — розминка. <strong>40 хв</strong> — орбітрек або велосипед. Можна додати інтервали: 3 хв помірно / 1 хв інтенсивно, повторити 8 разів. <strong>10 хв</strong> — стретчинг.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 3 -->
+<div id="phase3" class="section">
+  <div class="phase-header">
+    <div class="phase-num">3</div>
+    <div class="phase-info">
+      <div class="phase-badge">ТИЖНІ 9–12 · ІНТЕНСИФІКАЦІЯ</div>
+      <h2>Максимальне жироспалювання</h2>
+      <p>Ти вже 2 місяці в режимі. Тіло адаптоване. Тепер підвищуємо інтенсивність: більше ваги, більше кардіо, додаємо суперсети в ізолюючих вправах. За цей місяць має бути помітний прогрес у дзеркалі.</p>
+    </div>
+  </div>
+
+  <div class="days-grid">
+    <div class="day-card day-A" id="p3-dayA">
+      <div class="day-header" onclick="toggleDay('p3-dayA')">
+        <div class="day-letter">A</div>
+        <div class="day-title"><strong>ДЕНЬ А — Спина + Біцепс</strong><span>Понеділок · Тижні 9–12</span></div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>#</th><th>Вправа</th><th>Підходи × Повт.</th><th>Вага (тижні 9→12)</th><th>Відпочинок</th></tr>
+          <tr><td class="ex-num">1</td><td><div class="ex-name">Тяга горизонт. блоку</div></td><td class="sets-cell">4 × 10</td><td class="weight-cell"><span class="weight-main">55→57,5→60→62,5 кг</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">2</td><td><div class="ex-name">Тяга вертик. блоку / Підтягування</div><div class="ex-tip">Якщо можеш 5+ підтягувань — переходь на них!</div></td><td class="sets-cell">4 × 8–10</td><td class="weight-cell"><span class="weight-main">65→67,5→70→70 кг</span></td><td class="rest-cell">90 сек</td></tr>
+          <tr><td class="ex-num">3</td><td><div class="ex-name">Тяга гантелі в нахилі</div></td><td class="sets-cell">4 × 8 кожна</td><td class="weight-cell"><span class="weight-main">26→28→30→32 кг</span></td><td class="rest-cell">60 сек</td></tr>
+          <tr><td class="ex-num">4</td><td><div class="ex-name">Гіперекстензія</div></td><td class="sets-cell">4 × 15</td><td class="weight-cell"><span class="weight-main">10 кг</span></td><td class="rest-cell">60 сек</td></tr>
+          <tr><td class="ex-num">5+6</td><td><div class="ex-name">⚡ СУПЕРСЕТ: Згинач біцепс + Молотки</div><div class="ex-tip">Без відпочинку між ними!</div></td><td class="sets-cell">3 × 10 + 10</td><td class="weight-cell"><span class="weight-main">26 кг + 18 кг</span></td><td class="rest-cell">90 сек між</td></tr>
+          <tr><td class="ex-num">7</td><td><div class="ex-name">Скручування + Підйом ніг у висі</div></td><td class="sets-cell">3 × 20</td><td class="weight-cell"><span class="weight-main">—</span></td><td class="rest-cell">45 сек</td></tr>
+        </table>
+        <div class="cardio-block"><div class="cardio-icon">🚴</div><div class="cardio-text"><strong>Кардіо:</strong> 35 хв велосипед або орбітрек. Останні 5 хв — інтенсивно (пульс 155+).</div></div>
+      </div>
+    </div>
+
+    <div class="day-card day-B" id="p3-dayB">
+      <div class="day-header" onclick="toggleDay('p3-dayB')">
+        <div class="day-letter">Б</div>
+        <div class="day-title"><strong>ДЕНЬ Б — Ноги + Прес</strong><span>Середа · Тижні 9–12</span></div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>#</th><th>Вправа</th><th>Підходи × Повт.</th><th>Вага (тижні 9→12)</th><th>Відпочинок</th></tr>
+          <tr><td class="ex-num">1</td><td><div class="ex-name">Присідання зі штангою</div></td><td class="sets-cell">5 × 10</td><td class="weight-cell"><span class="weight-main">47,5→50→52,5→55 кг</span></td><td class="rest-cell">90 сек</td></tr>
+          <tr><td class="ex-num">2</td><td><div class="ex-name">Випади кроком</div></td><td class="sets-cell">4 × 12 кожна</td><td class="weight-cell"><span class="weight-main">18→20→22→24 кг</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">3</td><td><div class="ex-name">Жим ногами</div></td><td class="sets-cell">4 × 10</td><td class="weight-cell"><span class="weight-main">95→100→105→110 кг</span></td><td class="rest-cell">90 сек</td></tr>
+          <tr><td class="ex-num">4</td><td><div class="ex-name">Румунська тяга</div></td><td class="sets-cell">4 × 8</td><td class="weight-cell"><span class="weight-main">30→32→34→36 кг</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">5</td><td><div class="ex-name">Гомілки стоячи</div></td><td class="sets-cell">5 × 20</td><td class="weight-cell"><span class="weight-main">60→65→70→70 кг</span></td><td class="rest-cell">45 сек</td></tr>
+          <tr><td class="ex-num">6+7</td><td><div class="ex-name">⚡ СУПЕРСЕТ: Скручування + Планка</div></td><td class="sets-cell">4 × 30 + 60 сек</td><td class="weight-cell"><span class="weight-main">—</span></td><td class="rest-cell">60 сек між</td></tr>
+        </table>
+        <div class="cardio-block"><div class="cardio-icon">🚶</div><div class="cardio-text"><strong>Кардіо:</strong> 30 хв інтервальна ходьба/біг. 2 хв хода / 1 хв біг, × 10 разів.</div></div>
+      </div>
+    </div>
+
+    <div class="day-card day-C" id="p3-dayC">
+      <div class="day-header" onclick="toggleDay('p3-dayC')">
+        <div class="day-letter">В</div>
+        <div class="day-title"><strong>ДЕНЬ В — Груди + Плечі + Трицепс</strong><span>П'ятниця · Тижні 9–12</span></div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <table class="ex-table">
+          <tr><th>#</th><th>Вправа</th><th>Підходи × Повт.</th><th>Вага (тижні 9→12)</th><th>Відпочинок</th></tr>
+          <tr><td class="ex-num">1</td><td><div class="ex-name">Жим штанги лежачи 30°</div></td><td class="sets-cell">4 × 8–10</td><td class="weight-cell"><span class="weight-main">55→57,5→60→62,5 кг</span></td><td class="rest-cell">90 сек</td></tr>
+          <tr><td class="ex-num">2</td><td><div class="ex-name">Жим гантелей горизонтально</div></td><td class="sets-cell">4 × 8</td><td class="weight-cell"><span class="weight-main">28→30→32→34 кг</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">3</td><td><div class="ex-name">Розведення (бабочка) в тренажері</div></td><td class="sets-cell">3 × 15</td><td class="weight-cell"><span class="weight-main">50→55→60 кг</span></td><td class="rest-cell">60 сек</td></tr>
+          <tr><td class="ex-num">4</td><td><div class="ex-name">Жим гантелей сидячи (плечі)</div></td><td class="sets-cell">4 × 8</td><td class="weight-cell"><span class="weight-main">24→26→28→30 кг</span></td><td class="rest-cell">75 сек</td></tr>
+          <tr><td class="ex-num">5+6</td><td><div class="ex-name">⚡ СУПЕРСЕТ: Махи в сторони + Махи перед собою</div></td><td class="sets-cell">3 × 12 + 12</td><td class="weight-cell"><span class="weight-main">10 кг + 7 кг</span></td><td class="rest-cell">75 сек між</td></tr>
+          <tr><td class="ex-num">7</td><td><div class="ex-name">Відтискання від брусів</div></td><td class="sets-cell">4 × максимум</td><td class="weight-cell"><span class="weight-main">власна вага</span></td><td class="rest-cell">90 сек</td></tr>
+          <tr><td class="ex-num">8</td><td><div class="ex-name">Розгинання трицепса на блоці</div></td><td class="sets-cell">4 × 8</td><td class="weight-cell"><span class="weight-main">37→40→42→45 кг</span></td><td class="rest-cell">60 сек</td></tr>
+        </table>
+        <div class="cardio-block"><div class="cardio-icon">🛸</div><div class="cardio-text"><strong>Кардіо:</strong> 35 хв орбітрек. Пульс 140–150 уд/хв.</div></div>
+      </div>
+    </div>
+
+    <div class="day-card day-D" id="p3-dayD">
+      <div class="day-header" onclick="toggleDay('p3-dayD')">
+        <div class="day-letter">Г</div>
+        <div class="day-title"><strong>ДЕНЬ Г — Кардіо + Мобільність</strong><span>Субота · Тижні 9–12</span></div>
+        <div class="day-toggle">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="warmup-block">
+          <h4>🕐 Тижні 9–12: 50–55 хв кардіо</h4>
+          <p><strong>5 хв</strong> — розминка. <strong>45–50 хв</strong> — орбітрек або велосипед. Використовуй інтервальний протокол: 4 хв помірно (пульс 135) / 1 хв інтенсивно (пульс 160+), повторити 9–10 разів. <strong>10 хв</strong> — стретчинг. На 12-му тижні — можеш замінити на 40-хвилинну швидку прогулянку на свіжому повітрі.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESSION -->
+<div id="progression" class="section">
+  <div class="phase-header">
+    <div class="phase-num">↑</div>
+    <div class="phase-info">
+      <div class="phase-badge">ЗВЕДЕНА ТАБЛИЦЯ</div>
+      <h2>Прогресія ваг по тижнях</h2>
+      <p>Якщо в якомусь тижні не вдається виконати задану вагу чисто — залишайся на попередній ще тиждень. Техніка важливіша за цифру. Якщо ваги ростуть швидше — чудово, додавай!</p>
+    </div>
+  </div>
+
+  <table class="prog-table">
+    <tr>
+      <th>Вправа</th>
+      <th>Тижні 1–2 <span class="w-tag w-green">Адаптація</span></th>
+      <th>Тижні 3–4 <span class="w-tag w-green">Адаптація</span></th>
+      <th>Тижні 5–6 <span class="w-tag w-yellow">Прогрес</span></th>
+      <th>Тижні 7–8 <span class="w-tag w-yellow">Прогрес</span></th>
+      <th>Тижні 9–10 <span class="w-tag w-orange">Інтенс.</span></th>
+      <th>Тижні 11–12 <span class="w-tag w-orange">Інтенс.</span></th>
+    </tr>
+    <tr class="phase-1"><td><strong>Присідання</strong></td><td>20 кг</td><td>30 кг</td><td>37,5 кг</td><td>42,5 кг</td><td>50 кг</td><td>55 кг</td></tr>
+    <tr class="phase-1"><td><strong>Жим ногами</strong></td><td>50 кг</td><td>70 кг</td><td>80 кг</td><td>90 кг</td><td>100 кг</td><td>110 кг</td></tr>
+    <tr class="phase-1"><td><strong>Випади (гантелі)</strong></td><td>без ваги</td><td>8 кг</td><td>12 кг</td><td>16 кг</td><td>20 кг</td><td>24 кг</td></tr>
+    <tr class="phase-2"><td><strong>Румунська тяга</strong></td><td>16 кг</td><td>20 кг</td><td>24 кг</td><td>28 кг</td><td>32 кг</td><td>36 кг</td></tr>
+    <tr class="phase-2"><td><strong>Жим штанги 30°</strong></td><td>30 кг</td><td>40 кг</td><td>47,5 кг</td><td>52,5 кг</td><td>57,5 кг</td><td>62,5 кг</td></tr>
+    <tr class="phase-2"><td><strong>Жим гантелей лежачи</strong></td><td>14 кг</td><td>18 кг</td><td>22 кг</td><td>26 кг</td><td>30 кг</td><td>34 кг</td></tr>
+    <tr class="phase-3"><td><strong>Тяга гориз. блоку</strong></td><td>30 кг</td><td>40 кг</td><td>47,5 кг</td><td>52,5 кг</td><td>57,5 кг</td><td>62,5 кг</td></tr>
+    <tr class="phase-3"><td><strong>Тяга верт. блоку</strong></td><td>40 кг</td><td>50 кг</td><td>57,5 кг</td><td>62,5 кг</td><td>67,5 кг</td><td>70 кг</td></tr>
+    <tr class="phase-3"><td><strong>Згинач (біцепс)</strong></td><td>14 кг</td><td>18 кг</td><td>22 кг</td><td>26 кг</td><td>28 кг</td><td>30 кг</td></tr>
+    <tr class="phase-3"><td><strong>Жим плечей (гантелі)</strong></td><td>10 кг</td><td>14 кг</td><td>18 кг</td><td>22 кг</td><td>26 кг</td><td>30 кг</td></tr>
+    <tr class="phase-3"><td><strong>Махи в сторони</strong></td><td>5 кг</td><td>7 кг</td><td>8 кг</td><td>10 кг</td><td>10 кг</td><td>10 кг</td></tr>
+    <tr class="phase-3"><td><strong>Трицепс на блоці</strong></td><td>15 кг</td><td>25 кг</td><td>30 кг</td><td>35 кг</td><td>40 кг</td><td>45 кг</td></tr>
+    <tr class="phase-1"><td><strong>Кардіо (хв після силового)</strong></td><td>20 хв</td><td>25 хв</td><td>30 хв</td><td>30 хв</td><td>35 хв</td><td>35 хв</td></tr>
+    <tr class="phase-1"><td><strong>Кардіо день Г</strong></td><td>30 хв</td><td>35 хв</td><td>40 хв</td><td>45 хв</td><td>50 хв</td><td>55 хв</td></tr>
+  </table>
+
+  <div class="warning-block" style="margin-top:20px">
+    <h4>📌 Правило прогресії</h4>
+    <p>Якщо виконав усі підходи з чистою технікою і верхньою межею повторень — наступного тижня +2,5 кг. Для ніг можна +5 кг. Не виконав — залишайся на тій же вазі ще тиждень. Ніколи не жертвуй технікою заради ваги.</p>
+  </div>
+</div>
+
+<!-- NUTRITION -->
+<div id="nutrition" class="section">
+  <div class="phase-header">
+    <div class="phase-num">🥗</div>
+    <div class="phase-info">
+      <div class="phase-badge">ХАРЧУВАННЯ</div>
+      <h2>План харчування для схуднення</h2>
+      <p>Головне правило: помірний дефіцит калорій + достатньо білка. Білок захищає м'язи під час схуднення — це не опція, це обов'язково.</p>
+    </div>
+  </div>
+
+  <div class="nutrition-grid">
+    <div class="nut-card">
+      <div class="nut-label">Цільова калорійність</div>
+      <div class="nut-value">2300</div>
+      <div class="nut-unit">ккал/день (дні тренувань +150)</div>
+    </div>
+    <div class="nut-card">
+      <div class="nut-label">Мінімум білка</div>
+      <div class="nut-value">200</div>
+      <div class="nut-unit">г/день (1,7 г × кг маси тіла)</div>
+    </div>
+    <div class="nut-card">
+      <div class="nut-label">Дефіцит</div>
+      <div class="nut-value">~600</div>
+      <div class="nut-unit">ккал/день від TDEE</div>
+    </div>
+    <div class="nut-card">
+      <div class="nut-label">Очікуване схуднення</div>
+      <div class="nut-value">0,5</div>
+      <div class="nut-unit">кг/тиждень (безпечний темп)</div>
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);padding:24px;margin-bottom:24px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:16px;">Приклад розподілу їжі на день</div>
+    <div class="meal-header">
+      <span>Час</span><span>Що їсти</span><span style="text-align:right">Ккал</span><span style="text-align:right;min-width:50px">Білок</span>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">07:00</div>
+      <div class="meal-name"><strong>Сніданок</strong> — 4 яйця (варені або омлет) + 80 г вівсянки (суха) + 1 фрукт (банан або яблуко)</div>
+      <div class="meal-kcal">~580 ккал</div>
+      <div class="meal-protein">~40 г</div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">10:30</div>
+      <div class="meal-name"><strong>Перекус</strong> — 200 г грецького йогурту 2% + 30 г мигдалю або волоських горіхів</div>
+      <div class="meal-kcal">~300 ккал</div>
+      <div class="meal-protein">~20 г</div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">13:00</div>
+      <div class="meal-name"><strong>Обід</strong> — 200 г курячого філе гриль + 100 г гречки або рису (сухий) + салат з огірків та помідорів без майонезу</div>
+      <div class="meal-kcal">~560 ккал</div>
+      <div class="meal-protein">~50 г</div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">16:00</div>
+      <div class="meal-name"><strong>До тренування</strong> — банан + 30 г сиру або протеїновий батончик (за 60–90 хв до тренування)</div>
+      <div class="meal-kcal">~250 ккал</div>
+      <div class="meal-protein">~20 г</div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">19:30</div>
+      <div class="meal-name"><strong>Після тренування</strong> — 200 г риби (тріска, лосось, тунець) або 200 г курки + тушковані або запечені овочі (броколі, цукіні, перець)</div>
+      <div class="meal-kcal">~420 ккал</div>
+      <div class="meal-protein">~48 г</div>
+    </div>
+    <div class="meal-row">
+      <div class="meal-time">22:00</div>
+      <div class="meal-name"><strong>На ніч</strong> — 200 г сиру 5% (казеїн = повільний білок, живить м'язи вночі)</div>
+      <div class="meal-kcal">~220 ккал</div>
+      <div class="meal-protein">~28 г</div>
+    </div>
+    <div class="meal-row" style="background:rgba(232,255,71,0.05);border-top:2px solid var(--border)">
+      <div class="meal-time" style="color:var(--accent)">РАЗОМ</div>
+      <div class="meal-name" style="color:var(--text);font-weight:600">Вода: 2,5–3 літри на день</div>
+      <div class="meal-kcal" style="color:var(--accent);font-weight:600">~2330 ккал</div>
+      <div class="meal-protein" style="color:var(--green);font-weight:600">~206 г</div>
+    </div>
+  </div>
+
+  <div class="rules-grid">
+    <div class="rule-card">
+      <div class="rule-title">✅ Їж</div>
+      <div class="rule-text">Куряча грудка, індичка, риба, яйця, сир, грецький йогурт, гречка, рис, вівсянка, всі овочі, фрукти (до 16:00), горіхи (жменя), оливкова олія.</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-title">❌ Уникай</div>
+      <div class="rule-text">Солодкі напої та соки, фастфуд, випічка, ковбаси та сосиски, майонез, смажені страви, алкоголь (або раз на тиждень максимум), солодке після 16:00.</div>
+    </div>
+    <div class="rule-card">
+      <div class="rule-title">💡 Прості правила</div>
+      <div class="rule-text">Їж кожні 3–4 год. Вечеря — тільки білок + овочі, без вуглеводів. Голод між прийомами — склянка води. Не голодуй більше 5 годин.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function toggleDay(id) {
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+// Open first day in each phase by default
+document.addEventListener('DOMContentLoaded', () => {
+  ['p1-dayA', 'p2-dayA', 'p3-dayA'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('open');
+  });
+});
+</script>
