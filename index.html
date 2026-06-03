@@ -532,98 +532,169 @@
   #profile-screen {
     position: fixed;
     inset: 0;
-    background: #0f0f0f;
+    background: radial-gradient(ellipse at 30% 20%, rgba(232,255,71,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(71,200,255,0.04) 0%, transparent 50%),
+                #0a0a0a;
     z-index: 1999;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 24px;
+    padding: 32px 20px 48px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   #profile-screen.hidden { display: none; }
+
   .profile-box {
-    background: #181818;
-    border: 1px solid #2e2e2e;
-    border-radius: 8px;
-    padding: 32px 28px;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid rgba(255,255,255,0.13);
+    border-radius: 28px;
+    padding: 40px 32px 36px;
     width: 100%;
-    max-width: 480px;
+    max-width: 460px;
     margin: auto;
+    box-shadow:
+      0 32px 64px rgba(0,0,0,0.5),
+      0 0 0 0.5px rgba(255,255,255,0.06) inset,
+      0 1px 0 rgba(255,255,255,0.1) inset;
+  }
+
+  .profile-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(232,255,71,0.25);
   }
   .profile-logo {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    color: var(--accent);
-    letter-spacing: 2px;
-    margin-bottom: 4px;
+    font-size: 32px;
+    color: #fff;
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 6px;
   }
   .profile-sub {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 24px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 32px;
+    line-height: 1.4;
   }
+
   .profile-section-title {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 9px;
-    letter-spacing: 2px;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    color: var(--accent);
-    margin: 20px 0 12px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid #2e2e2e;
+    color: rgba(232,255,71,0.7);
+    margin: 28px 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
-  .profile-field { margin-bottom: 14px; }
+  .profile-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+  }
+
+  .profile-field { margin-bottom: 12px; }
   .profile-field label {
     display: block;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 7px;
+    padding-left: 4px;
   }
-  .profile-field input, .profile-field select {
+  .profile-field input,
+  .profile-field select {
     width: 100%;
-    background: #222;
-    border: 1px solid #2e2e2e;
-    border-radius: 4px;
-    padding: 10px 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 14px 18px;
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 15px;
-    color: #e8e8e8;
+    font-size: 16px;
+    color: #fff;
     outline: none;
+    transition: border-color .2s, background .2s, box-shadow .2s;
+    -webkit-appearance: none;
+    appearance: none;
   }
-  .profile-field input:focus, .profile-field select:focus { border-color: var(--accent); }
-  .profile-field select option { background: #181818; }
+  .profile-field input::placeholder { color: rgba(255,255,255,0.2); }
+  .profile-field input:focus,
+  .profile-field select:focus {
+    border-color: rgba(232,255,71,0.5);
+    background: rgba(232,255,71,0.05);
+    box-shadow: 0 0 0 3px rgba(232,255,71,0.08);
+  }
+  .profile-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+  .profile-field select option { background: #1a1a1a; color: #fff; }
+
   .profile-grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
+
   .profile-submit {
     width: 100%;
-    height: 48px;
+    height: 54px;
     background: var(--accent);
     border: none;
-    border-radius: 4px;
+    border-radius: 16px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 13px;
     font-weight: 600;
-    letter-spacing: 1px;
-    color: #0f0f0f;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #0a0a0a;
     cursor: pointer;
-    margin-top: 20px;
-    transition: opacity .15s;
+    margin-top: 28px;
+    transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease, opacity .15s;
+    box-shadow: 0 8px 24px rgba(232,255,71,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
-  .profile-submit:hover { opacity: .88; }
+  .profile-submit:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 14px 32px rgba(232,255,71,0.4);
+  }
+  .profile-submit:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 4px 12px rgba(232,255,71,0.2);
+  }
+
   .profile-error {
     font-size: 12px;
-    color: #ff4f4f;
-    margin-top: 10px;
+    color: #ff6b6b;
+    margin-top: 12px;
     font-family: 'IBM Plex Mono', monospace;
+    text-align: center;
+    min-height: 18px;
+  }
+
+  @media (max-width: 480px) {
+    .profile-box { padding: 32px 22px 28px; border-radius: 24px; }
+    .profile-submit { height: 52px; }
   }
 
   /* ══ PROGRESS PROFILE HEADER ══ */
@@ -3402,13 +3473,14 @@ document.addEventListener('DOMContentLoaded', () => initAuth());
 <!-- PROFILE SETUP SCREEN -->
 <div id="profile-screen" class="hidden">
   <div class="profile-box">
-    <div class="profile-logo">PROFILE SETUP</div>
-    <div class="profile-sub">Налаштування профілю — один раз</div>
+    <div class="profile-icon">🏋️</div>
+    <div class="profile-logo">Твій профіль</div>
+    <div class="profile-sub">Заповни один раз — трекер адаптується під тебе</div>
 
     <div class="profile-section-title">Основне</div>
     <div class="profile-field">
-      <label>Ім'я або нікнейм</label>
-      <input type="text" id="p-nickname" placeholder="Ваше ім'я" maxlength="30">
+      <label>Нікнейм</label>
+      <input type="text" id="p-nickname" placeholder="Як тебе звати?" maxlength="30" autocomplete="off">
     </div>
     <div class="profile-field">
       <label>Мета тренувань</label>
@@ -3420,18 +3492,20 @@ document.addEventListener('DOMContentLoaded', () => initAuth());
         <option value="custom">🎯 Індивідуальна ціль</option>
       </select>
     </div>
+
+    <div class="profile-section-title">Вага</div>
     <div class="profile-grid-2">
       <div class="profile-field">
-        <label>Поточна вага (кг)</label>
-        <input type="number" id="p-weight" placeholder="118" step="0.1" inputmode="decimal">
+        <label>Поточна (кг)</label>
+        <input type="number" id="p-weight" placeholder="—" step="0.1" inputmode="decimal">
       </div>
       <div class="profile-field">
-        <label>Цільова вага (кг)</label>
-        <input type="number" id="p-target" placeholder="105" step="0.1" inputmode="decimal">
+        <label>Ціль (кг)</label>
+        <input type="number" id="p-target" placeholder="—" step="0.1" inputmode="decimal">
       </div>
     </div>
 
-    <div class="profile-section-title">Початкові заміри (необов'язково)</div>
+    <div class="profile-section-title">Заміри тіла <span style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:none;font-family:'IBM Plex Sans',sans-serif">(необов'язково)</span></div>
     <div class="profile-grid-2">
       <div class="profile-field">
         <label>Талія (см)</label>
@@ -3451,7 +3525,7 @@ document.addEventListener('DOMContentLoaded', () => initAuth());
       </div>
     </div>
 
-    <button class="profile-submit" onclick="saveProfile()">Зберегти та продовжити →</button>
+    <button class="profile-submit" onclick="saveProfile()">Розпочати →</button>
     <div class="profile-error" id="profile-error"></div>
   </div>
 </div>
