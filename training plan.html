@@ -526,6 +526,315 @@
     .meal-kcal, .meal-protein { display: none; }
     .ex-table th:nth-child(5), .ex-table td:nth-child(5) { display: none; }
   }
+
+  /* ══ КНОПКА РОЗПОЧАТИ ТРЕНУВАННЯ ══ */
+  .start-workout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 16px 0 4px;
+    padding: 13px 20px;
+    background: var(--accent);
+    color: #0f0f0f;
+    border: none;
+    border-radius: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity .15s;
+  }
+  .start-workout-btn:hover { opacity: .85; }
+  .start-workout-btn:active { opacity: .7; }
+
+  /* ══ WORKOUT OVERLAY ══ */
+  #workout-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #0f0f0f;
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  #workout-overlay.visible { display: flex; }
+
+  .wo-topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #181818;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .wo-back-btn {
+    background: none;
+    border: none;
+    color: var(--accent3, #47c8ff);
+    font-size: 15px;
+    cursor: pointer;
+    padding: 4px 8px 4px 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .wo-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.5px;
+    flex: 1;
+  }
+
+  .wo-scroll {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 20px 100px;
+  }
+
+  /* Meta row: date + стан */
+  .wo-meta {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .wo-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 140px;
+  }
+  .wo-meta-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted, #777);
+  }
+  .wo-meta-input, .wo-meta-select {
+    background: #181818;
+    border: 1px solid var(--border, #2e2e2e);
+    border-radius: 4px;
+    color: #e8e8e8;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    padding: 8px 10px;
+    outline: none;
+    width: 100%;
+  }
+  .wo-meta-input:focus, .wo-meta-select:focus {
+    border-color: var(--accent, #e8ff47);
+  }
+  .wo-meta-select option { background: #181818; }
+
+  /* Timer */
+  .wo-timer-block {
+    background: #181818;
+    border: 1px solid var(--border, #2e2e2e);
+    border-left: 3px solid var(--accent, #e8ff47);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .wo-timer-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted, #777);
+    margin-bottom: 4px;
+  }
+  .wo-timer-display {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--accent, #e8ff47);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .wo-timer-info { flex: 1; }
+  .wo-timer-duration {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--green, #44ff88);
+    margin-top: 4px;
+    min-height: 16px;
+  }
+  .wo-timer-btn {
+    height: 40px;
+    padding: 0 18px;
+    background: rgba(232,255,71,0.12);
+    border: 1px solid rgba(232,255,71,0.3);
+    border-radius: 4px;
+    color: var(--accent, #e8ff47);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .15s;
+  }
+  .wo-timer-btn:hover { background: rgba(232,255,71,0.2); }
+  .wo-timer-btn.running {
+    background: rgba(255,68,68,0.12);
+    border-color: rgba(255,68,68,0.3);
+    color: #ff4f4f;
+  }
+
+  /* Exercise cards */
+  .wo-ex-card {
+    background: #181818;
+    border: 1px solid var(--border, #2e2e2e);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .wo-ex-card.all-done { border-color: rgba(68,255,136,0.35); }
+
+  .wo-ex-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .wo-ex-num {
+    width: 24px; height: 24px;
+    border-radius: 4px;
+    background: #222;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 600;
+    color: var(--muted, #777);
+    flex-shrink: 0;
+  }
+  .wo-ex-num.done { background: rgba(68,255,136,0.12); color: var(--green, #44ff88); }
+  .wo-ex-info { flex: 1; min-width: 0; }
+  .wo-ex-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    display: block;
+    line-height: 1.3;
+  }
+  .wo-ex-tip {
+    font-size: 11px;
+    color: var(--muted, #777);
+    font-style: italic;
+    margin-top: 2px;
+    display: block;
+  }
+  .wo-ex-status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted, #777);
+    flex-shrink: 0;
+  }
+  .wo-ex-status.done { color: var(--green, #44ff88); }
+
+  .wo-sets-body {
+    border-top: 1px solid var(--border, #2e2e2e);
+    padding: 10px 14px 12px;
+  }
+  .wo-target {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted, #777);
+    background: #222;
+    border-radius: 3px;
+    padding: 3px 8px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .wo-set-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .wo-set-row:last-child { margin-bottom: 0; }
+  .wo-set-lbl {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted, #777);
+    width: 60px;
+    flex-shrink: 0;
+  }
+  .wo-inputs { display: flex; align-items: center; gap: 6px; flex: 1; }
+  .wo-inputs span {
+    font-size: 11px;
+    color: #555;
+    white-space: nowrap;
+  }
+  .wo-numinput {
+    width: 60px; height: 38px;
+    background: #222;
+    border: 1px solid var(--border, #2e2e2e);
+    border-radius: 4px;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px; font-weight: 600;
+    color: #e8e8e8;
+    -moz-appearance: textfield;
+    outline: none;
+  }
+  .wo-numinput:focus { border-color: var(--accent, #e8ff47); }
+  .wo-numinput::-webkit-inner-spin-button,
+  .wo-numinput::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+  .wo-check-btn {
+    width: 38px; height: 38px;
+    border-radius: 4px;
+    border: 1px solid var(--border, #2e2e2e);
+    background: #222;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all .15s;
+  }
+  .wo-check-btn svg { width: 16px; height: 16px; color: #555; }
+  .wo-check-btn.done { background: rgba(68,255,136,0.12); border-color: rgba(68,255,136,0.3); }
+  .wo-check-btn.done svg { color: var(--green, #44ff88); }
+
+  /* Bottom finish */
+  .wo-bottom {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 20px 20px;
+    background: #0f0f0f;
+    border-top: 1px solid var(--border, #2e2e2e);
+  }
+  .wo-finish-btn {
+    width: 100%; height: 50px;
+    background: var(--accent, #e8ff47);
+    border: none;
+    border-radius: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px; font-weight: 600;
+    letter-spacing: 1px;
+    color: #0f0f0f;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: opacity .15s;
+  }
+  .wo-finish-btn:hover { opacity: .88; }
+  .wo-finish-btn:active { opacity: .75; }
 </style>
 </head>
 <body>
@@ -718,6 +1027,7 @@
           <div class="cardio-icon">🚴</div>
           <div class="cardio-text"><strong>Кардіо після (обов'язково!):</strong> Велотренажер або орбітрек — <strong>тижні 1–2: 20 хв, тижні 3–4: 25 хв</strong>. Пульс 130–145 уд/хв.</div>
         </div>
+        <button class="start-workout-btn" onclick="openWorkout(1,'A')">▶ Розпочати тренування</button>
       </div>
     </div>
 
@@ -792,6 +1102,7 @@
           <div class="cardio-icon">🚶</div>
           <div class="cardio-text"><strong>Кардіо після:</strong> Бігова доріжка — <strong>20 хв</strong> швидкою ходою 6–6,5 км/год або легкий біг. Пульс 130–140 уд/хв.</div>
         </div>
+        <button class="start-workout-btn" onclick="openWorkout(1,'B')">▶ Розпочати тренування</button>
       </div>
     </div>
 
@@ -864,8 +1175,9 @@
         </table>
         <div class="cardio-block">
           <div class="cardio-icon">🛸</div>
-          <div class="cardio-text"><strong>Кардіо після:</strong> Орбітрек — <strong>tижні 1–2: 20 хв, тижні 3–4: 25 хв</strong>. Пульс 130–145 уд/хв.</div>
+          <div class="cardio-text"><strong>Кардіо після:</strong> Орбітрек — <strong>тижні 1–2: 20 хв, тижні 3–4: 25 хв</strong>. Пульс 130–145 уд/хв.</div>
         </div>
+        <button class="start-workout-btn" onclick="openWorkout(1,'C')">▶ Розпочати тренування</button>
       </div>
     </div>
 
@@ -888,6 +1200,7 @@
           <div class="cardio-icon">🔥</div>
           <div class="cardio-text">Цей день дає +300–400 ккал до тижневого дефіциту. <strong>Не пропускай!</strong> Саме він буде вирішальним для темпу схуднення.</div>
         </div>
+        <button class="start-workout-btn" onclick="openWorkout(1,'D')">▶ Розпочати тренування</button>
       </div>
     </div>
 
@@ -924,6 +1237,7 @@
           <tr><td class="ex-num">7</td><td><div class="ex-name">Скручування (прес)</div></td><td class="sets-cell">3 × 25</td><td class="weight-cell"><span class="weight-main">без ваги</span></td><td class="rest-cell">45 сек</td></tr>
         </table>
         <div class="cardio-block"><div class="cardio-icon">🚴</div><div class="cardio-text"><strong>Кардіо:</strong> 30 хв велосипед або орбітрек, пульс 135–145 уд/хв.</div></div>
+        <button class="start-workout-btn" onclick="openWorkout(2,'A')">▶ Розпочати тренування</button>
       </div>
     </div>
 
@@ -945,6 +1259,7 @@
           <tr><td class="ex-num">7</td><td><div class="ex-name">Планка</div></td><td class="sets-cell">3 × 45 сек</td><td class="weight-cell"><span class="weight-main">—</span></td><td class="rest-cell">45 сек</td></tr>
         </table>
         <div class="cardio-block"><div class="cardio-icon">🚶</div><div class="cardio-text"><strong>Кардіо:</strong> 25 хв доріжка (7 км/год або інтервали: 1 хв біг / 1 хв хода).</div></div>
+        <button class="start-workout-btn" onclick="openWorkout(2,'B')">▶ Розпочати тренування</button>
       </div>
     </div>
 
@@ -966,6 +1281,7 @@
           <tr><td class="ex-num">7</td><td><div class="ex-name">Розгинання трицепса на блоці</div></td><td class="sets-cell">4 × 10</td><td class="weight-cell"><span class="weight-main">28→30→33→35 кг</span></td><td class="rest-cell">60 сек</td></tr>
         </table>
         <div class="cardio-block"><div class="cardio-icon">🛸</div><div class="cardio-text"><strong>Кардіо:</strong> 30 хв орбітрек, пульс 135–145 уд/хв.</div></div>
+        <button class="start-workout-btn" onclick="openWorkout(2,'C')">▶ Розпочати тренування</button>
       </div>
     </div>
 
@@ -980,6 +1296,7 @@
           <h4>🕐 Тижні 5–8: 45 хв кардіо</h4>
           <p><strong>5 хв</strong> — розминка. <strong>40 хв</strong> — орбітрек або велосипед. Можна додати інтервали: 3 хв помірно / 1 хв інтенсивно, повторити 8 разів. <strong>10 хв</strong> — стретчинг.</p>
         </div>
+        <button class="start-workout-btn" onclick="openWorkout(2,'D')">▶ Розпочати тренування</button>
       </div>
     </div>
   </div>
@@ -1014,6 +1331,7 @@
           <tr><td class="ex-num">7</td><td><div class="ex-name">Скручування + Підйом ніг у висі</div></td><td class="sets-cell">3 × 20</td><td class="weight-cell"><span class="weight-main">—</span></td><td class="rest-cell">45 сек</td></tr>
         </table>
         <div class="cardio-block"><div class="cardio-icon">🚴</div><div class="cardio-text"><strong>Кардіо:</strong> 35 хв велосипед або орбітрек. Останні 5 хв — інтенсивно (пульс 155+).</div></div>
+        <button class="start-workout-btn" onclick="openWorkout(3,'A')">▶ Розпочати тренування</button>
       </div>
     </div>
 
@@ -1034,6 +1352,7 @@
           <tr><td class="ex-num">6+7</td><td><div class="ex-name">⚡ СУПЕРСЕТ: Скручування + Планка</div></td><td class="sets-cell">4 × 30 + 60 сек</td><td class="weight-cell"><span class="weight-main">—</span></td><td class="rest-cell">60 сек між</td></tr>
         </table>
         <div class="cardio-block"><div class="cardio-icon">🚶</div><div class="cardio-text"><strong>Кардіо:</strong> 30 хв інтервальна ходьба/біг. 2 хв хода / 1 хв біг, × 10 разів.</div></div>
+        <button class="start-workout-btn" onclick="openWorkout(3,'B')">▶ Розпочати тренування</button>
       </div>
     </div>
 
@@ -1055,6 +1374,7 @@
           <tr><td class="ex-num">8</td><td><div class="ex-name">Розгинання трицепса на блоці</div></td><td class="sets-cell">4 × 8</td><td class="weight-cell"><span class="weight-main">37→40→42→45 кг</span></td><td class="rest-cell">60 сек</td></tr>
         </table>
         <div class="cardio-block"><div class="cardio-icon">🛸</div><div class="cardio-text"><strong>Кардіо:</strong> 35 хв орбітрек. Пульс 140–150 уд/хв.</div></div>
+        <button class="start-workout-btn" onclick="openWorkout(3,'C')">▶ Розпочати тренування</button>
       </div>
     </div>
 
@@ -1069,6 +1389,7 @@
           <h4>🕐 Тижні 9–12: 50–55 хв кардіо</h4>
           <p><strong>5 хв</strong> — розминка. <strong>45–50 хв</strong> — орбітрек або велосипед. Використовуй інтервальний протокол: 4 хв помірно (пульс 135) / 1 хв інтенсивно (пульс 160+), повторити 9–10 разів. <strong>10 хв</strong> — стретчинг. На 12-му тижні — можеш замінити на 40-хвилинну швидку прогулянку на свіжому повітрі.</p>
         </div>
+        <button class="start-workout-btn" onclick="openWorkout(3,'D')">▶ Розпочати тренування</button>
       </div>
     </div>
   </div>
@@ -1218,6 +1539,47 @@
 
 </div><!-- /content -->
 
+<!-- ══ WORKOUT OVERLAY ══ -->
+<div id="workout-overlay">
+  <div class="wo-topbar">
+    <button class="wo-back-btn" onclick="closeWorkout()">
+      ‹ Назад до плану
+    </button>
+    <div class="wo-title" id="wo-title">День А — Спина + Біцепс</div>
+  </div>
+  <div class="wo-scroll">
+    <div class="wo-meta">
+      <div class="wo-meta-item">
+        <span class="wo-meta-label">Дата тренування</span>
+        <input type="date" class="wo-meta-input" id="wo-date">
+      </div>
+      <div class="wo-meta-item">
+        <span class="wo-meta-label">Загальний стан</span>
+        <select class="wo-meta-select" id="wo-feeling">
+          <option value="great">💪 Відмінно</option>
+          <option value="good" selected>😊 Добре</option>
+          <option value="ok">😐 Нормально</option>
+          <option value="hard">😓 Важко</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="wo-timer-block">
+      <div class="wo-timer-info">
+        <div class="wo-timer-label">Таймер тренування</div>
+        <div class="wo-timer-display" id="wo-timer">00:00</div>
+        <div class="wo-timer-duration" id="wo-duration"></div>
+      </div>
+      <button class="wo-timer-btn" id="wo-timer-btn" onclick="toggleTimer()">▶ Старт</button>
+    </div>
+
+    <div id="wo-ex-list"></div>
+  </div>
+  <div class="wo-bottom">
+    <button class="wo-finish-btn" onclick="closeWorkout()">✓ Завершити тренування</button>
+  </div>
+</div>
+
 <script>
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1232,13 +1594,340 @@ function toggleDay(id) {
   card.classList.toggle('open');
 }
 
-// Open first day in each phase by default
 document.addEventListener('DOMContentLoaded', () => {
   ['p1-dayA', 'p2-dayA', 'p3-dayA'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.add('open');
   });
+  // Set today's date
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('wo-date').value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 });
+
+// ── WORKOUT DATA ───────────────────────────────────────────
+const WORKOUT_DATA = {
+  1: {
+    A: { name:'День А — Спина + Біцепс', cardio:'🚴 Велотренажер або орбітрек — тижні 1–2: 20 хв, тижні 3–4: 25 хв. Пульс 130–145 уд/хв.', exercises:[
+      {n:'Тяга горизонт. блоку до поясу',    t:'Лопатки зводиш в кінці руху',           sets:3, reps:15, kg:30,  note:'30→35→40→40 кг'},
+      {n:'Тяга верт. блоку широким хватом',  t:'Лікті тягнуть вниз, без розгойдування', sets:3, reps:12, kg:40,  note:'40→45→50→50 кг'},
+      {n:'Тяга гантелі в нахилі (одна рука)',t:'Спина паралельна підлозі',               sets:3, reps:12, kg:12,  note:'12→14→16→16 кг'},
+      {n:'Гіперекстензія',                   t:'Тільки до горизонталі!',                 sets:3, reps:15, kg:0,   note:'без ваги'},
+      {n:'Згинач — біцепс (EZ/гантелі)',     t:'Лікті нерухомі біля тулуба',            sets:3, reps:12, kg:14,  note:'14→16→18→18 кг'},
+      {n:'Підйом ніг лежачи (поперем.)',      t:'Поперек притиснутий до підлоги',        sets:3, reps:20, kg:0,   note:'без ваги'},
+    ]},
+    B: { name:'День Б — Ноги + Прес', cardio:'🚶 Бігова доріжка — 20 хв, 6–6,5 км/год або легкий біг. Пульс 130–140 уд/хв.', exercises:[
+      {n:'Присідання зі штангою',            t:'Коліна за носками, спина рівна',         sets:4, reps:15, kg:20,  note:'20→25→30→30 кг'},
+      {n:'Випади кроком',                    t:'Заднє коліно майже торкається підлоги',  sets:3, reps:10, kg:0,   note:'без ваги → 8 кг'},
+      {n:'Жим ногами',                       t:'Коліна не випрямляти до кінця',          sets:3, reps:15, kg:50,  note:'50→60→70→70 кг'},
+      {n:'Румунська тяга (гантелі)',          t:'Спина рівна, відчуваєш задню поверхню', sets:3, reps:12, kg:16,  note:'16→18→20→20 кг'},
+      {n:'Гомілки стоячи',                   t:'Повна амплітуда вгору і вниз',           sets:4, reps:20, kg:0,   note:'без ваги або 30 кг'},
+      {n:'Скручування на підлозі',           t:'Не тягни за шию — працює прес',          sets:3, reps:20, kg:0,   note:'без ваги'},
+      {n:'Планка',                           t:'Тіло — одна лінія, не задирай сідниці',  sets:3, reps:-1, kg:0,   note:'3 × 30 сек'},
+    ]},
+    C: { name:'День В — Груди + Плечі + Трицепс', cardio:'🌀 Орбітрек — тижні 1–2: 20 хв, тижні 3–4: 25 хв. Пульс 130–145 уд/хв.', exercises:[
+      {n:'Жим штанги лежачи 30° нахил',     t:'Лопатки зведені та притиснуті',          sets:4, reps:12, kg:30,  note:'30→35→40→40 кг'},
+      {n:'Жим гантелей горизонтально',      t:'В нижній точці лікті нижче плечей',      sets:3, reps:12, kg:14,  note:'14→16→18→18 кг'},
+      {n:'Розведення (бабочка) в тренажері',t:'Рух повільний, відчуваєш груди',          sets:3, reps:15, kg:20,  note:'20→25→30→30 кг'},
+      {n:'Жим гантелей сидячи (плечі)',     t:'Лікті трохи вперед від лінії плечей',    sets:3, reps:12, kg:10,  note:'10→12→14→14 кг'},
+      {n:'Махи в сторони (гантелі)',        t:'Рух до рівня плечей, лікоть зігнутий',   sets:3, reps:15, kg:5,   note:'5→6→7→7 кг'},
+      {n:'Відтискання від підлоги',         t:'Тіло пряме; важко — з колін',            sets:3, reps:-1, kg:0,   note:'3 × максимум'},
+      {n:'Розгинання трицепса на блоці',    t:'Лікті нерухомі, притиснуті до тулуба',   sets:3, reps:12, kg:15,  note:'15→20→25→25 кг'},
+    ]},
+    D: { name:'День Г — Кардіо + Мобільність', cardio:'', exercises:[
+      {n:'Орбітрек або велосипед',           t:'Пульс 125–135 уд/хв',                   sets:1, reps:-1, kg:0,   note:'30–35 хв'},
+      {n:'Стретч — квадрицепс',              t:'Тримай 30–40 сек, без болю',             sets:3, reps:-1, kg:0,   note:'3 × 40 сек'},
+      {n:'Стретч — задня поверхня стегна',   t:'Плавно, без ривків',                     sets:3, reps:-1, kg:0,   note:'3 × 40 сек'},
+      {n:'Стретч — груди та плечі',          t:'Руки за спиною, розкрий груди',          sets:3, reps:-1, kg:0,   note:'3 × 40 сек'},
+      {n:'Стретч — поперек',                 t:'Лежачи, коліна до грудей',               sets:3, reps:-1, kg:0,   note:'3 × 40 сек'},
+    ]},
+  },
+  2: {
+    A: { name:'День А — Спина + Біцепс', cardio:'🚴 Велосипед або орбітрек — 30 хв. Пульс 135–145 уд/хв.', exercises:[
+      {n:'Тяга горизонт. блоку до поясу',    t:'4 підходи, вага вища',                  sets:4, reps:12, kg:45,  note:'45→47,5→50→52,5 кг'},
+      {n:'Тяга верт. блоку широким хватом',  t:'Лікті тягнуть вниз',                    sets:4, reps:10, kg:55,  note:'55→57,5→60→62,5 кг'},
+      {n:'Тяга гантелі в нахилі (одна рука)',t:'Спина паралельна підлозі',               sets:4, reps:10, kg:18,  note:'18→20→22→24 кг'},
+      {n:'Гіперекстензія',                   t:'Тільки до горизонталі',                  sets:3, reps:15, kg:5,   note:'+5 кг блін'},
+      {n:'Згинач — біцепс',                  t:'Лікті нерухомі',                         sets:4, reps:10, kg:20,  note:'20→22→24→26 кг'},
+      {n:'Молотки (нейтральний хват)',        t:'Плечова частина біцепса',                sets:3, reps:12, kg:14,  note:'14→16→18 кг'},
+      {n:'Скручування',                      t:'Не тягни за шию',                        sets:3, reps:25, kg:0,   note:'3 × 25'},
+    ]},
+    B: { name:'День Б — Ноги + Прес', cardio:'🚶 Доріжка — 25 хв, 7 км/год або інтервали: 1 хв біг / 1 хв хода.', exercises:[
+      {n:'Присідання зі штангою',            t:'Коліна за носками',                      sets:4, reps:12, kg:35,  note:'35→40→42,5→45 кг'},
+      {n:'Випади кроком (з гантелями)',       t:'Заднє коліно до підлоги',                sets:4, reps:10, kg:10,  note:'10→12→14→16 кг'},
+      {n:'Жим ногами',                       t:'Коліна не розгинати до кінця',            sets:4, reps:12, kg:75,  note:'75→80→85→90 кг'},
+      {n:'Румунська тяга (гантелі)',          t:'Спина рівна',                             sets:4, reps:10, kg:22,  note:'22→24→26→28 кг'},
+      {n:'Гомілки стоячи',                   t:'Повна амплітуда',                         sets:4, reps:20, kg:40,  note:'40→45→50→55 кг'},
+      {n:'Скручування на підлозі',           t:'Не тягни за шию',                        sets:4, reps:25, kg:0,   note:'4 × 25'},
+      {n:'Планка',                           t:'Тіло — одна лінія',                      sets:3, reps:-1, kg:0,   note:'3 × 45 сек'},
+    ]},
+    C: { name:'День В — Груди + Плечі + Трицепс', cardio:'🌀 Орбітрек — 30 хв. Пульс 135–145 уд/хв.', exercises:[
+      {n:'Жим штанги лежачи 30° нахил',     t:'Лопатки зведені',                        sets:4, reps:10, kg:45,  note:'45→47,5→50→52,5 кг'},
+      {n:'Жим гантелей горизонтально',      t:'Повна амплітуда',                        sets:4, reps:10, kg:20,  note:'20→22→24→26 кг'},
+      {n:'Розведення (бабочка)',             t:'Рух повільний',                           sets:3, reps:12, kg:35,  note:'35→40→45 кг'},
+      {n:'Жим гантелей сидячи (плечі)',     t:'Лікті вперед від плечей',                sets:4, reps:10, kg:16,  note:'16→18→20→22 кг'},
+      {n:'Махи в сторони',                  t:'До рівня плечей',                        sets:4, reps:12, kg:7,   note:'7→8→9→10 кг'},
+      {n:'Відтискання або брусья',           t:'Тіло пряме',                             sets:4, reps:-1, kg:0,   note:'4 × максимум'},
+      {n:'Розгинання трицепса на блоці',    t:'Лікті нерухомі',                         sets:4, reps:10, kg:28,  note:'28→30→33→35 кг'},
+    ]},
+    D: { name:'День Г — Кардіо + Мобільність', cardio:'', exercises:[
+      {n:'Орбітрек або велосипед (інтервали)',t:'3 хв помірно / 1 хв інтенсивно',       sets:1, reps:-1, kg:0,   note:'40 хв'},
+      {n:'Стретч — квадрицепс',              t:'30–40 сек кожна нога',                   sets:3, reps:-1, kg:0,   note:'3×40 сек'},
+      {n:'Стретч — задня поверхня стегна',   t:'Без ривків',                             sets:3, reps:-1, kg:0,   note:'3×40 сек'},
+      {n:'Стретч — груди та плечі',          t:'Розкрий грудну клітку',                  sets:3, reps:-1, kg:0,   note:'3×40 сек'},
+      {n:'Стретч — поперек',                 t:'Коліна до грудей лежачи',                sets:3, reps:-1, kg:0,   note:'3×40 сек'},
+    ]},
+  },
+  3: {
+    A: { name:'День А — Спина + Біцепс', cardio:'🚴 Велосипед/орбітрек — 35 хв. Останні 5 хв інтенсивно (пульс 155+).', exercises:[
+      {n:'Тяга горизонт. блоку до поясу',    t:'Якість руху важливіша за вагу',          sets:4, reps:10, kg:55,  note:'55→57,5→60→62,5 кг'},
+      {n:'Тяга верт. блоку / Підтягування',  t:'Якщо 5+ підтягувань — переходь на них!',sets:4, reps:8,  kg:65,  note:'65→67,5→70→70 кг'},
+      {n:'Тяга гантелі в нахилі',            t:'Спина паралельна підлозі',               sets:4, reps:8,  kg:26,  note:'26→28→30→32 кг'},
+      {n:'Гіперекстензія',                   t:'До горизонталі',                          sets:4, reps:15, kg:10,  note:'10 кг'},
+      {n:'⚡ Суперсет: Згинач + Молотки',    t:'Без відпочинку між ними!',               sets:3, reps:10, kg:26,  note:'26 кг + 18 кг'},
+      {n:'Підйом ніг у висі',                t:'Коліна підтягуєш до грудей',             sets:3, reps:15, kg:0,   note:'3 × 15'},
+    ]},
+    B: { name:'День Б — Ноги + Прес', cardio:'🚶 30 хв інтервальна: 2 хв хода / 1 хв біг, × 10.', exercises:[
+      {n:'Присідання зі штангою',            t:'5 підходів!',                            sets:5, reps:10, kg:47,  note:'47,5→50→52,5→55 кг'},
+      {n:'Випади кроком',                    t:'Заднє коліно до підлоги',                sets:4, reps:12, kg:18,  note:'18→20→22→24 кг'},
+      {n:'Жим ногами',                       t:'Коліна не розгинати',                    sets:4, reps:10, kg:95,  note:'95→100→105→110 кг'},
+      {n:'Румунська тяга',                   t:'Спина рівна',                             sets:4, reps:8,  kg:30,  note:'30→32→34→36 кг'},
+      {n:'Гомілки стоячи',                   t:'Повна амплітуда',                         sets:5, reps:20, kg:60,  note:'60→65→70→70 кг'},
+      {n:'⚡ Суперсет: Скручування + Планка',t:'Без відпочинку між ними',                sets:4, reps:30, kg:0,   note:'4 × 30 + 60 сек'},
+    ]},
+    C: { name:'День В — Груди + Плечі + Трицепс', cardio:'🌀 Орбітрек — 35 хв. Пульс 140–150 уд/хв.', exercises:[
+      {n:'Жим штанги лежачи 30° нахил',     t:'Лопатки зведені',                        sets:4, reps:8,  kg:55,  note:'55→57,5→60→62,5 кг'},
+      {n:'Жим гантелей горизонтально',      t:'Повна амплітуда',                        sets:4, reps:8,  kg:28,  note:'28→30→32→34 кг'},
+      {n:'Розведення (бабочка)',             t:'Рух повільний',                           sets:3, reps:15, kg:50,  note:'50→55→60 кг'},
+      {n:'Жим гантелей сидячи (плечі)',     t:'Лікті вперед від плечей',                sets:4, reps:8,  kg:24,  note:'24→26→28→30 кг'},
+      {n:'⚡ Суперсет: Махи боком + Махи перед',t:'Без відпочинку',                     sets:3, reps:12, kg:10,  note:'10 кг + 7 кг'},
+      {n:'Відтискання від брусів',           t:'Тіло пряме',                             sets:4, reps:-1, kg:0,   note:'4 × максимум'},
+      {n:'Розгинання трицепса на блоці',    t:'Лікті нерухомі',                         sets:4, reps:8,  kg:37,  note:'37→40→42→45 кг'},
+    ]},
+    D: { name:'День Г — Кардіо + Мобільність', cardio:'', exercises:[
+      {n:'Орбітрек/велосипед (інтервали)',   t:'4 хв помірно / 1 хв інтенсивно × 10',   sets:1, reps:-1, kg:0,   note:'50 хв'},
+      {n:'Стретч — квадрицепс',              t:'30–40 сек кожна нога',                   sets:3, reps:-1, kg:0,   note:'3×40 сек'},
+      {n:'Стретч — задня поверхня стегна',   t:'Без ривків',                             sets:3, reps:-1, kg:0,   note:'3×40 сек'},
+      {n:'Стретч — груди та плечі',          t:'Розкрий грудну клітку',                  sets:3, reps:-1, kg:0,   note:'3×40 сек'},
+      {n:'Стретч — поперек',                 t:'Коліна до грудей',                        sets:3, reps:-1, kg:0,   note:'3×40 сек'},
+    ]},
+  }
+};
+
+// ── WORKOUT STATE ──────────────────────────────────────────
+let wo_timerInt = null;
+let wo_t0 = null;
+let wo_elapsed = 0;
+let wo_running = false;
+let wo_setDone = {};
+let wo_setKg = {};
+let wo_setReps = {};
+let wo_curData = null;
+let wo_returnScrollY = 0;
+
+// ── OPEN / CLOSE ───────────────────────────────────────────
+function openWorkout(phase, dayId) {
+  wo_curData = WORKOUT_DATA[phase][dayId];
+  wo_setDone = {}; wo_setKg = {}; wo_setReps = {};
+  wo_elapsed = 0; wo_running = false;
+  clearInterval(wo_timerInt);
+
+  document.getElementById('wo-title').textContent = wo_curData.name;
+  document.getElementById('wo-timer').textContent = '00:00';
+  document.getElementById('wo-duration').textContent = '';
+  document.getElementById('wo-timer-btn').textContent = '▶ Старт';
+  document.getElementById('wo-timer-btn').classList.remove('running');
+
+  // Set today's date
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('wo-date').value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+
+  wo_renderExercises();
+
+  wo_returnScrollY = window.scrollY;
+  const overlay = document.getElementById('workout-overlay');
+  overlay.classList.add('visible');
+  overlay.scrollTop = 0;
+}
+
+function closeWorkout() {
+  clearInterval(wo_timerInt);
+  wo_running = false;
+  document.getElementById('workout-overlay').classList.remove('visible');
+  window.scrollTo({ top: wo_returnScrollY });
+}
+
+// ── TIMER ──────────────────────────────────────────────────
+function toggleTimer() {
+  if (!wo_running) {
+    wo_running = true;
+    wo_t0 = Date.now() - wo_elapsed * 1000;
+    wo_timerInt = setInterval(wo_tick, 1000);
+    const btn = document.getElementById('wo-timer-btn');
+    btn.textContent = '⏸ Пауза';
+    btn.classList.add('running');
+    document.getElementById('wo-duration').textContent = '';
+  } else {
+    wo_running = false;
+    clearInterval(wo_timerInt);
+    wo_elapsed = Math.floor((Date.now() - wo_t0) / 1000);
+    const btn = document.getElementById('wo-timer-btn');
+    btn.textContent = '▶ Продовжити';
+    btn.classList.remove('running');
+    const m = Math.floor(wo_elapsed / 60);
+    const s = wo_elapsed % 60;
+    document.getElementById('wo-duration').textContent =
+      `Тривалість: ${m} хв ${String(s).padStart(2,'0')} сек`;
+  }
+}
+
+function wo_tick() {
+  const secs = Math.floor((Date.now() - wo_t0) / 1000);
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  document.getElementById('wo-timer').textContent =
+    String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+// ── RENDER EXERCISES ───────────────────────────────────────
+function wo_renderExercises() {
+  const exs = wo_curData.exercises;
+  let html = '';
+  exs.forEach((ex, ei) => {
+    const doneCnt = Array.from({length: ex.sets}, (_, si) => wo_setDone[`${ei}-${si}`]).filter(Boolean).length;
+    const allDone = doneCnt === ex.sets;
+    let setsHtml = '';
+    for (let si = 0; si < ex.sets; si++) {
+      const k = `${ei}-${si}`;
+      const checked = !!wo_setDone[k];
+      const kg = wo_setKg[k] !== undefined ? wo_setKg[k] : ex.kg;
+      const reps = wo_setReps[k] !== undefined ? wo_setReps[k] : ex.reps;
+      const isTime = ex.reps < 0;
+      setsHtml += `<div class="wo-set-row">
+        <span class="wo-set-lbl">${si + 1} підхід</span>
+        <div class="wo-inputs">
+          ${ex.kg > 0 ? `<input type="number" class="wo-numinput" value="${kg}" step="2.5" inputmode="decimal" onchange="wo_saveKg(${ei},${si},this.value)"><span>кг</span>` : ''}
+          ${!isTime ? `<input type="number" class="wo-numinput" value="${reps}" step="1" inputmode="numeric" onchange="wo_saveReps(${ei},${si},this.value)"><span>пов.</span>`
+                    : `<span style="color:#777;font-size:12px">${ex.note}</span>`}
+        </div>
+        <div class="wo-check-btn ${checked ? 'done' : ''}" onclick="wo_toggleSet(${ei},${si})">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3,9 7,13 15,5"/>
+          </svg>
+        </div>
+      </div>`;
+    }
+    const open = allDone ? false : (doneCnt > 0 || ei === 0);
+    html += `<div class="wo-ex-card ${allDone ? 'all-done' : ''}" id="wo-exc${ei}">
+      <div class="wo-ex-header" onclick="wo_toggleEx(${ei})">
+        <div class="wo-ex-num ${allDone ? 'done' : ''}">${allDone ? '✓' : ei + 1}</div>
+        <div class="wo-ex-info">
+          <span class="wo-ex-name">${ex.n}</span>
+          <span class="wo-ex-tip">${ex.t}</span>
+        </div>
+        <span class="wo-ex-status ${allDone ? 'done' : ''}">${doneCnt}/${ex.sets}</span>
+      </div>
+      <div class="wo-sets-body" id="wo-sets${ei}" style="display:${open ? 'block' : 'none'}">
+        <span class="wo-target">Ціль: ${ex.note}</span>
+        ${setsHtml}
+      </div>
+    </div>`;
+  });
+  if (wo_curData.cardio) {
+    html += `<div class="wo-ex-card" id="wo-cardio-card" style="border-color:rgba(255,107,53,0.3)">
+      <div class="wo-ex-header" onclick="wo_toggleCardio()">
+        <div class="wo-ex-num" style="background:rgba(255,107,53,0.12);color:#ff6b35" id="wo-cardio-num">🏃</div>
+        <div class="wo-ex-info">
+          <span class="wo-ex-name">Кардіо після — обов'язково!</span>
+          <span class="wo-ex-tip">${wo_curData.cardio.replace(/^[^\s]+\s/, '')}</span>
+        </div>
+        <span class="wo-ex-status" id="wo-cardio-status">▼</span>
+      </div>
+      <div class="wo-sets-body" id="wo-cardio-body" style="display:none">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div>
+            <div class="wo-meta-label" style="margin-bottom:4px">Вид кардіо</div>
+            <select class="wo-meta-select" id="wo-cardio-type">
+              <option value="bike">🚴 Велотренажер</option>
+              <option value="orbit">🌀 Орбітрек</option>
+              <option value="treadmill">🚶 Бігова доріжка</option>
+            </select>
+          </div>
+          <div>
+            <div class="wo-meta-label" style="margin-bottom:4px">Тривалість (хвилин)</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <input type="number" class="wo-numinput" id="wo-cardio-time" value="20" min="1" max="120" inputmode="numeric" style="width:72px">
+              <span style="font-size:13px;color:#777">хв</span>
+              <div class="wo-check-btn" id="wo-cardio-check" onclick="wo_toggleCardioCheck()" style="margin-left:auto">
+                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3,9 7,13 15,5"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+  document.getElementById('wo-ex-list').innerHTML = html;
+}
+
+function wo_toggleEx(ei) {
+  const el = document.getElementById('wo-sets' + ei);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function wo_toggleCardio() {
+  const body = document.getElementById('wo-cardio-body');
+  const status = document.getElementById('wo-cardio-status');
+  if (body.style.display === 'none') {
+    body.style.display = 'block';
+    status.textContent = '▲';
+  } else {
+    body.style.display = 'none';
+    status.textContent = '▼';
+  }
+}
+
+function wo_toggleCardioCheck() {
+  const btn = document.getElementById('wo-cardio-check');
+  const num = document.getElementById('wo-cardio-num');
+  const status = document.getElementById('wo-cardio-status');
+  const isDone = btn.classList.toggle('done');
+  if (isDone) {
+    num.textContent = '✓';
+    num.style.background = 'rgba(68,255,136,0.12)';
+    num.style.color = 'var(--green, #44ff88)';
+    status.style.color = 'var(--green, #44ff88)';
+    document.getElementById('wo-cardio-card').style.borderColor = 'rgba(68,255,136,0.35)';
+  } else {
+    num.textContent = '🏃';
+    num.style.background = 'rgba(255,107,53,0.12)';
+    num.style.color = '#ff6b35';
+    status.style.color = '';
+    document.getElementById('wo-cardio-card').style.borderColor = 'rgba(255,107,53,0.3)';
+  }
+}
+
+function wo_saveKg(ei, si, v) { wo_setKg[`${ei}-${si}`] = parseFloat(v); }
+function wo_saveReps(ei, si, v) { wo_setReps[`${ei}-${si}`] = parseInt(v); }
+
+function wo_toggleSet(ei, si) {
+  const k = `${ei}-${si}`;
+  wo_setDone[k] = !wo_setDone[k];
+  const scrollY = document.getElementById('workout-overlay').querySelector('.wo-scroll').scrollTop;
+  wo_renderExercises();
+  document.getElementById('workout-overlay').querySelector('.wo-scroll').scrollTop = scrollY;
+  if (wo_setDone[k]) {
+    const ex = wo_curData.exercises[ei];
+    const allDone = Array.from({length: ex.sets}, (_, s) => wo_setDone[`${ei}-${s}`]).every(Boolean);
+    if (allDone && ei + 1 < wo_curData.exercises.length) {
+      const next = document.getElementById('wo-sets' + (ei + 1));
+      if (next) next.style.display = 'block';
+    }
+  }
+}
 </script>
 </body>
 </html>
