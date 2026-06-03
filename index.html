@@ -148,9 +148,9 @@
     inset: 0;
     background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80');
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     background-attachment: fixed;
-    filter: blur(0px) brightness(0.28) saturate(0.7);
+    filter: blur(0px) brightness(0.36) saturate(0.75);
     z-index: -3;
     transform: scale(1.02);
   }
@@ -160,10 +160,10 @@
     inset: 0;
     background: linear-gradient(
       to bottom,
-      rgba(5,5,7,0.65) 0%,
-      rgba(5,5,7,0.45) 25%,
-      rgba(5,5,7,0.45) 75%,
-      rgba(5,5,7,0.75) 100%
+      rgba(5,5,7,0.30) 0%,
+      rgba(5,5,7,0.20) 15%,
+      rgba(5,5,7,0.25) 60%,
+      rgba(5,5,7,0.60) 100%
     );
     z-index: -2;
     pointer-events: none;
@@ -1737,11 +1737,20 @@
     box-shadow: 0 0 20px rgba(232,255,71,0.12), 0 0 0 1px rgba(232,255,71,0.2) inset;
   }
   .goal-card-icon {
-    font-size: 26px;
-    line-height: 1;
-    filter: grayscale(0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
   }
-  .goal-card.selected .goal-card-icon { filter: none; }
+  .goal-card-icon svg {
+    width: 24px; height: 24px;
+    stroke: rgba(255,255,255,0.4);
+    fill: none; stroke-width: 1.8;
+    stroke-linecap: round; stroke-linejoin: round;
+    transition: stroke .2s;
+  }
+  .goal-card.selected .goal-card-icon svg { stroke: var(--accent); }
   .goal-card-label {
     font-family: 'Inter', sans-serif;
     font-size: 11px;
@@ -2107,13 +2116,15 @@
 
   /* ══ APP CHROME — UNIFIED TOP BAR ══════════════════════ */
   .app-chrome {
-    background: rgba(7,7,9,0.88);
-    backdrop-filter: blur(28px) saturate(160%);
-    -webkit-backdrop-filter: blur(28px) saturate(160%);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: rgba(7,7,9,0.68);
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
     position: sticky;
     top: 0;
     z-index: 101;
+    /* micro-gradient — faint accent at very top */
+    box-shadow: 0 1px 0 rgba(232,255,71,0.04);
   }
   /* Override individual backgrounds — chrome handles them */
   .app-chrome .header {
@@ -2222,6 +2233,8 @@
   .blk-icon.c-green svg { stroke: var(--green); }
   .blk-icon.c-muted { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
   .blk-icon.c-muted svg { stroke: var(--muted); }
+  .blk-icon.c-accent { background: rgba(232,255,71,0.08); border-color: rgba(232,255,71,0.18); }
+  .blk-icon.c-accent svg { stroke: var(--accent); }
   .blk-title {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
@@ -2292,6 +2305,204 @@
     letter-spacing: 0.6px;
   }
 
+  /* ══ BY BRAND MARK (profile / auth screens) ════════════ */
+  .by-brand {
+    margin-bottom: 28px;
+  }
+  .by-brand-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    letter-spacing: 2px;
+    color: #fff;
+    line-height: 1;
+  }
+  .by-brand-logo span { color: var(--accent); }
+  .by-brand-tagline {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.8px;
+    margin-top: 5px;
+  }
+
+  /* ══ STATS PAGE EXTRAS ══════════════════════════════════ */
+  .ts-streak-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .ts-streak-tile {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .ts-streak-tile .st-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .ts-streak-tile .st-val.c3 { color: var(--accent3); }
+  .ts-streak-tile .st-lbl {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .ts-last-workout {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-left: 3px solid var(--accent);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ts-lw-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: rgba(232,255,71,0.1);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ts-lw-icon svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; }
+  .ts-lw-info { flex: 1; min-width: 0; }
+  .ts-lw-name { font-size: 13px; font-weight: 600; color: #fff; }
+  .ts-lw-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .ts-phase-progress { margin-top: 4px; }
+  .ts-phase-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .ts-phase-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    width: 60px;
+    flex-shrink: 0;
+  }
+  .ts-phase-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .ts-phase-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width .6s ease;
+  }
+  .ts-phase-pct {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    width: 32px;
+    text-align: right;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ══ RULE CARDS — updated ═══════════════════════════════ */
+  .rule-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-card);
+    padding: 20px 18px;
+    box-shadow: var(--glass-shadow);
+  }
+  .rule-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--accent);
+    opacity: 0.18;
+    line-height: 1;
+    margin-bottom: -6px;
+  }
+  .rule-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+    /* strip any leading emoji via no-font trick */
+  }
+  .rule-title-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .rule-title-icon svg {
+    width: 13px; height: 13px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ══ WARNING / WARMUP BLOCKS — clean ═══════════════════ */
+  .block-notice {
+    margin: 16px 0;
+    padding: 12px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    border-radius: 10px;
+  }
+  .block-notice.warn {
+    background: rgba(255,68,68,0.07);
+    border-left: 3px solid var(--danger);
+  }
+  .block-notice.info {
+    background: rgba(71,200,255,0.07);
+    border-left: 3px solid var(--accent3);
+  }
+  .block-notice.tip {
+    background: rgba(232,255,71,0.06);
+    border-left: 3px solid var(--accent);
+  }
+  .bn-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .warn .bn-icon { background: rgba(255,68,68,0.12); }
+  .info .bn-icon { background: rgba(71,200,255,0.12); }
+  .tip .bn-icon  { background: rgba(232,255,71,0.1); }
+  .bn-icon svg { width: 14px; height: 14px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .warn .bn-icon svg { stroke: var(--danger); }
+  .info .bn-icon svg { stroke: var(--accent3); }
+  .tip .bn-icon svg  { stroke: var(--accent); }
+  .bn-body {}
+  .bn-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .warn .bn-title { color: var(--danger); }
+  .info .bn-title { color: var(--accent3); }
+  .tip .bn-title  { color: var(--accent); }
+  .bn-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
   /* ══ MOBILE OVERRIDES ════════════════════════════════════ */
   @media (max-width: 700px) {
     .app-chrome .header { padding: 12px 16px 8px; }
@@ -2299,6 +2510,7 @@
     .app-chrome .nav-sub { padding: 0 8px; }
     .app-chrome .user-bar { padding: 5px 16px; }
     .blk-title { font-size: 13px; }
+    .ts-streak-row { flex-wrap: wrap; }
   }
 </style>
 </head>
@@ -3281,15 +3493,71 @@
     </div>
   </div>
 
-  <!-- НАЙКРАЩИЙ ТИЖДЕНЬ -->
+  <!-- STREAK TILES -->
+  <div class="prog-block">
+    <div class="blk-hd">
+      <div class="blk-hd-l">
+        <div class="blk-icon c-accent">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Серії та активність</div>
+          <div class="blk-sub">Поточна серія та загальна консистентність</div>
+        </div>
+      </div>
+    </div>
+    <div class="ts-streak-row">
+      <div class="ts-streak-tile">
+        <div class="st-val" id="ts-streak-cur">0</div>
+        <div class="st-lbl">Поточна серія (дні)</div>
+      </div>
+      <div class="ts-streak-tile">
+        <div class="st-val c3" id="ts-streak-best">0</div>
+        <div class="st-lbl">Найкраща серія</div>
+      </div>
+      <div class="ts-streak-tile">
+        <div class="st-val" id="ts-streak-month">0</div>
+        <div class="st-lbl">Тренувань цього місяця</div>
+      </div>
+    </div>
+    <!-- Last workout card -->
+    <div class="ts-last-workout" id="ts-last-block" style="display:none;margin-top:12px">
+      <div style="font-size:10px;font-weight:600;letter-spacing:0.8px;color:var(--muted);margin-bottom:6px">ОСТАННЄ ТРЕНУВАННЯ</div>
+      <div style="font-size:15px;font-weight:600;color:#fff" id="ts-last-name">—</div>
+      <div style="display:flex;gap:12px;margin-top:4px">
+        <span style="font-size:12px;color:var(--muted)" id="ts-last-date">—</span>
+        <span style="font-size:12px;color:var(--muted)" id="ts-last-dur">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE PROGRESS -->
+  <div class="prog-block">
+    <div class="blk-hd">
+      <div class="blk-hd-l">
+        <div class="blk-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Прогрес по фазах</div>
+          <div class="blk-sub">Виконані тренування в кожній фазі</div>
+        </div>
+      </div>
+    </div>
+    <div class="ts-phase-progress" id="ts-phase-progress">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+  <!-- ACTIVITY HEATMAP -->
   <div class="prog-block" id="ts-streak-block">
     <div class="blk-hd">
       <div class="blk-hd-l">
         <div class="blk-icon">
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </div>
         <div>
-          <div class="blk-title">Активність</div>
+          <div class="blk-title">Активність по днях</div>
           <div class="blk-sub">Розподіл тренувань по днях тижня</div>
         </div>
       </div>
@@ -4339,8 +4607,8 @@ async function loadTrainStats() {
 
   if (profile) {
     const goalMap = {
-      weight_loss: '🔥 Схуднення', muscle_gain: '💪 Набір м\'язів',
-      maintenance: '⚖️ Підтримка форми', health: '❤️ Здоров\'я', custom: '🎯 Індивідуальна ціль'
+      weight_loss: 'Схуднення', muscle_gain: 'Набір м\'язів',
+      maintenance: 'Підтримка форми', health: 'Здоров\'я', custom: 'Індивідуальна ціль'
     };
     const tsName = document.getElementById('ts-pph-name');
     const tsGoal = document.getElementById('ts-pph-goal');
@@ -4355,9 +4623,9 @@ async function loadTrainStats() {
     if (tsBlock) tsBlock.style.display = 'flex';
   }
 
-  // Load workouts
+  // Load workouts (include phase + day_name for details)
   const { data: wos } = await sb.from('workouts')
-    .select('duration_seconds, created_at, date').eq('user_id', currentUser.id)
+    .select('id, duration_seconds, created_at, date, phase, day_name').eq('user_id', currentUser.id)
     .order('date', { ascending: true });
   const totalWo = wos ? wos.length : 0;
   const avgDur = totalWo > 0
@@ -4378,14 +4646,86 @@ async function loadTrainStats() {
   const latestW = (meas && meas.length) ? parseFloat(meas[meas.length - 1].weight_kg) : null;
   const lost = latestW !== null && START_WEIGHT ? +(START_WEIGHT - latestW).toFixed(1) : null;
 
-  // Fill tiles
+  // Fill main tiles
   const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   setEl('ts-total', totalWo);
   setEl('ts-week', perWeek);
   setEl('ts-dur', avgDur || '—');
   setEl('ts-lost', lost !== null ? (lost > 0 ? lost : '0') : '—');
 
-  // Heatmap — days of week distribution
+  // ── Streak calculation ──────────────────────────────────────
+  if (wos && wos.length) {
+    // Sort descending by date for streak
+    const sortedDates = [...new Set(wos.map(w => w.date))].sort().reverse();
+    const today = new Date().toISOString().slice(0,10);
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+    let curStreak = 0, bestStreak = 0, tempStreak = 0, prevDate = null;
+    // current streak (from today or yesterday backward)
+    let streakActive = (sortedDates[0] === today || sortedDates[0] === yesterday);
+    for (let i = 0; i < sortedDates.length; i++) {
+      const d = new Date(sortedDates[i]);
+      if (i === 0) { tempStreak = 1; }
+      else {
+        const prev = new Date(sortedDates[i-1]);
+        const diff = Math.round((prev - d) / 86400000);
+        if (diff === 1) tempStreak++;
+        else { bestStreak = Math.max(bestStreak, tempStreak); tempStreak = 1; }
+      }
+    }
+    bestStreak = Math.max(bestStreak, tempStreak);
+    if (streakActive) {
+      // count from most recent backward
+      curStreak = 1;
+      for (let i = 1; i < sortedDates.length; i++) {
+        const prev = new Date(sortedDates[i-1]);
+        const curr = new Date(sortedDates[i]);
+        if (Math.round((prev - curr) / 86400000) === 1) curStreak++;
+        else break;
+      }
+    }
+    // This month count
+    const nowMon = new Date().toISOString().slice(0,7);
+    const monthCount = wos.filter(w => w.date && w.date.startsWith(nowMon)).length;
+
+    setEl('ts-streak-cur', curStreak);
+    setEl('ts-streak-best', bestStreak);
+    setEl('ts-streak-month', monthCount);
+
+    // Last workout card
+    const lastWo = wos[wos.length - 1];
+    const lastBlock = document.getElementById('ts-last-block');
+    if (lastBlock && lastWo) {
+      lastBlock.style.display = 'block';
+      setEl('ts-last-name', lastWo.day_name || 'Тренування');
+      const lastDate = new Date(lastWo.date);
+      setEl('ts-last-date', lastDate.toLocaleDateString('uk', { day: 'numeric', month: 'long' }));
+      const mins = lastWo.duration_seconds ? Math.round(lastWo.duration_seconds / 60) + ' хв' : '—';
+      setEl('ts-last-dur', mins);
+    }
+  }
+
+  // ── Phase progress bars ─────────────────────────────────────
+  const phaseContainer = document.getElementById('ts-phase-progress');
+  if (phaseContainer && wos) {
+    // Count workouts per phase (phases 1-3 in DB correspond to groups of months)
+    const phaseLabels = { 1: 'Фаза 1–4', 2: 'Фаза 5–8', 3: 'Фаза 9–12' };
+    const phaseTargets = { 1: 48, 2: 48, 3: 48 }; // ~4 workouts/week × 12 weeks
+    const phaseCounts = { 1: 0, 2: 0, 3: 0 };
+    wos.forEach(w => { if (w.phase && phaseCounts[w.phase] !== undefined) phaseCounts[w.phase]++; });
+    const colors = { 1: 'var(--accent)', 2: 'var(--accent3)', 3: 'var(--accent2)' };
+    phaseContainer.innerHTML = [1,2,3].map(p => {
+      const cnt = phaseCounts[p];
+      const tgt = phaseTargets[p];
+      const pct = Math.min(100, Math.round(cnt / tgt * 100));
+      return `<div class="ts-phase-row">
+        <div class="ts-phase-label">${phaseLabels[p]}</div>
+        <div class="ts-phase-bar"><div class="ts-phase-fill" style="width:${pct}%;background:${colors[p]}"></div></div>
+        <div class="ts-phase-pct">${cnt}/${tgt}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Heatmap — days of week distribution ─────────────────────
   const heatmap = document.getElementById('ts-heatmap');
   if (heatmap && wos && wos.length) {
     const days = ['Нд','Пн','Вт','Ср','Чт','Пт','Сб'];
@@ -4421,9 +4761,10 @@ document.addEventListener('DOMContentLoaded', () => initAuth());
 <!-- PROFILE SETUP SCREEN -->
 <div id="profile-screen" class="hidden">
   <div class="profile-box">
-    <div class="profile-icon">🏋️</div>
-    <div class="profile-logo">Твій профіль</div>
-    <div class="profile-sub">Заповни один раз — трекер адаптується під тебе</div>
+    <div class="by-brand">
+      <div class="by-brand-logo">BUILD <span>YOURSELF</span></div>
+      <div class="by-brand-tagline">Персональний трекер</div>
+    </div>
 
     <div class="profile-section-title">Основне</div>
     <div class="profile-field">
@@ -4435,23 +4776,23 @@ document.addEventListener('DOMContentLoaded', () => initAuth());
     <input type="hidden" id="p-goal" value="weight_loss">
     <div class="goal-cards">
       <div class="goal-card selected" data-goal="weight_loss" onclick="selectGoal(this)">
-        <div class="goal-card-icon">🔥</div>
+        <div class="goal-card-icon"><svg viewBox="0 0 24 24"><path d="M12 2c0 0-5 5.5-5 10a5 5 0 0 0 10 0c0-4.5-5-10-5-10z"/><path d="M12 12c0 0-2 2.5-2 4a2 2 0 0 0 4 0c0-1.5-2-4-2-4z" fill="currentColor" stroke="none" opacity="0.4"/></svg></div>
         <div class="goal-card-label">Схуднення</div>
       </div>
       <div class="goal-card" data-goal="muscle_gain" onclick="selectGoal(this)">
-        <div class="goal-card-icon">💪</div>
+        <div class="goal-card-icon"><svg viewBox="0 0 24 24"><path d="M6.5 6.5h11M6.5 6.5A2.5 2.5 0 0 1 4 4M17.5 6.5A2.5 2.5 0 0 0 20 4M6.5 17.5h11M6.5 17.5A2.5 2.5 0 0 0 4 20M17.5 17.5A2.5 2.5 0 0 1 20 20M8 6.5v11M16 6.5v11"/></svg></div>
         <div class="goal-card-label">Набір маси</div>
       </div>
       <div class="goal-card" data-goal="maintenance" onclick="selectGoal(this)">
-        <div class="goal-card-icon">⚖️</div>
+        <div class="goal-card-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 9h18M3 15h18"/><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>
         <div class="goal-card-label">Підтримка форми</div>
       </div>
       <div class="goal-card" data-goal="health" onclick="selectGoal(this)">
-        <div class="goal-card-icon">❤️</div>
+        <div class="goal-card-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
         <div class="goal-card-label">Здоров'я</div>
       </div>
       <div class="goal-card" data-goal="custom" onclick="selectGoal(this)">
-        <div class="goal-card-icon">🎯</div>
+        <div class="goal-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <div class="goal-card-label">Індивідуальна ціль</div>
       </div>
     </div>
@@ -4497,7 +4838,7 @@ document.addEventListener('DOMContentLoaded', () => initAuth());
 <!-- AUTH SCREEN -->
 <div id="auth-screen" class="hidden">
   <div class="auth-box">
-    <div class="auth-logo">WORKOUT</div>
+    <div class="auth-logo">BUILD <span style="color:var(--accent)">YOURSELF</span></div>
     <div class="auth-sub">Трекер тренувань</div>
     <div class="auth-tabs">
       <button class="auth-tab active" id="auth-tab-login" onclick="switchAuthTab('login')">Вхід</button>
