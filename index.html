@@ -42,16 +42,30 @@
     content: '';
     position: fixed;
     inset: 0;
-    background:
-      linear-gradient(rgba(0,0,0,0.82), rgba(0,0,0,0.88)),
-      url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80');
+    background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80');
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     background-attachment: fixed;
-    filter: saturate(0) contrast(1.1);
+    filter: blur(1px) brightness(0.15) saturate(0.5);
     z-index: -3;
+    transform: scale(1.03);
   }
-  body::after { display: none; }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(232,255,71,0.06) 0%, transparent 60%),
+      linear-gradient(
+        to bottom,
+        rgba(5,5,7,0.55) 0%,
+        rgba(5,5,7,0.25) 30%,
+        rgba(5,5,7,0.35) 70%,
+        rgba(5,5,7,0.7) 100%
+      );
+    z-index: -2;
+    pointer-events: none;
+  }
 
   /* HEADER */
   .header {
