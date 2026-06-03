@@ -528,6 +528,169 @@
     .ex-table th:nth-child(5), .ex-table td:nth-child(5) { display: none; }
   }
 
+  /* ══ PROFILE SETUP SCREEN ══ */
+  #profile-screen {
+    position: fixed;
+    inset: 0;
+    background: #0f0f0f;
+    z-index: 1999;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 24px;
+    overflow-y: auto;
+  }
+  #profile-screen.hidden { display: none; }
+  .profile-box {
+    background: #181818;
+    border: 1px solid #2e2e2e;
+    border-radius: 8px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
+  }
+  .profile-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .profile-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .profile-section-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 20px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #2e2e2e;
+  }
+  .profile-field { margin-bottom: 14px; }
+  .profile-field label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .profile-field input, .profile-field select {
+    width: 100%;
+    background: #222;
+    border: 1px solid #2e2e2e;
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    color: #e8e8e8;
+    outline: none;
+  }
+  .profile-field input:focus, .profile-field select:focus { border-color: var(--accent); }
+  .profile-field select option { background: #181818; }
+  .profile-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .profile-submit {
+    width: 100%;
+    height: 48px;
+    background: var(--accent);
+    border: none;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #0f0f0f;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: opacity .15s;
+  }
+  .profile-submit:hover { opacity: .88; }
+  .profile-error {
+    font-size: 12px;
+    color: #ff4f4f;
+    margin-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ══ PROGRESS PROFILE HEADER ══ */
+  .progress-profile-header {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .pph-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: #fff;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .pph-meta {
+    flex: 1;
+    min-width: 160px;
+  }
+  .pph-goal {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .pph-since {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ══ COMPARISON BLOCK ══ */
+  .compare-table { width: 100%; border-collapse: collapse; }
+  .compare-table th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table th:not(:first-child) { text-align: center; }
+  .compare-table td {
+    padding: 10px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(46,46,46,0.5);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:not(:first-child) { text-align: center; }
+  .compare-table .ct-label { color: var(--muted); font-size: 11px; }
+  .compare-table .ct-start { color: #666; }
+  .compare-table .ct-current { color: #fff; font-weight: 600; }
+  .compare-table .ct-diff-neg { color: var(--green); }
+  .compare-table .ct-diff-pos { color: var(--accent2); }
+  .compare-table .ct-diff-zero { color: var(--muted); }
+
   /* ══ AUTH SCREEN ══ */
   #auth-screen {
     position: fixed;
@@ -2132,6 +2295,15 @@
 <!-- PROGRESS -->
 <div id="progress" class="section active">
 
+  <!-- PROFILE HEADER -->
+  <div class="progress-profile-header" id="pph-block" style="display:none">
+    <div class="pph-name" id="pph-name">—</div>
+    <div class="pph-meta">
+      <div class="pph-goal" id="pph-goal">—</div>
+      <div class="pph-since" id="pph-since"></div>
+    </div>
+  </div>
+
   <!-- KPI КАРТКИ -->
   <div class="kpi-grid" id="kpi-grid">
     <div class="kpi-card">
@@ -2141,7 +2313,7 @@
     </div>
     <div class="kpi-card">
       <div class="kpi-lbl">Цільова вага</div>
-      <div class="kpi-val accent2">105</div>
+      <div class="kpi-val accent2" id="kpi-goal-weight">—</div>
       <div class="kpi-unit">кг</div>
     </div>
     <div class="kpi-card">
@@ -2166,45 +2338,6 @@
     </div>
   </div>
 
-  <!-- ВАГА -->
-  <div class="prog-block">
-    <div class="prog-block-title">⚖️ Вага тіла</div>
-    <div class="weight-detail-row">
-      <div class="weight-detail-item">
-        <div class="wd-lbl">Старт</div>
-        <div class="wd-val muted">118 кг</div>
-      </div>
-      <div class="weight-detail-item">
-        <div class="wd-lbl">Зараз</div>
-        <div class="wd-val accent" id="wd-current">— кг</div>
-      </div>
-      <div class="weight-detail-item">
-        <div class="wd-lbl">Ціль</div>
-        <div class="wd-val accent2">105 кг</div>
-      </div>
-      <div class="weight-detail-item">
-        <div class="wd-lbl">Прогрес</div>
-        <div class="wd-val green" id="wd-pct">0%</div>
-      </div>
-    </div>
-    <div class="weight-progress-wrap" style="margin-top:12px">
-      <div class="weight-progress-bar">
-        <div class="weight-progress-fill" id="weight-prog-fill" style="width:0%"></div>
-      </div>
-    </div>
-    <div class="forecast-row" id="forecast-row" style="display:none">
-      <span class="forecast-icon">🎯</span>
-      <span id="forecast-text"></span>
-    </div>
-    <div class="weight-inputs-row">
-      <div class="weight-input-grp">
-        <label>Поточна вага (кг)</label>
-        <input type="number" id="prog-weight-input" placeholder="118.0" step="0.1" inputmode="decimal">
-      </div>
-      <button class="prog-save-btn" onclick="saveWeight()">Зберегти</button>
-    </div>
-  </div>
-
   <!-- ГРАФІК -->
   <div class="prog-block">
     <div class="prog-block-title" style="display:flex;align-items:center;justify-content:space-between">
@@ -2221,42 +2354,55 @@
       <div style="font-size:36px;margin-bottom:10px">📉</div>
       <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px">ДОДАЙ ПЕРШИЙ ЗАПИС ВАГИ<br>І ГРАФІК З'ЯВИТЬСЯ ТУТ</div>
     </div>
+    <div class="forecast-row" id="forecast-row" style="display:none">
+      <span class="forecast-icon">🎯</span>
+      <span id="forecast-text"></span>
+    </div>
   </div>
 
-  <!-- ЗАМІРИ -->
+  <!-- ПОРІВНЯННЯ РЕЗУЛЬТАТІВ -->
   <div class="prog-block">
-    <div class="prog-block-title">📏 Заміри тіла (см)</div>
-    <div class="measure-compare-grid" id="measure-compare">
-      <div class="mc-item">
-        <div class="mc-name">Талія</div>
-        <div class="mc-val" id="mc-waist-cur">—</div>
-        <div class="mc-diff" id="mc-waist-diff"></div>
+    <div class="prog-block-title">📊 Порівняння результатів</div>
+    <div style="overflow-x:auto">
+      <table class="compare-table" id="compare-table">
+        <thead>
+          <tr>
+            <th>Параметр</th>
+            <th>Старт</th>
+            <th>Зараз</th>
+            <th>Зміна</th>
+          </tr>
+        </thead>
+        <tbody id="compare-tbody">
+          <tr><td colspan="4" style="color:#555;text-align:center;padding:16px;font-family:'IBM Plex Mono',monospace;font-size:11px">Заповни профіль та додай заміри</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="weight-progress-wrap" style="margin-top:14px">
+      <div class="weight-progress-labels" style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px">
+        <span id="prog-start-lbl">Старт</span>
+        <span id="prog-pct-lbl">0%</span>
+        <span id="prog-goal-lbl">Ціль</span>
       </div>
-      <div class="mc-item">
-        <div class="mc-name">Груди</div>
-        <div class="mc-val" id="mc-chest-cur">—</div>
-        <div class="mc-diff" id="mc-chest-diff"></div>
-      </div>
-      <div class="mc-item">
-        <div class="mc-name">Стегна</div>
-        <div class="mc-val" id="mc-hips-cur">—</div>
-        <div class="mc-diff" id="mc-hips-diff"></div>
-      </div>
-      <div class="mc-item">
-        <div class="mc-name">Біцепс</div>
-        <div class="mc-val" id="mc-bicep-cur">—</div>
-        <div class="mc-diff" id="mc-bicep-diff"></div>
+      <div class="weight-progress-bar">
+        <div class="weight-progress-fill" id="weight-prog-fill" style="width:0%"></div>
       </div>
     </div>
-    <div class="measure-grid" style="margin-top:14px">
-      <div class="measure-field"><label>Талія</label><input type="number" id="m-waist" placeholder="—" step="0.1" inputmode="decimal"></div>
-      <div class="measure-field"><label>Груди</label><input type="number" id="m-chest" placeholder="—" step="0.1" inputmode="decimal"></div>
-      <div class="measure-field"><label>Стегна</label><input type="number" id="m-hips" placeholder="—" step="0.1" inputmode="decimal"></div>
-      <div class="measure-field"><label>Біцепс</label><input type="number" id="m-bicep" placeholder="—" step="0.1" inputmode="decimal"></div>
+  </div>
+
+  <!-- ЗАМІРИ ТІЛА -->
+  <div class="prog-block">
+    <div class="prog-block-title">📏 Оновити заміри</div>
+    <div class="measure-grid">
+      <div class="measure-field"><label>Вага (кг)</label><input type="number" id="m-weight" placeholder="—" step="0.1" inputmode="decimal"></div>
+      <div class="measure-field"><label>Талія (см)</label><input type="number" id="m-waist" placeholder="—" step="0.1" inputmode="decimal"></div>
+      <div class="measure-field"><label>Груди (см)</label><input type="number" id="m-chest" placeholder="—" step="0.1" inputmode="decimal"></div>
+      <div class="measure-field"><label>Стегна (см)</label><input type="number" id="m-hips" placeholder="—" step="0.1" inputmode="decimal"></div>
+      <div class="measure-field"><label>Біцепс (см)</label><input type="number" id="m-bicep" placeholder="—" step="0.1" inputmode="decimal"></div>
     </div>
-    <button class="prog-save-btn" onclick="saveMeasurements()">Зберегти заміри</button>
-    <table class="measure-hist-table" style="margin-top:14px" id="measure-table">
-      <thead><tr><th>Дата</th><th>Талія</th><th>Груди</th><th>Стегна</th><th>Біцепс</th></tr></thead>
+    <button class="prog-save-btn" style="margin-top:10px;width:100%;height:42px" onclick="saveMeasurements()">Зберегти заміри</button>
+    <table class="measure-hist-table" style="margin-top:16px" id="measure-table">
+      <thead><tr><th>Дата</th><th>Вага</th><th>Талія</th><th>Груди</th><th>Стегна</th><th>Біцепс</th></tr></thead>
       <tbody id="measure-tbody"></tbody>
     </table>
   </div>
@@ -2268,7 +2414,7 @@
       <div class="sd-item"><div class="sd-val" id="sd-total">0</div><div class="sd-lbl">Всього тренувань</div></div>
       <div class="sd-item"><div class="sd-val" id="sd-week">0</div><div class="sd-lbl">Сер. тренувань/тиждень</div></div>
       <div class="sd-item"><div class="sd-val" id="sd-dur">—</div><div class="sd-lbl">Сер. тривалість (хв)</div></div>
-      <div class="sd-item"><div class="sd-val" id="sd-lost">—</div><div class="sd-lbl">Загальна втрата ваги (кг)</div></div>
+      <div class="sd-item"><div class="sd-val" id="sd-lost">—</div><div class="sd-lbl">Втрата ваги (кг)</div></div>
     </div>
   </div>
 
@@ -2690,17 +2836,26 @@ async function initAuth() {
   });
 }
 
-function onLogin(user) {
+async function onLogin(user) {
   currentUser = user;
   document.getElementById('auth-screen').classList.add('hidden');
-  document.getElementById('user-bar').style.display = 'flex';
-  loadProgress();
   document.getElementById('user-email').textContent = user.email;
+  // Check if profile exists
+  const { data: profile } = await sb.from('user_profiles')
+    .select('id').eq('user_id', user.id).single();
+  if (!profile) {
+    document.getElementById('profile-screen').classList.remove('hidden');
+  } else {
+    document.getElementById('user-bar').style.display = 'flex';
+    loadProgress();
+  }
 }
 
 function onLogout() {
   currentUser = null;
+  userProfile = null;
   document.getElementById('user-bar').style.display = 'none';
+  document.getElementById('profile-screen').classList.add('hidden');
   document.getElementById('auth-screen').classList.remove('hidden');
 }
 
@@ -2735,6 +2890,54 @@ async function authSubmit() {
 
 async function authLogout() {
   await sb.auth.signOut();
+}
+
+// ── PROFILE ──────────────────────────────────────────────
+async function saveProfile() {
+  if (!currentUser) return;
+  const nickname = document.getElementById('p-nickname').value.trim();
+  const goal = document.getElementById('p-goal').value;
+  const weight = parseFloat(document.getElementById('p-weight').value);
+  const target = parseFloat(document.getElementById('p-target').value);
+  const errEl = document.getElementById('profile-error');
+  errEl.textContent = '';
+
+  if (!nickname) { errEl.textContent = 'Введіть ім\'я або нікнейм'; return; }
+  if (!weight || weight < 30 || weight > 300) { errEl.textContent = 'Введіть коректну поточну вагу'; return; }
+  if (!target || target < 30 || target > 300) { errEl.textContent = 'Введіть коректну цільову вагу'; return; }
+
+  const waist  = parseFloat(document.getElementById('p-waist').value)  || null;
+  const chest  = parseFloat(document.getElementById('p-chest').value)  || null;
+  const hips   = parseFloat(document.getElementById('p-hips').value)   || null;
+  const biceps = parseFloat(document.getElementById('p-biceps').value) || null;
+
+  const today = new Date().toISOString().split('T')[0];
+
+  const { error: pErr } = await sb.from('user_profiles').insert({
+    user_id: currentUser.id,
+    nickname,
+    goal_type: goal,
+    start_weight_kg: weight,
+    target_weight_kg: target,
+    start_waist_cm: waist,
+    start_chest_cm: chest,
+    start_hips_cm: hips,
+    start_biceps_cm: biceps
+  });
+
+  if (pErr) { errEl.textContent = pErr.message; return; }
+
+  // Save initial measurements
+  const measPayload = { user_id: currentUser.id, date: today, weight_kg: weight };
+  if (waist)  measPayload.waist_cm  = waist;
+  if (chest)  measPayload.chest_cm  = chest;
+  if (hips)   measPayload.hips_cm   = hips;
+  if (biceps) measPayload.bicep_cm  = biceps;
+  await sb.from('measurements').upsert(measPayload, { onConflict: 'user_id,date' });
+
+  document.getElementById('profile-screen').classList.add('hidden');
+  document.getElementById('user-bar').style.display = 'flex';
+  loadProgress();
 }
 
 // ── SAVE WORKOUT ──────────────────────────────────────────
@@ -2897,6 +3100,7 @@ function toggleHistCard(id) {
 // ── PROGRESS ─────────────────────────────────────────────
 let weightLogsAll = [];
 let chartMode = 'dates';
+let userProfile = null;
 
 function switchChartTab(mode) {
   chartMode = mode;
@@ -2907,79 +3111,97 @@ function switchChartTab(mode) {
 
 async function loadProgress() {
   if (!currentUser) return;
-  const START_WEIGHT = 118;
-  const GOAL_WEIGHT = 105;
 
-  // Load workouts stats
+  // Load profile
+  const { data: profile } = await sb.from('user_profiles')
+    .select('*').eq('user_id', currentUser.id).single();
+  userProfile = profile;
+
+  const START_WEIGHT = profile ? parseFloat(profile.start_weight_kg) || 118 : 118;
+  const GOAL_WEIGHT  = profile ? parseFloat(profile.target_weight_kg) || 105 : 105;
+
+  // Profile header
+  if (profile) {
+    const goalMap = {
+      weight_loss: '🔥 Схуднення',
+      muscle_gain: '💪 Набір м\'язів',
+      maintenance: '⚖️ Підтримка форми',
+      health: '❤️ Здоров\'я',
+      custom: '🎯 Індивідуальна ціль'
+    };
+    document.getElementById('pph-name').textContent = profile.nickname || currentUser.email;
+    document.getElementById('pph-goal').textContent = goalMap[profile.goal_type] || profile.goal_type;
+    const since = new Date(profile.created_at);
+    document.getElementById('pph-since').textContent =
+      'З ' + since.toLocaleDateString('uk', { day: 'numeric', month: 'long', year: 'numeric' });
+    document.getElementById('pph-block').style.display = 'flex';
+  }
+
+  // Workouts stats
   const { data: wos } = await sb.from('workouts')
-    .select('duration_seconds, created_at')
-    .eq('user_id', currentUser.id);
-
+    .select('duration_seconds, created_at').eq('user_id', currentUser.id);
   const totalWo = wos ? wos.length : 0;
   const avgDur = totalWo > 0
-    ? Math.round(wos.reduce((s, w) => s + (w.duration_seconds || 0), 0) / totalWo / 60)
-    : 0;
-
-  // Weeks since first workout
+    ? Math.round(wos.reduce((s, w) => s + (w.duration_seconds || 0), 0) / totalWo / 60) : 0;
   let perWeek = 0;
-  if (totalWo > 0 && wos.length > 0) {
+  if (totalWo > 0) {
     const dates = wos.map(w => new Date(w.created_at));
     const minDate = new Date(Math.min(...dates));
     const weeks = Math.max(1, Math.ceil((Date.now() - minDate) / (7 * 86400000)));
     perWeek = (totalWo / weeks).toFixed(1);
   }
 
-  // Load weight logs
-  const { data: logs } = await sb.from('weight_logs')
-    .select('date, weight_kg')
-    .eq('user_id', currentUser.id)
+  // Measurements (includes weight)
+  const { data: meas } = await sb.from('measurements')
+    .select('*').eq('user_id', currentUser.id)
     .order('date', { ascending: true });
+  const measDesc = meas ? [...meas].reverse() : [];
 
-  weightLogsAll = logs || [];
-  const latestW = logs && logs.length > 0 ? parseFloat(logs[logs.length - 1].weight_kg) : null;
+  // Weight from measurements
+  const weightEntries = (meas || []).filter(m => m.weight_kg != null);
+  weightLogsAll = weightEntries.map(m => ({ date: m.date, weight_kg: m.weight_kg }));
+  const latestMeas = measDesc.length > 0 ? measDesc[0] : null;
+  const latestW = weightEntries.length > 0 ? parseFloat(weightEntries[weightEntries.length - 1].weight_kg) : null;
   const lost = latestW !== null ? +(START_WEIGHT - latestW).toFixed(1) : null;
   const leftToGoal = latestW !== null ? +(latestW - GOAL_WEIGHT).toFixed(1) : null;
   const pct = latestW !== null
-    ? Math.min(100, Math.max(0, Math.round((START_WEIGHT - latestW) / (START_WEIGHT - GOAL_WEIGHT) * 100)))
-    : 0;
+    ? Math.min(100, Math.max(0, Math.round((START_WEIGHT - latestW) / (START_WEIGHT - GOAL_WEIGHT) * 100))) : 0;
 
-  // KPI cards
+  // KPI
   document.getElementById('kpi-current').textContent = latestW !== null ? latestW : '—';
-  document.getElementById('kpi-lost').textContent = lost !== null ? (lost > 0 ? '-'+lost : lost) : '—';
+  document.getElementById('kpi-goal-weight').textContent = GOAL_WEIGHT;
+  document.getElementById('kpi-lost').textContent = lost !== null ? (lost > 0 ? '-' + lost : lost) : '—';
   document.getElementById('kpi-left').textContent = leftToGoal !== null ? (leftToGoal > 0 ? leftToGoal : '✓') : '—';
   document.getElementById('kpi-workouts').textContent = totalWo;
   document.getElementById('kpi-avg-dur').textContent = avgDur || '—';
 
-  // Weight detail
-  document.getElementById('wd-current').textContent = latestW !== null ? latestW + ' кг' : '— кг';
-  document.getElementById('wd-pct').textContent = pct + '%';
+  // Progress bar
   document.getElementById('weight-prog-fill').style.width = pct + '%';
-  if (latestW !== null) {
-    document.getElementById('prog-weight-input').value = latestW;
-  }
+  document.getElementById('prog-pct-lbl').textContent = pct + '%';
+  document.getElementById('prog-start-lbl').textContent = 'Старт: ' + START_WEIGHT + ' кг';
+  document.getElementById('prog-goal-lbl').textContent = 'Ціль: ' + GOAL_WEIGHT + ' кг';
 
   // Forecast
   const forecastRow = document.getElementById('forecast-row');
-  if (logs && logs.length >= 2) {
-    const first = logs[0], last = logs[logs.length - 1];
+  if (weightEntries.length >= 2) {
+    const first = weightEntries[0], last = weightEntries[weightEntries.length - 1];
     const daysDiff = (new Date(last.date) - new Date(first.date)) / 86400000;
-    const totalLost = parseFloat(first.weight_kg) - parseFloat(last.weight_kg);
-    if (daysDiff > 0 && totalLost > 0) {
-      const ratePerDay = totalLost / daysDiff;
-      if (leftToGoal > 0) {
-        const daysLeft = Math.round(leftToGoal / ratePerDay);
-        const forecastDate = new Date(Date.now() + daysLeft * 86400000);
-        const months = ['січ','лют','бер','квіт','трав','черв','лип','серп','вер','жовт','лист','груд'];
-        document.getElementById('forecast-text').textContent =
-          `При поточному темпі (-${(ratePerDay * 7).toFixed(2)} кг/тижд.) — досягнеш цілі ~${forecastDate.getDate()} ${months[forecastDate.getMonth()]} ${forecastDate.getFullYear()}`;
-        forecastRow.style.display = 'flex';
-      }
-    }
-  } else {
-    forecastRow.style.display = 'none';
-  }
+    const totalLost2 = parseFloat(first.weight_kg) - parseFloat(last.weight_kg);
+    if (daysDiff > 0 && totalLost2 > 0 && leftToGoal > 0) {
+      const ratePerDay = totalLost2 / daysDiff;
+      const daysLeft = Math.round(leftToGoal / ratePerDay);
+      const forecastDate = new Date(Date.now() + daysLeft * 86400000);
+      const months = ['січ','лют','бер','квіт','трав','черв','лип','серп','вер','жовт','лист','груд'];
+      document.getElementById('forecast-text').textContent =
+        `При поточному темпі (-${(ratePerDay * 7).toFixed(2)} кг/тижд.) — ціль ~${forecastDate.getDate()} ${months[forecastDate.getMonth()]} ${forecastDate.getFullYear()}`;
+      forecastRow.style.display = 'flex';
+    } else { forecastRow.style.display = 'none'; }
+  } else { forecastRow.style.display = 'none'; }
 
-  // Stats detail
+  // Comparison table
+  renderCompareTable(profile, latestMeas);
+
+  // Stats
   document.getElementById('sd-total').textContent = totalWo;
   document.getElementById('sd-week').textContent = perWeek;
   document.getElementById('sd-dur').textContent = avgDur || '—';
@@ -2988,66 +3210,61 @@ async function loadProgress() {
   // Chart
   renderWeightChart(weightLogsAll);
 
-  // Measurements
-  const { data: meas } = await sb.from('measurements')
-    .select('*')
-    .eq('user_id', currentUser.id)
-    .order('date', { ascending: false })
-    .limit(10);
-
-  // Compare cards
-  const fields = ['waist','chest','hips','bicep'];
-  if (meas && meas.length > 0) {
-    const cur = meas[0], prev = meas.length > 1 ? meas[1] : null;
-    fields.forEach(f => {
-      const curVal = cur[f+'_cm'];
-      document.getElementById('mc-'+f+'-cur').textContent = curVal ? curVal : '—';
-      if (prev && curVal && prev[f+'_cm']) {
-        const diff = (curVal - prev[f+'_cm']).toFixed(1);
-        const el = document.getElementById('mc-'+f+'-diff');
-        el.textContent = (diff > 0 ? '+' : '') + diff + ' см';
-        el.className = 'mc-diff ' + (diff < 0 ? 'neg' : diff > 0 ? 'pos' : '');
-      }
-    });
+  // Fill measurement inputs with latest values
+  if (latestMeas) {
+    if (latestMeas.weight_kg) document.getElementById('m-weight').value = latestMeas.weight_kg;
+    if (latestMeas.waist_cm) document.getElementById('m-waist').value = latestMeas.waist_cm;
+    if (latestMeas.chest_cm) document.getElementById('m-chest').value = latestMeas.chest_cm;
+    if (latestMeas.hips_cm) document.getElementById('m-hips').value = latestMeas.hips_cm;
+    if (latestMeas.bicep_cm) document.getElementById('m-bicep').value = latestMeas.bicep_cm;
   }
 
-  renderMeasurementsTable(meas || []);
+  renderMeasurementsTable(measDesc.slice(0, 10));
 }
 
-async function saveWeight() {
-  if (!currentUser) return;
-  const val = parseFloat(document.getElementById('prog-weight-input').value);
-  if (!val || val < 30 || val > 300) { showToast('⚠️ Введи коректну вагу'); return; }
-  const today = new Date().toISOString().split('T')[0];
-  const { error } = await sb.from('weight_logs').upsert({ user_id: currentUser.id, date: today, weight_kg: val }, { onConflict: 'user_id,date' });
-  if (!error) { showToast('✓ Вагу збережено!'); loadProgress(); }
-  else showToast('⚠️ Помилка збереження');
-}
+function renderCompareTable(profile, latestMeas) {
+  const tbody = document.getElementById('compare-tbody');
+  const rows = [
+    { label: 'Вага', startVal: profile?.start_weight_kg, curVal: latestMeas?.weight_kg, unit: 'кг', lowerIsBetter: true },
+    { label: 'Талія', startVal: profile?.start_waist_cm, curVal: latestMeas?.waist_cm, unit: 'см', lowerIsBetter: true },
+    { label: 'Груди', startVal: profile?.start_chest_cm, curVal: latestMeas?.chest_cm, unit: 'см', lowerIsBetter: null },
+    { label: 'Стегна', startVal: profile?.start_hips_cm, curVal: latestMeas?.hips_cm, unit: 'см', lowerIsBetter: true },
+    { label: 'Біцепс', startVal: profile?.start_biceps_cm, curVal: latestMeas?.bicep_cm, unit: 'см', lowerIsBetter: false },
+  ];
 
-async function saveMeasurements() {
-  if (!currentUser) return;
-  const today = new Date().toISOString().split('T')[0];
-  const waist = parseFloat(document.getElementById('m-waist').value) || null;
-  const chest = parseFloat(document.getElementById('m-chest').value) || null;
-  const hips  = parseFloat(document.getElementById('m-hips').value)  || null;
-  const bicep = parseFloat(document.getElementById('m-bicep').value) || null;
-  if (!waist && !chest && !hips && !bicep) { showToast('⚠️ Введи хоча б один замір'); return; }
-  const { error } = await sb.from('measurements').upsert(
-    { user_id: currentUser.id, date: today, waist_cm: waist, chest_cm: chest, hips_cm: hips, bicep_cm: bicep },
-    { onConflict: 'user_id,date' }
-  );
-  if (!error) { showToast('✓ Заміри збережено!'); loadProgress(); }
-  else showToast('⚠️ Помилка збереження');
+  tbody.innerHTML = rows.map(r => {
+    const startStr = r.startVal ? r.startVal + ' ' + r.unit : '—';
+    const curStr = r.curVal ? r.curVal + ' ' + r.unit : '—';
+    let diffStr = '—', diffClass = 'ct-diff-zero';
+    if (r.startVal && r.curVal) {
+      const diff = +(parseFloat(r.curVal) - parseFloat(r.startVal)).toFixed(1);
+      diffStr = (diff > 0 ? '+' : '') + diff + ' ' + r.unit;
+      if (diff === 0) diffClass = 'ct-diff-zero';
+      else if (r.lowerIsBetter === true) diffClass = diff < 0 ? 'ct-diff-neg' : 'ct-diff-pos';
+      else if (r.lowerIsBetter === false) diffClass = diff > 0 ? 'ct-diff-neg' : 'ct-diff-pos';
+      else diffClass = 'ct-diff-zero';
+    }
+    return `<tr>
+      <td class="ct-label">${r.label}</td>
+      <td class="ct-start">${startStr}</td>
+      <td class="ct-current">${curStr}</td>
+      <td class="${diffClass}">${diffStr}</td>
+    </tr>`;
+  }).join('');
 }
 
 function renderMeasurementsTable(rows) {
   const tbody = document.getElementById('measure-tbody');
-  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="5" style="color:#555;text-align:center;padding:12px">Немає записів</td></tr>'; return; }
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="color:#555;text-align:center;padding:12px;font-family:\'IBM Plex Mono\',monospace;font-size:11px">Немає записів</td></tr>';
+    return;
+  }
   tbody.innerHTML = rows.map(r => {
     const d = new Date(r.date);
     const dateStr = `${d.getDate()} ${d.toLocaleString('uk', { month: 'short' }).replace('.', '')}`;
     return `<tr>
       <td>${dateStr}</td>
+      <td>${r.weight_kg || '—'}</td>
       <td>${r.waist_cm || '—'}</td>
       <td>${r.chest_cm || '—'}</td>
       <td>${r.hips_cm || '—'}</td>
@@ -3056,10 +3273,33 @@ function renderMeasurementsTable(rows) {
   }).join('');
 }
 
+async function saveMeasurements() {
+  if (!currentUser) return;
+  const today = new Date().toISOString().split('T')[0];
+  const weight = parseFloat(document.getElementById('m-weight').value) || null;
+  const waist  = parseFloat(document.getElementById('m-waist').value)  || null;
+  const chest  = parseFloat(document.getElementById('m-chest').value)  || null;
+  const hips   = parseFloat(document.getElementById('m-hips').value)   || null;
+  const bicep  = parseFloat(document.getElementById('m-bicep').value)  || null;
+  if (!weight && !waist && !chest && !hips && !bicep) {
+    showToast('⚠️ Введи хоча б один показник'); return;
+  }
+  // Build only non-null fields
+  const payload = { user_id: currentUser.id, date: today };
+  if (weight !== null) payload.weight_kg = weight;
+  if (waist !== null) payload.waist_cm = waist;
+  if (chest !== null) payload.chest_cm = chest;
+  if (hips !== null) payload.hips_cm = hips;
+  if (bicep !== null) payload.bicep_cm = bicep;
+
+  const { error } = await sb.from('measurements').upsert(payload, { onConflict: 'user_id,date' });
+  if (!error) { showToast('✓ Заміри збережено!'); loadProgress(); }
+  else { showToast('⚠️ Помилка збереження'); console.error(error); }
+}
+
 function renderWeightChart(logs) {
   const svg = document.getElementById('weight-chart');
   const empty = document.getElementById('chart-empty');
-  const wrap = document.getElementById('chart-wrap');
 
   if (!logs || logs.length < 2) {
     svg.style.display = 'none';
@@ -3071,7 +3311,6 @@ function renderWeightChart(logs) {
 
   let points = [];
   if (chartMode === 'weeks') {
-    // Group by week
     const weeks = {};
     logs.forEach(l => {
       const d = new Date(l.date);
@@ -3084,13 +3323,11 @@ function renderWeightChart(logs) {
     points = Object.entries(weeks)
       .sort((a,b) => a[0] < b[0] ? -1 : 1)
       .map(([date, vals]) => ({
-        date,
         weight: +(vals.reduce((s,v) => s+v, 0) / vals.length).toFixed(1),
-        label: 'Тиж ' + new Date(date).toLocaleDateString('uk', {day:'numeric',month:'short'})
+        label: 'Тиж ' + new Date(date).toLocaleDateString('uk', {day:'numeric', month:'short'})
       }));
   } else {
     points = logs.map(l => ({
-      date: l.date,
       weight: parseFloat(l.weight_kg),
       label: new Date(l.date).toLocaleDateString('uk', {day:'numeric', month:'short'})
     }));
@@ -3102,48 +3339,39 @@ function renderWeightChart(logs) {
   const weights = points.map(p => p.weight);
   const minW = Math.min(...weights) - 1;
   const maxW = Math.max(...weights) + 1;
-
   const xOf = i => padL + (i / (points.length - 1)) * (W - padL - padR);
   const yOf = w => padT + (1 - (w - minW) / (maxW - minW)) * (H - padT - padB);
 
-  // Grid lines
-  const steps = 4;
   let grid = '';
-  for (let i = 0; i <= steps; i++) {
-    const w = minW + (maxW - minW) * i / steps;
+  for (let i = 0; i <= 4; i++) {
+    const w = minW + (maxW - minW) * i / 4;
     const y = yOf(w);
-    grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#222" stroke-width="1"/>`;
-    grid += `<text x="${padL - 4}" y="${y + 4}" text-anchor="end" font-size="8" fill="#555" font-family="IBM Plex Mono,monospace">${w.toFixed(0)}</text>`;
+    grid += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#222" stroke-width="1"/>`;
+    grid += `<text x="${padL-4}" y="${y+4}" text-anchor="end" font-size="8" fill="#555" font-family="IBM Plex Mono,monospace">${w.toFixed(0)}</text>`;
   }
 
-  // Path
-  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${xOf(i).toFixed(1)},${yOf(p.weight).toFixed(1)}`).join(' ');
+  const pathD = points.map((p, i) => `${i===0?'M':'L'}${xOf(i).toFixed(1)},${yOf(p.weight).toFixed(1)}`).join(' ');
   const areaD = pathD + ` L${xOf(points.length-1)},${H-padB} L${padL},${H-padB} Z`;
 
-  // Labels (show up to 6)
   const step = Math.max(1, Math.ceil(points.length / 6));
   let labels = '';
   points.forEach((p, i) => {
-    if (i % step === 0 || i === points.length - 1) {
-      labels += `<text x="${xOf(i)}" y="${H - padB + 14}" text-anchor="middle" font-size="8" fill="#555" font-family="IBM Plex Mono,monospace">${p.label}</text>`;
-    }
+    if (i % step === 0 || i === points.length - 1)
+      labels += `<text x="${xOf(i)}" y="${H-padB+14}" text-anchor="middle" font-size="8" fill="#555" font-family="IBM Plex Mono,monospace">${p.label}</text>`;
   });
 
-  // Circles
-  let circles = points.map((p, i) =>
-    `<circle cx="${xOf(i).toFixed(1)}" cy="${yOf(p.weight).toFixed(1)}" r="3" fill="#e8ff47"/><title>${p.label}: ${p.weight} кг</title>`
+  const circles = points.map((p, i) =>
+    `<circle cx="${xOf(i).toFixed(1)}" cy="${yOf(p.weight).toFixed(1)}" r="3" fill="#e8ff47"><title>${p.label}: ${p.weight} кг</title></circle>`
   ).join('');
 
-  svg.innerHTML = `<defs>
-    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#e8ff47" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#e8ff47" stop-opacity="0"/>
-    </linearGradient></defs>
-    ${grid}
-    <path d="${areaD}" fill="url(#areaGrad)"/>
-    <path d="${pathD}" fill="none" stroke="#e8ff47" stroke-width="2" stroke-linejoin="round"/>
-    ${circles}
-    ${labels}`;
+  svg.innerHTML = `<defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#e8ff47" stop-opacity="0.18"/>
+    <stop offset="100%" stop-color="#e8ff47" stop-opacity="0"/>
+  </linearGradient></defs>
+  ${grid}
+  <path d="${areaD}" fill="url(#areaGrad)"/>
+  <path d="${pathD}" fill="none" stroke="#e8ff47" stroke-width="2" stroke-linejoin="round"/>
+  ${circles}${labels}`;
 }
 
 // ── SECTION SWITCHING (extended) ─────────────────────────
@@ -3170,6 +3398,63 @@ function showToast(msg) {
 // ── INIT ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => initAuth());
 </script>
+
+<!-- PROFILE SETUP SCREEN -->
+<div id="profile-screen" class="hidden">
+  <div class="profile-box">
+    <div class="profile-logo">PROFILE SETUP</div>
+    <div class="profile-sub">Налаштування профілю — один раз</div>
+
+    <div class="profile-section-title">Основне</div>
+    <div class="profile-field">
+      <label>Ім'я або нікнейм</label>
+      <input type="text" id="p-nickname" placeholder="Ваше ім'я" maxlength="30">
+    </div>
+    <div class="profile-field">
+      <label>Мета тренувань</label>
+      <select id="p-goal">
+        <option value="weight_loss">🔥 Схуднення</option>
+        <option value="muscle_gain">💪 Набір м'язової маси</option>
+        <option value="maintenance">⚖️ Підтримка форми</option>
+        <option value="health">❤️ Покращення здоров'я</option>
+        <option value="custom">🎯 Індивідуальна ціль</option>
+      </select>
+    </div>
+    <div class="profile-grid-2">
+      <div class="profile-field">
+        <label>Поточна вага (кг)</label>
+        <input type="number" id="p-weight" placeholder="118" step="0.1" inputmode="decimal">
+      </div>
+      <div class="profile-field">
+        <label>Цільова вага (кг)</label>
+        <input type="number" id="p-target" placeholder="105" step="0.1" inputmode="decimal">
+      </div>
+    </div>
+
+    <div class="profile-section-title">Початкові заміри (необов'язково)</div>
+    <div class="profile-grid-2">
+      <div class="profile-field">
+        <label>Талія (см)</label>
+        <input type="number" id="p-waist" placeholder="—" step="0.1" inputmode="decimal">
+      </div>
+      <div class="profile-field">
+        <label>Груди (см)</label>
+        <input type="number" id="p-chest" placeholder="—" step="0.1" inputmode="decimal">
+      </div>
+      <div class="profile-field">
+        <label>Стегна (см)</label>
+        <input type="number" id="p-hips" placeholder="—" step="0.1" inputmode="decimal">
+      </div>
+      <div class="profile-field">
+        <label>Біцепс (см)</label>
+        <input type="number" id="p-biceps" placeholder="—" step="0.1" inputmode="decimal">
+      </div>
+    </div>
+
+    <button class="profile-submit" onclick="saveProfile()">Зберегти та продовжити →</button>
+    <div class="profile-error" id="profile-error"></div>
+  </div>
+</div>
 
 <!-- AUTH SCREEN -->
 <div id="auth-screen" class="hidden">
