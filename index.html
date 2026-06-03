@@ -9,7 +9,7 @@
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap');
 
   :root {
-    --bg: #0a0a0a;
+    --bg: #070709;
     --surface: rgba(255,255,255,0.055);
     --surface2: rgba(255,255,255,0.04);
     --border: rgba(255,255,255,0.1);
@@ -32,7 +32,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    background: #0a0a0a;
+    background: #070709;
     color: var(--text);
     font-family: 'IBM Plex Sans', sans-serif;
     min-height: 100vh;
@@ -42,24 +42,23 @@
     content: '';
     position: fixed;
     inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    filter: blur(3px) brightness(0.22) saturate(0.7);
-    z-index: -2;
-    transform: scale(1.04);
+    background:
+      radial-gradient(ellipse 70% 55% at 15% 10%, rgba(232,255,71,0.13) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 40% at 85% 85%, rgba(255,107,53,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 35% at 60% 40%, rgba(71,200,255,0.04) 0%, transparent 55%),
+      #070709;
+    z-index: -3;
   }
   body::after {
     content: '';
     position: fixed;
     inset: 0;
-    background:
-      radial-gradient(ellipse at 50% 0%, rgba(232,255,71,0.05) 0%, transparent 55%),
-      radial-gradient(ellipse at 0% 100%, rgba(71,200,255,0.04) 0%, transparent 50%),
-      linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.4) 100%);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
     z-index: -1;
     pointer-events: none;
+    opacity: 0.6;
   }
 
   /* HEADER */
@@ -748,10 +747,18 @@
     box-shadow: 0 4px 12px rgba(232,255,71,0.2);
   }
 
+  .profile-hint {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    text-align: center;
+    margin-top: 12px;
+    letter-spacing: 0.3px;
+  }
   .profile-error {
     font-size: 12px;
     color: #ff6b6b;
-    margin-top: 12px;
+    margin-top: 8px;
     font-family: 'IBM Plex Mono', monospace;
     text-align: center;
     min-height: 18px;
@@ -834,9 +841,9 @@
   #auth-screen {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(4,4,6,0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 2000;
     display: flex;
     align-items: center;
@@ -1162,10 +1169,8 @@
     font-weight: 600;
     color: #f0f0f0;
     outline: none;
-    -moz-appearance: textfield;
     transition: border-color .2s, background .2s, box-shadow .2s;
   }
-  .weight-input-grp input::-webkit-inner-spin-button { -webkit-appearance: none; }
   .weight-input-grp input:focus {
     border-color: rgba(232,255,71,0.5);
     background: rgba(232,255,71,0.06);
@@ -1227,10 +1232,8 @@
     font-size: 15px;
     color: #f0f0f0;
     outline: none;
-    -moz-appearance: textfield;
     transition: border-color .2s, background .2s, box-shadow .2s;
   }
-  .measure-field input::-webkit-inner-spin-button { -webkit-appearance: none; }
   .measure-field input:focus {
     border-color: rgba(232,255,71,0.5);
     background: rgba(232,255,71,0.06);
@@ -1461,6 +1464,69 @@
     pointer-events: none;
   }
   .save-toast.show { opacity: 1; }
+
+  /* ══ HIDE NUMBER SPINNERS GLOBALLY ══ */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* ══ GOAL CARDS ══ */
+  .goal-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .goal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.09);
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all .2s cubic-bezier(.34,1.2,.64,1);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .goal-card:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.15);
+    transform: translateY(-1px);
+  }
+  .goal-card:active { transform: scale(0.96); }
+  .goal-card.selected {
+    background: rgba(232,255,71,0.1);
+    border-color: rgba(232,255,71,0.55);
+    box-shadow: 0 0 20px rgba(232,255,71,0.12), 0 0 0 1px rgba(232,255,71,0.2) inset;
+  }
+  .goal-card-icon {
+    font-size: 26px;
+    line-height: 1;
+    filter: grayscale(0.2);
+  }
+  .goal-card.selected .goal-card-icon { filter: none; }
+  .goal-card-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.3;
+  }
+  .goal-card.selected .goal-card-label { color: var(--accent); }
+  /* 5th card full width */
+  .goal-cards .goal-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
 
   /* ══ КНОПКА РОЗПОЧАТИ ТРЕНУВАННЯ ══ */
   .start-workout-btn {
@@ -1748,7 +1814,6 @@
     font-family: 'IBM Plex Mono', monospace;
     font-size: 16px; font-weight: 600;
     color: #f0f0f0;
-    -moz-appearance: textfield;
     outline: none;
     transition: border-color .2s, box-shadow .2s;
   }
@@ -1756,8 +1821,6 @@
     border-color: rgba(232,255,71,0.5);
     box-shadow: 0 0 0 3px rgba(232,255,71,0.08);
   }
-  .wo-numinput::-webkit-inner-spin-button,
-  .wo-numinput::-webkit-outer-spin-button { -webkit-appearance: none; }
 
   .wo-check-btn {
     width: 38px; height: 38px;
@@ -3120,6 +3183,13 @@ async function authLogout() {
   await sb.auth.signOut();
 }
 
+// ── GOAL SELECTION ───────────────────────────────────────
+function selectGoal(el) {
+  document.querySelectorAll('.goal-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('p-goal').value = el.dataset.goal;
+}
+
 // ── PROFILE ──────────────────────────────────────────────
 async function saveProfile() {
   if (!currentUser) return;
@@ -3637,17 +3707,32 @@ document.addEventListener('DOMContentLoaded', () => initAuth());
     <div class="profile-section-title">Основне</div>
     <div class="profile-field">
       <label>Нікнейм</label>
-      <input type="text" id="p-nickname" placeholder="Як тебе звати?" maxlength="30" autocomplete="off">
+      <input type="text" id="p-nickname" placeholder="Наприклад: Oleksandr" maxlength="30" autocomplete="off">
     </div>
-    <div class="profile-field">
-      <label>Мета тренувань</label>
-      <select id="p-goal">
-        <option value="weight_loss">🔥 Схуднення</option>
-        <option value="muscle_gain">💪 Набір м'язової маси</option>
-        <option value="maintenance">⚖️ Підтримка форми</option>
-        <option value="health">❤️ Покращення здоров'я</option>
-        <option value="custom">🎯 Індивідуальна ціль</option>
-      </select>
+
+    <div class="profile-section-title">Мета тренувань</div>
+    <input type="hidden" id="p-goal" value="weight_loss">
+    <div class="goal-cards">
+      <div class="goal-card selected" data-goal="weight_loss" onclick="selectGoal(this)">
+        <div class="goal-card-icon">🔥</div>
+        <div class="goal-card-label">Схуднення</div>
+      </div>
+      <div class="goal-card" data-goal="muscle_gain" onclick="selectGoal(this)">
+        <div class="goal-card-icon">💪</div>
+        <div class="goal-card-label">Набір маси</div>
+      </div>
+      <div class="goal-card" data-goal="maintenance" onclick="selectGoal(this)">
+        <div class="goal-card-icon">⚖️</div>
+        <div class="goal-card-label">Підтримка форми</div>
+      </div>
+      <div class="goal-card" data-goal="health" onclick="selectGoal(this)">
+        <div class="goal-card-icon">❤️</div>
+        <div class="goal-card-label">Здоров'я</div>
+      </div>
+      <div class="goal-card" data-goal="custom" onclick="selectGoal(this)">
+        <div class="goal-card-icon">🎯</div>
+        <div class="goal-card-label">Індивідуальна ціль</div>
+      </div>
     </div>
 
     <div class="profile-section-title">Вага</div>
@@ -3663,7 +3748,7 @@ document.addEventListener('DOMContentLoaded', () => initAuth());
     </div>
 
     <div class="profile-section-title">Заміри тіла <span style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:1px;text-transform:none;font-family:'IBM Plex Sans',sans-serif">(необов'язково)</span></div>
-    <div class="profile-grid-2">
+    <div class="profile-grid-2" id="p-measurements-grid">
       <div class="profile-field">
         <label>Талія (см)</label>
         <input type="number" id="p-waist" placeholder="—" step="0.1" inputmode="decimal">
@@ -3683,6 +3768,7 @@ document.addEventListener('DOMContentLoaded', () => initAuth());
     </div>
 
     <button class="profile-submit" onclick="saveProfile()">Розпочати →</button>
+    <div class="profile-hint">Усі дані можна змінити пізніше</div>
     <div class="profile-error" id="profile-error"></div>
   </div>
 </div>
