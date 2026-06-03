@@ -42,15 +42,28 @@
     content: '';
     position: fixed;
     inset: 0;
-    background:
-      linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.90)),
-      url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80');
+    background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+    filter: blur(0px) brightness(0.28) saturate(0.7);
     z-index: -3;
+    transform: scale(1.02);
   }
-  body::after { display: none; }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(5,5,7,0.65) 0%,
+      rgba(5,5,7,0.45) 25%,
+      rgba(5,5,7,0.45) 75%,
+      rgba(5,5,7,0.75) 100%
+    );
+    z-index: -2;
+    pointer-events: none;
+  }
 
   /* HEADER */
   .header {
@@ -64,7 +77,7 @@
     overflow: hidden;
   }
   .header::before {
-    content: 'TRAIN';
+    content: 'CONSISTENCY';
     font-family: 'Bebas Neue', sans-serif;
     font-size: 180px;
     color: rgba(232,255,71,0.04);
@@ -90,6 +103,15 @@
     color: #fff;
   }
   .header h1 span { color: var(--accent); }
+  .header-sub {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 10px;
+    font-style: italic;
+    letter-spacing: 0.3px;
+    max-width: 480px;
+  }
   .header-meta {
     display: flex;
     gap: 32px;
@@ -116,37 +138,89 @@
   }
 
   /* NAVIGATION */
-  .nav {
-    background: rgba(8,8,8,0.75);
+  .nav-main {
+    background: rgba(6,6,8,0.85);
     backdrop-filter: blur(24px) saturate(160%);
     -webkit-backdrop-filter: blur(24px) saturate(160%);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    padding: 0 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    padding: 0 32px;
     display: flex;
     gap: 0;
-    overflow-x: auto;
     position: sticky;
     top: 0;
-    z-index: 100;
-    scrollbar-width: none;
+    z-index: 101;
   }
-  .nav::-webkit-scrollbar { display: none; }
-  .nav-btn {
+  .nav-main-btn {
     padding: 16px 24px;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--muted);
+    color: rgba(255,255,255,0.35);
     cursor: pointer;
     border: none;
     background: none;
-    border-bottom: 3px solid transparent;
+    border-bottom: 2px solid transparent;
     white-space: nowrap;
-    transition: all 0.2s;
+    transition: color .2s, border-color .2s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
   }
-  .nav-btn:hover { color: var(--text); }
+  .nav-main-btn:hover { color: rgba(255,255,255,0.7); }
+  .nav-main-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .nav-main-btn .nav-icon { font-size: 14px; }
+
+  .nav-sub {
+    background: rgba(4,4,6,0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 32px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 49px;
+    z-index: 100;
+    scrollbar-width: none;
+  }
+  .nav-sub::-webkit-scrollbar { display: none; }
+  .nav-sub.hidden { display: none; }
+
+  .nav {
+    background: rgba(4,4,6,0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 32px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 49px;
+    z-index: 100;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    padding: 12px 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color .2s, border-color .2s;
+  }
+  .nav-btn:hover { color: rgba(255,255,255,0.65); }
   .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
   /* CONTENT */
@@ -570,7 +644,10 @@
   @media (max-width: 700px) {
     .header { padding: 20px 20px 16px; }
     .header h1 { font-size: 36px; }
-    .nav { padding: 0 8px; }
+    .nav-main { padding: 0 8px; }
+    .nav-main-btn { padding: 14px 16px; font-size: 11px; gap: 5px; }
+    .nav-sub { padding: 0 8px; top: 48px; }
+    .nav { padding: 0 8px; top: 48px; }
     .content { padding: 16px; }
     .week-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .meal-row { grid-template-columns: 80px 1fr; }
@@ -955,11 +1032,11 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 7px 40px;
-    background: rgba(0,0,0,0.5);
+    padding: 6px 32px;
+    background: rgba(0,0,0,0.4);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     color: var(--muted);
@@ -1862,19 +1939,42 @@
 <body>
 
 <div class="header">
-  <div class="header-tag">Персональна програма тренувань</div>
-  <h1>ПЛАН НА <span>12 ТИЖНІВ</span></h1>
+  <div class="header-tag">Fitness Tracker</div>
+  <h1>BUILD <span>YOURSELF</span></h1>
+  <div class="header-sub">Результат починається там, де закінчуються виправдання.</div>
 </div>
 
-<nav class="nav">
-  <button class="nav-btn active" onclick="showSection('progress')">Прогрес</button>
-  <button class="nav-btn" onclick="showSection('schedule')">Розклад</button>
-  <button class="nav-btn" onclick="showSection('phase1')">Фаза 1 — Тижні 1–4</button>
-  <button class="nav-btn" onclick="showSection('phase2')">Фаза 2 — Тижні 5–8</button>
-  <button class="nav-btn" onclick="showSection('phase3')">Фаза 3 — Тижні 9–12</button>
-  <button class="nav-btn" onclick="showSection('progression')">Прогресія ваг</button>
-  <button class="nav-btn" onclick="showSection('nutrition')">Харчування</button>
-  <button class="nav-btn" onclick="showSection('myworkouts')">Мої тренування</button>
+<!-- MAIN NAV -->
+<nav class="nav-main">
+  <button class="nav-main-btn active" id="main-btn-progress" onclick="showMainSection('progress')">
+    <span class="nav-icon">📈</span> Прогрес
+  </button>
+  <button class="nav-main-btn" id="main-btn-plan" onclick="showMainSection('plan')">
+    <span class="nav-icon">📅</span> План
+  </button>
+  <button class="nav-main-btn" id="main-btn-train" onclick="showMainSection('train')">
+    <span class="nav-icon">💪</span> Тренування
+  </button>
+</nav>
+
+<!-- SUB NAV: Прогрес -->
+<nav class="nav-sub" id="sub-progress">
+  <button class="nav-btn active" id="subbtn-progress" onclick="showSection('progress', this)">Огляд</button>
+  <button class="nav-btn" id="subbtn-myworkouts" onclick="showSection('myworkouts', this)">Історія</button>
+</nav>
+
+<!-- SUB NAV: План -->
+<nav class="nav-sub hidden" id="sub-plan">
+  <button class="nav-btn active" id="subbtn-schedule" onclick="showSection('schedule', this)">Розклад</button>
+  <button class="nav-btn" id="subbtn-progression" onclick="showSection('progression', this)">Прогресія ваг</button>
+  <button class="nav-btn" id="subbtn-nutrition" onclick="showSection('nutrition', this)">Харчування</button>
+</nav>
+
+<!-- SUB NAV: Тренування -->
+<nav class="nav-sub hidden" id="sub-train">
+  <button class="nav-btn active" id="subbtn-phase1" onclick="showSection('phase1', this)">Фаза 1 — Тижні 1–4</button>
+  <button class="nav-btn" id="subbtn-phase2" onclick="showSection('phase2', this)">Фаза 2 — Тижні 5–8</button>
+  <button class="nav-btn" id="subbtn-phase3" onclick="showSection('phase3', this)">Фаза 3 — Тижні 9–12</button>
 </nav>
 <div class="user-bar" id="user-bar" style="display:none">
   <span id="user-email"></span>
@@ -2746,12 +2846,47 @@
 </div>
 
 <script>
-function showSection(id) {
+// Mapping: section → main group
+const SECTION_GROUP = {
+  progress: 'progress', myworkouts: 'progress',
+  schedule: 'plan', progression: 'plan', nutrition: 'plan',
+  phase1: 'train', phase2: 'train', phase3: 'train'
+};
+
+function showMainSection(group) {
+  // Activate main btn
+  document.querySelectorAll('.nav-main-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('main-btn-' + group).classList.add('active');
+  // Show correct sub-nav
+  document.querySelectorAll('.nav-sub').forEach(n => n.classList.add('hidden'));
+  document.getElementById('sub-' + group).classList.remove('hidden');
+  // Activate default section for group
+  const defaults = { progress: 'progress', plan: 'schedule', train: 'phase1' };
+  const defaultSection = defaults[group];
+  // Activate first sub-btn
+  const subNav = document.getElementById('sub-' + group);
+  subNav.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  subNav.querySelector('.nav-btn').classList.add('active');
+  // Show section
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(defaultSection).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (defaultSection === 'myworkouts') loadWorkouts(true);
+  if (defaultSection === 'progress') loadProgress();
+}
+
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  // Update sub-nav active btn
+  if (btn) {
+    const subNav = btn.closest('.nav-sub');
+    if (subNav) subNav.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (id === 'myworkouts') loadWorkouts(true);
+  if (id === 'progress') loadProgress();
 }
 
 function toggleDay(id) {
@@ -3129,6 +3264,13 @@ async function onLogin(user) {
     document.getElementById('profile-screen').classList.remove('hidden');
   } else {
     document.getElementById('user-bar').style.display = 'flex';
+    // Show progress main section by default
+    document.getElementById('sub-progress').classList.remove('hidden');
+    document.getElementById('sub-plan').classList.add('hidden');
+    document.getElementById('sub-train').classList.add('hidden');
+    document.getElementById('main-btn-progress').classList.add('active');
+    document.getElementById('main-btn-plan').classList.remove('active');
+    document.getElementById('main-btn-train').classList.remove('active');
     loadProgress();
   }
 }
@@ -3662,19 +3804,6 @@ function renderWeightChart(logs) {
   <path d="${pathD}" fill="none" stroke="#e8ff47" stroke-width="2" stroke-linejoin="round"/>
   ${circles}${labels}`;
 }
-
-// ── SECTION SWITCHING (extended) ─────────────────────────
-const _origShowSection = showSection;
-window.showSection = function(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById(id);
-  if (el) el.classList.add('active');
-  event.target.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (id === 'myworkouts') loadWorkouts(true);
-  if (id === 'progress') loadProgress();
-};
 
 // ── TOAST ─────────────────────────────────────────────────
 function showToast(msg) {
