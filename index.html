@@ -4615,11 +4615,15 @@ function applyMeasFilter() {
 
 // ── TRAINING STATS ─────────────────────────────────────────
 async function loadTrainStats() {
-  if (!currentUser) return;
+  if (!currentUser) { console.warn('[stats] no currentUser'); return; }
+  try { await _loadTrainStatsInner(); } catch(e) { console.error('[stats] CRASH:', e); }
+}
+async function _loadTrainStatsInner() {
 
   // Load profile
-  const { data: profile } = await sb.from('user_profiles')
+  const { data: profile, error: profErr } = await sb.from('user_profiles')
     .select('*').eq('user_id', currentUser.id).single();
+  if (profErr) console.warn('[stats] profile error:', profErr.message);
 
   if (profile) {
     const goalMap = {
@@ -4640,9 +4644,10 @@ async function loadTrainStats() {
   }
 
   // Load workouts
-  const { data: wos } = await sb.from('workouts')
+  const { data: wos, error: wosErr } = await sb.from('workouts')
     .select('id, duration_seconds, created_at, date, phase, day_name').eq('user_id', currentUser.id)
     .order('date', { ascending: true });
+  console.log('[stats] workouts:', wos?.length ?? 0, wosErr ? 'ERR:' + wosErr.message : 'ok');
   const totalWo = wos ? wos.length : 0;
   const avgDur = totalWo > 0
     ? Math.round(wos.reduce((s, w) => s + (w.duration_seconds || 0), 0) / totalWo / 60) : 0;
@@ -4848,6 +4853,7 @@ async function loadTrainStats() {
       </div>`;
     }).join('');
   }
+  console.log('[stats] render complete');
 }
 
 // ── TOAST ─────────────────────────────────────────────────
