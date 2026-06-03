@@ -319,10 +319,13 @@
 
   /* CONTENT */
   .content {
+    max-width: var(--max-w);
+    margin: 0 auto;
     padding: 28px 40px;
-    max-width: 860px;
     position: relative;
     z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
   }
   .section { display: none; }
   .section.active { display: block !important; min-height: 100px; }
@@ -2104,6 +2107,8 @@
   .wo-finish-btn:active { transform: scale(0.98); box-shadow: none; }
 
   /* ══ APP CHROME — UNIFIED TOP BAR ══════════════════════ */
+  /* ══ CENTRED LAYOUT ════════════════════════════════════════ */
+  :root { --max-w: 900px; }
   .app-chrome {
     position: sticky;
     top: 0;
@@ -2113,6 +2118,12 @@
     -webkit-backdrop-filter: blur(32px) saturate(200%);
     border-bottom: 1px solid rgba(255,255,255,0.08);
     box-shadow: 0 1px 0 rgba(232,255,71,0.05), 0 8px 40px rgba(0,0,0,0.4);
+  }
+  /* inner wrapper — centres nav & header */
+  .app-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    width: 100%;
   }
   /* Subtle accent line under active section */
   .app-chrome .nav-btn.active {
@@ -2723,6 +2734,7 @@
 <body>
 
 <div class="app-chrome">
+<div class="app-inner">
 
   <div class="header">
     <div class="header-brand">
@@ -2773,6 +2785,7 @@
     <button class="logout-btn" onclick="authLogout()">Вийти</button>
   </div>
 
+</div><!-- /app-inner -->
 </div><!-- /app-chrome -->
 
 <div class="content">
