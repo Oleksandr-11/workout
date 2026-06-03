@@ -4407,11 +4407,12 @@ async function loadProgress() {
   // Comparison table
   renderCompareTable(profile, latestMeas);
 
-  // Stats
-  document.getElementById('sd-total').textContent = totalWo;
-  document.getElementById('sd-week').textContent = perWeek;
-  document.getElementById('sd-dur').textContent = avgDur || '—';
-  document.getElementById('sd-lost').textContent = lost !== null ? (lost > 0 ? lost : '0') : '—';
+  // Stats (moved to trainstats section — loaded via loadTrainStats())
+  const setElPr = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setElPr('sd-total', totalWo);
+  setElPr('sd-week', perWeek);
+  setElPr('sd-dur', avgDur || '—');
+  setElPr('sd-lost', lost !== null ? (lost > 0 ? lost : '0') : '—');
 
   // Chart
   renderWeightChart(weightLogsAll);
