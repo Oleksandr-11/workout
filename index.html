@@ -171,29 +171,26 @@
 
   /* HEADER */
   .header {
-    background: rgba(8,8,10,0.72);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-    padding: 18px 32px 14px;
+    padding: 20px 28px 12px;
     position: relative;
     overflow: hidden;
   }
   .header::before {
     content: 'CONSISTENCY';
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 160px;
-    color: rgba(232,255,71,0.055);
+    font-size: 120px;
+    color: rgba(232,255,71,0.045);
     position: absolute;
-    right: -10px;
-    top: -28px;
-    letter-spacing: -4px;
+    right: -8px;
+    top: -18px;
+    letter-spacing: -3px;
     pointer-events: none;
     line-height: 1;
+    user-select: none;
   }
   .header h1 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
+    font-size: 40px;
     letter-spacing: 2px;
     line-height: 1;
     color: #fff;
@@ -202,12 +199,20 @@
   .header h1 span { color: var(--accent); }
   .header-sub {
     font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    color: rgba(255,255,255,0.35);
-    margin-top: 4px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.28);
+    margin-top: 3px;
     font-style: italic;
     letter-spacing: 0.2px;
     position: relative;
+  }
+  .header-brand { display: flex; align-items: center; gap: 14px; }
+  .header-accent-line {
+    height: 28px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    border-radius: 2px;
+    opacity: 0.7;
   }
   .header-meta {
     display: flex;
@@ -237,16 +242,9 @@
 
   /* NAVIGATION */
   .nav-main {
-    background: rgba(6,6,8,0.88);
-    backdrop-filter: blur(24px) saturate(160%);
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-    padding: 10px 28px;
+    padding: 4px 28px 10px;
     display: flex;
     gap: 6px;
-    position: sticky;
-    top: 0;
-    z-index: 101;
   }
   .nav-main-btn {
     padding: 8px 18px;
@@ -282,34 +280,21 @@
   .nav-main-btn.active svg { stroke: #0a0a0a; }
 
   .nav-sub {
-    background: rgba(4,4,6,0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
     padding: 0 28px;
     display: flex;
     gap: 0;
     overflow-x: auto;
-    position: sticky;
-    top: 58px;
-    z-index: 100;
     scrollbar-width: none;
+    border-top: 1px solid rgba(255,255,255,0.05);
   }
   .nav-sub::-webkit-scrollbar { display: none; }
   .nav-sub.hidden { display: none; }
 
   .nav {
-    background: rgba(4,4,6,0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
     padding: 0 28px;
     display: flex;
     gap: 0;
     overflow-x: auto;
-    position: sticky;
-    top: 58px;
-    z-index: 100;
     scrollbar-width: none;
   }
   .nav::-webkit-scrollbar { display: none; }
@@ -778,8 +763,8 @@
     .header h1 { font-size: 36px; }
     .nav-main { padding: 0 8px; }
     .nav-main-btn { padding: 14px 16px; font-size: 11px; gap: 5px; }
-    .nav-sub { padding: 0 8px; top: 48px; }
-    .nav { padding: 0 8px; top: 48px; }
+    .nav-sub { padding: 0 8px; }
+    .nav { padding: 0 8px; }
     .content { padding: 16px; }
     .week-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .meal-row { grid-template-columns: 80px 1fr; }
@@ -1166,12 +1151,9 @@
   .user-bar {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 32px;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    justify-content: space-between;
+    padding: 5px 28px 8px;
+    border-top: 1px solid rgba(255,255,255,0.05);
     font-family: 'Inter', sans-serif;
     font-size: 12px;
     font-weight: 400;
@@ -2116,52 +2098,14 @@
 
   /* ══ APP CHROME — UNIFIED TOP BAR ══════════════════════ */
   .app-chrome {
-    background: rgba(7,7,9,0.68);
-    backdrop-filter: blur(32px) saturate(180%);
-    -webkit-backdrop-filter: blur(32px) saturate(180%);
-    border-bottom: 1px solid rgba(255,255,255,0.07);
     position: sticky;
     top: 0;
     z-index: 101;
-    /* micro-gradient — faint accent at very top */
-    box-shadow: 0 1px 0 rgba(232,255,71,0.04);
-  }
-  /* Override individual backgrounds — chrome handles them */
-  .app-chrome .header {
-    background: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border-bottom: none;
-    padding: 14px 28px 10px;
-  }
-  .app-chrome .nav-main {
-    background: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border-bottom: none;
-    position: relative;
-    top: auto;
-    z-index: auto;
-    padding: 6px 22px 8px;
-  }
-  .app-chrome .nav-sub {
-    background: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    position: relative;
-    top: auto;
-    z-index: auto;
-    border-bottom: none;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    padding: 0 22px;
-  }
-  .app-chrome .user-bar {
-    background: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border-bottom: none;
-    border-top: 1px solid rgba(255,255,255,0.05);
-    padding: 5px 28px;
+    background: rgba(7,7,9,0.78);
+    backdrop-filter: blur(32px) saturate(200%);
+    -webkit-backdrop-filter: blur(32px) saturate(200%);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 1px 0 rgba(232,255,71,0.05), 0 8px 40px rgba(0,0,0,0.4);
   }
   /* Subtle accent line under active section */
   .app-chrome .nav-btn.active {
@@ -2503,14 +2447,46 @@
   .tip .bn-title  { color: var(--accent); }
   .bn-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
+  /* ══ ACTIVITY GRID ══════════════════════════════════════ */
+  .act-grid-wrap { overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+  .act-grid-wrap::-webkit-scrollbar { display: none; }
+  .act-month-row { display: flex; gap: 3px; padding-left: 28px; margin-bottom: 4px; }
+  .act-month-cell { flex: 0 0 14px; font-size: 9px; color: var(--muted); font-weight: 500; letter-spacing: 0.3px; text-align: left; min-width: 0; overflow: visible; white-space: nowrap; }
+  .act-grid-body { display: flex; gap: 0; }
+  .act-day-labels { display: flex; flex-direction: column; gap: 3px; margin-right: 6px; width: 22px; flex-shrink: 0; }
+  .act-day-lbl { height: 14px; font-size: 9px; color: var(--muted); line-height: 14px; font-weight: 500; }
+  .act-grid-cells { display: flex; gap: 3px; }
+  .act-week-col { display: flex; flex-direction: column; gap: 3px; }
+  .act-cell { width: 14px; height: 14px; border-radius: 3px; }
+  .act-cell-none { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); }
+  .act-cell-active { background: var(--accent); box-shadow: 0 0 4px rgba(232,255,71,0.3); }
+  .act-cell-future { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); }
+  .act-cell-empty { background: transparent; }
+
   /* ══ MOBILE OVERRIDES ════════════════════════════════════ */
   @media (max-width: 700px) {
-    .app-chrome .header { padding: 12px 16px 8px; }
-    .app-chrome .nav-main { padding: 6px 12px 8px; }
-    .app-chrome .nav-sub { padding: 0 8px; }
-    .app-chrome .user-bar { padding: 5px 16px; }
+    .header { padding: 14px 16px 10px; }
+    .header h1 { font-size: 34px; }
+    .header::before { font-size: 90px; top: -14px; }
+    .nav-main { padding: 4px 12px 8px; }
+    .nav-main-btn { padding: 8px 14px; font-size: 11px; gap: 5px; }
+    .nav-sub { padding: 0 8px; }
+    .nav { padding: 0 8px; }
+    .content { padding: 16px; }
+    .week-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .meal-row { grid-template-columns: 80px 1fr; }
+    .meal-kcal, .meal-protein { display: none; }
+    .ex-table th:nth-child(5), .ex-table td:nth-child(5) { display: none; }
+    .prog-block { padding: 18px 16px; }
+    .kpi-grid { gap: 8px; }
+    .kpi-card { padding: 14px 10px; }
+    .wo-hist-header { padding: 14px; }
+    body::before { background-attachment: scroll; }
     .blk-title { font-size: 13px; }
     .ts-streak-row { flex-wrap: wrap; }
+    .act-cell { width: 11px; height: 11px; }
+    .act-month-cell { flex: 0 0 11px; font-size: 8px; }
+    .act-day-lbl { height: 11px; line-height: 11px; font-size: 8px; }
   }
 </style>
 </head>
@@ -2519,7 +2495,10 @@
 <div class="app-chrome">
 
   <div class="header">
-    <h1>BUILD <span>YOURSELF</span></h1>
+    <div class="header-brand">
+      <h1>BUILD <span>YOURSELF</span></h1>
+      <div class="header-accent-line"></div>
+    </div>
     <div class="header-sub">Результат починається там, де закінчуються виправдання.</div>
   </div>
 
@@ -3460,7 +3439,7 @@
     </div>
   </div>
 
-  <!-- KPI СТАТИСТИКА -->
+  <!-- KPI СТАТИСТИКА — 2×3 grid -->
   <div class="prog-block">
     <div class="blk-hd">
       <div class="blk-hd-l">
@@ -3468,65 +3447,62 @@
           <svg viewBox="0 0 24 24"><path d="M6 4v16M18 4v16M6 12h12M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>
         </div>
         <div>
-          <div class="blk-title">Статистика тренувань</div>
+          <div class="blk-title">Загальна статистика</div>
           <div class="blk-sub">Підсумки тренувального процесу</div>
         </div>
       </div>
     </div>
-    <div class="stat-grid-2x2">
+    <div class="stat-grid-2x2" style="grid-template-columns: repeat(3, 1fr)">
       <div class="stat-tile">
         <div class="st-val" id="ts-total">0</div>
-        <div class="st-lbl">Всього тренувань</div>
+        <div class="st-lbl">Тренувань</div>
       </div>
       <div class="stat-tile">
         <div class="st-val c3" id="ts-week">0</div>
-        <div class="st-lbl">Сер. тренувань/тиждень</div>
+        <div class="st-lbl">Трен./тиждень</div>
       </div>
       <div class="stat-tile">
         <div class="st-val c2" id="ts-dur">—</div>
-        <div class="st-lbl">Сер. тривалість (хв)</div>
+        <div class="st-lbl">Сер. тривалість</div>
       </div>
+    </div>
+    <div class="stat-grid-2x2" style="grid-template-columns: repeat(3, 1fr); margin-top: 8px">
       <div class="stat-tile">
         <div class="st-val cg" id="ts-lost">—</div>
-        <div class="st-lbl">Втрата ваги (кг)</div>
+        <div class="st-lbl">Втрата (кг)</div>
       </div>
-    </div>
-  </div>
-
-  <!-- STREAK TILES -->
-  <div class="prog-block">
-    <div class="blk-hd">
-      <div class="blk-hd-l">
-        <div class="blk-icon c-accent">
-          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <div>
-          <div class="blk-title">Серії та активність</div>
-          <div class="blk-sub">Поточна серія та загальна консистентність</div>
-        </div>
-      </div>
-    </div>
-    <div class="ts-streak-row">
-      <div class="ts-streak-tile">
+      <div class="stat-tile">
         <div class="st-val" id="ts-streak-cur">0</div>
-        <div class="st-lbl">Поточна серія (дні)</div>
+        <div class="st-lbl">Серія (дні)</div>
       </div>
+      <div class="stat-tile">
+        <div class="st-val c3" id="ts-streak-month">0</div>
+        <div class="st-lbl">Цього місяця</div>
+      </div>
+    </div>
+    <!-- Last workout + best streak row -->
+    <div class="ts-streak-row" style="margin-top: 12px">
       <div class="ts-streak-tile">
-        <div class="st-val c3" id="ts-streak-best">0</div>
+        <div class="st-val c2" id="ts-streak-best">0</div>
         <div class="st-lbl">Найкраща серія</div>
       </div>
       <div class="ts-streak-tile">
-        <div class="st-val" id="ts-streak-month">0</div>
-        <div class="st-lbl">Тренувань цього місяця</div>
+        <div class="st-val" id="ts-days-since" style="font-size:16px">—</div>
+        <div class="st-lbl">Останнє трен.</div>
       </div>
     </div>
-    <!-- Last workout card -->
+    <!-- Best week -->
+    <div style="margin-top:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.07)">
+      <div style="font-size:9px;font-weight:600;letter-spacing:0.8px;color:var(--muted);margin-bottom:4px">НАЙАКТИВНІШИЙ ТИЖДЕНЬ</div>
+      <div style="font-size:13px;font-weight:600;color:var(--accent)" id="ts-best-week">—</div>
+    </div>
+    <!-- Last workout detail -->
     <div class="ts-last-workout" id="ts-last-block" style="display:none;margin-top:12px">
-      <div style="font-size:10px;font-weight:600;letter-spacing:0.8px;color:var(--muted);margin-bottom:6px">ОСТАННЄ ТРЕНУВАННЯ</div>
+      <div style="font-size:9px;font-weight:600;letter-spacing:0.8px;color:var(--muted);margin-bottom:6px">ОСТАННЄ ТРЕНУВАННЯ</div>
       <div style="font-size:15px;font-weight:600;color:#fff" id="ts-last-name">—</div>
       <div style="display:flex;gap:12px;margin-top:4px">
         <span style="font-size:12px;color:var(--muted)" id="ts-last-date">—</span>
-        <span style="font-size:12px;color:var(--muted)" id="ts-last-dur">—</span>
+        <span style="font-size:12px;color:var(--accent3)" id="ts-last-dur">—</span>
       </div>
     </div>
   </div>
@@ -3535,30 +3511,69 @@
   <div class="prog-block">
     <div class="blk-hd">
       <div class="blk-hd-l">
-        <div class="blk-icon">
+        <div class="blk-icon c-accent">
           <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
         <div>
           <div class="blk-title">Прогрес по фазах</div>
-          <div class="blk-sub">Виконані тренування в кожній фазі</div>
+          <div class="blk-sub">Виконані тренування в кожній фазі програми</div>
         </div>
       </div>
     </div>
     <div class="ts-phase-progress" id="ts-phase-progress">
-      <!-- filled by JS -->
+      <div class="ts-phase-row">
+        <div class="ts-phase-label">Фаза 1–4</div>
+        <div class="ts-phase-bar"><div class="ts-phase-fill" style="width:0%;background:var(--accent)"></div></div>
+        <div class="ts-phase-pct">0/48</div>
+      </div>
+      <div class="ts-phase-row">
+        <div class="ts-phase-label">Фаза 5–8</div>
+        <div class="ts-phase-bar"><div class="ts-phase-fill" style="width:0%;background:var(--accent3)"></div></div>
+        <div class="ts-phase-pct">0/48</div>
+      </div>
+      <div class="ts-phase-row">
+        <div class="ts-phase-label">Фаза 9–12</div>
+        <div class="ts-phase-bar"><div class="ts-phase-fill" style="width:0%;background:var(--accent2)"></div></div>
+        <div class="ts-phase-pct">0/48</div>
+      </div>
     </div>
   </div>
 
-  <!-- ACTIVITY HEATMAP -->
-  <div class="prog-block" id="ts-streak-block">
+  <!-- ACTIVITY GRID (GitHub-style) -->
+  <div class="prog-block">
     <div class="blk-hd">
       <div class="blk-hd-l">
         <div class="blk-icon">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </div>
         <div>
-          <div class="blk-title">Активність по днях</div>
-          <div class="blk-sub">Розподіл тренувань по днях тижня</div>
+          <div class="blk-title">Активність</div>
+          <div class="blk-sub">Останні 16 тижнів тренувань</div>
+        </div>
+      </div>
+    </div>
+    <div id="ts-activity-grid"></div>
+    <!-- Legend -->
+    <div style="display:flex;align-items:center;gap:6px;margin-top:10px;justify-content:flex-end">
+      <span style="font-size:10px;color:var(--muted)">Менше</span>
+      <div style="width:10px;height:10px;border-radius:3px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1)"></div>
+      <div style="width:10px;height:10px;border-radius:3px;background:rgba(232,255,71,0.25)"></div>
+      <div style="width:10px;height:10px;border-radius:3px;background:rgba(232,255,71,0.55)"></div>
+      <div style="width:10px;height:10px;border-radius:3px;background:var(--accent)"></div>
+      <span style="font-size:10px;color:var(--muted)">Більше</span>
+    </div>
+  </div>
+
+  <!-- DAY OF WEEK HEATMAP -->
+  <div class="prog-block" id="ts-streak-block">
+    <div class="blk-hd">
+      <div class="blk-hd-l">
+        <div class="blk-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">По днях тижня</div>
+          <div class="blk-sub">Розподіл тренувань по днях</div>
         </div>
       </div>
     </div>
@@ -4601,7 +4616,7 @@ function applyMeasFilter() {
 async function loadTrainStats() {
   if (!currentUser) return;
 
-  // Load profile for name/goal
+  // Load profile
   const { data: profile } = await sb.from('user_profiles')
     .select('*').eq('user_id', currentUser.id).single();
 
@@ -4623,7 +4638,7 @@ async function loadTrainStats() {
     if (tsBlock) tsBlock.style.display = 'flex';
   }
 
-  // Load workouts (include phase + day_name for details)
+  // Load workouts
   const { data: wos } = await sb.from('workouts')
     .select('id, duration_seconds, created_at, date, phase, day_name').eq('user_id', currentUser.id)
     .order('date', { ascending: true });
@@ -4654,27 +4669,26 @@ async function loadTrainStats() {
   setEl('ts-lost', lost !== null ? (lost > 0 ? lost : '0') : '—');
 
   // ── Streak calculation ──────────────────────────────────────
+  const workoutDateSet = new Set(wos ? wos.map(w => w.date) : []);
+  const today = new Date().toISOString().slice(0,10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+
   if (wos && wos.length) {
-    // Sort descending by date for streak
-    const sortedDates = [...new Set(wos.map(w => w.date))].sort().reverse();
-    const today = new Date().toISOString().slice(0,10);
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
-    let curStreak = 0, bestStreak = 0, tempStreak = 0, prevDate = null;
-    // current streak (from today or yesterday backward)
-    let streakActive = (sortedDates[0] === today || sortedDates[0] === yesterday);
+    const sortedDates = [...workoutDateSet].sort().reverse();
+    let curStreak = 0, bestStreak = 0, tempStreak = 0;
+    const streakActive = (sortedDates[0] === today || sortedDates[0] === yesterday);
     for (let i = 0; i < sortedDates.length; i++) {
-      const d = new Date(sortedDates[i]);
       if (i === 0) { tempStreak = 1; }
       else {
         const prev = new Date(sortedDates[i-1]);
-        const diff = Math.round((prev - d) / 86400000);
+        const curr = new Date(sortedDates[i]);
+        const diff = Math.round((prev - curr) / 86400000);
         if (diff === 1) tempStreak++;
         else { bestStreak = Math.max(bestStreak, tempStreak); tempStreak = 1; }
       }
     }
     bestStreak = Math.max(bestStreak, tempStreak);
     if (streakActive) {
-      // count from most recent backward
       curStreak = 1;
       for (let i = 1; i < sortedDates.length; i++) {
         const prev = new Date(sortedDates[i-1]);
@@ -4683,13 +4697,35 @@ async function loadTrainStats() {
         else break;
       }
     }
-    // This month count
     const nowMon = new Date().toISOString().slice(0,7);
     const monthCount = wos.filter(w => w.date && w.date.startsWith(nowMon)).length;
+    // Days since last workout
+    const lastDate = sortedDates[0];
+    const daysSince = lastDate ? Math.floor((Date.now() - new Date(lastDate)) / 86400000) : null;
 
     setEl('ts-streak-cur', curStreak);
     setEl('ts-streak-best', bestStreak);
     setEl('ts-streak-month', monthCount);
+    if (daysSince !== null) {
+      const dEl = document.getElementById('ts-days-since');
+      if (dEl) dEl.textContent = daysSince === 0 ? 'Сьогодні' : daysSince === 1 ? 'Вчора' : daysSince + ' дн. тому';
+    }
+
+    // Most active week
+    const weekCounts = {};
+    wos.forEach(w => {
+      const d = new Date(w.date);
+      const day = d.getDay();
+      const mon = new Date(d); mon.setDate(d.getDate() - ((day + 6) % 7));
+      const wk = mon.toISOString().slice(0,10);
+      weekCounts[wk] = (weekCounts[wk] || 0) + 1;
+    });
+    const maxWkEntry = Object.entries(weekCounts).sort((a,b) => b[1]-a[1])[0];
+    if (maxWkEntry) {
+      const wkDate = new Date(maxWkEntry[0]);
+      const wkStr = wkDate.toLocaleDateString('uk', { day: 'numeric', month: 'short' });
+      setEl('ts-best-week', maxWkEntry[1] + ' трен. (тиж. від ' + wkStr + ')');
+    }
 
     // Last workout card
     const lastWo = wos[wos.length - 1];
@@ -4697,8 +4733,8 @@ async function loadTrainStats() {
     if (lastBlock && lastWo) {
       lastBlock.style.display = 'block';
       setEl('ts-last-name', lastWo.day_name || 'Тренування');
-      const lastDate = new Date(lastWo.date);
-      setEl('ts-last-date', lastDate.toLocaleDateString('uk', { day: 'numeric', month: 'long' }));
+      const lastDt = new Date(lastWo.date);
+      setEl('ts-last-date', lastDt.toLocaleDateString('uk', { day: 'numeric', month: 'long' }));
       const mins = lastWo.duration_seconds ? Math.round(lastWo.duration_seconds / 60) + ' хв' : '—';
       setEl('ts-last-dur', mins);
     }
@@ -4707,9 +4743,8 @@ async function loadTrainStats() {
   // ── Phase progress bars ─────────────────────────────────────
   const phaseContainer = document.getElementById('ts-phase-progress');
   if (phaseContainer && wos) {
-    // Count workouts per phase (phases 1-3 in DB correspond to groups of months)
     const phaseLabels = { 1: 'Фаза 1–4', 2: 'Фаза 5–8', 3: 'Фаза 9–12' };
-    const phaseTargets = { 1: 48, 2: 48, 3: 48 }; // ~4 workouts/week × 12 weeks
+    const phaseTargets = { 1: 48, 2: 48, 3: 48 };
     const phaseCounts = { 1: 0, 2: 0, 3: 0 };
     wos.forEach(w => { if (w.phase && phaseCounts[w.phase] !== undefined) phaseCounts[w.phase]++; });
     const colors = { 1: 'var(--accent)', 2: 'var(--accent3)', 3: 'var(--accent2)' };
@@ -4723,6 +4758,74 @@ async function loadTrainStats() {
         <div class="ts-phase-pct">${cnt}/${tgt}</div>
       </div>`;
     }).join('');
+  }
+
+  // ── GitHub-style activity grid (last 16 weeks) ──────────────
+  const actGrid = document.getElementById('ts-activity-grid');
+  if (actGrid) {
+    const WEEKS = 16;
+    const DAYS = WEEKS * 7;
+    // Build array of date strings for last DAYS days, starting from most recent Monday
+    const todayDate = new Date();
+    // Find last Sunday (end of current week or today)
+    const dayOfWeek = todayDate.getDay(); // 0=Sun
+    const endDate = new Date(todayDate);
+    endDate.setDate(todayDate.getDate() + (6 - ((dayOfWeek + 6) % 7))); // end on Saturday
+    const startDate = new Date(endDate);
+    startDate.setDate(endDate.getDate() - DAYS + 1);
+
+    // Build cells
+    const dayLabels = ['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
+    // month labels
+    const monthLabels = [];
+    let lastMonth = -1;
+    const cells = [];
+    for (let i = 0; i < DAYS; i++) {
+      const d = new Date(startDate);
+      d.setDate(startDate.getDate() + i);
+      const ds = d.toISOString().slice(0,10);
+      const hasWo = workoutDateSet.has(ds);
+      const isFuture = d > todayDate;
+      const month = d.getMonth();
+      const weekIdx = Math.floor(i / 7);
+      if (month !== lastMonth && i % 7 === 0) {
+        monthLabels.push({ weekIdx, label: d.toLocaleDateString('uk', { month: 'short' }) });
+        lastMonth = month;
+      }
+      cells.push({ ds, hasWo, isFuture, dayOfWeek: (d.getDay() + 6) % 7, weekIdx });
+    }
+
+    // Render as CSS grid: columns = weeks, rows = days (Mon-Sun)
+    let html = `<div class="act-grid-wrap">`;
+    // Month labels row
+    html += `<div class="act-month-row">`;
+    for (let w = 0; w < WEEKS; w++) {
+      const ml = monthLabels.find(m => m.weekIdx === w);
+      html += `<div class="act-month-cell">${ml ? ml.label : ''}</div>`;
+    }
+    html += `</div>`;
+    // Day labels + grid
+    html += `<div class="act-grid-body">`;
+    // Day labels column
+    html += `<div class="act-day-labels">`;
+    dayLabels.forEach((dl, i) => {
+      html += `<div class="act-day-lbl">${i % 2 === 0 ? dl : ''}</div>`;
+    });
+    html += `</div>`;
+    // Grid cells
+    html += `<div class="act-grid-cells">`;
+    for (let w = 0; w < WEEKS; w++) {
+      html += `<div class="act-week-col">`;
+      for (let d = 0; d < 7; d++) {
+        const cell = cells.find(c => c.weekIdx === w && c.dayOfWeek === d);
+        if (!cell) { html += `<div class="act-cell act-cell-empty"></div>`; continue; }
+        const cls = cell.isFuture ? 'act-cell-future' : cell.hasWo ? 'act-cell-active' : 'act-cell-none';
+        html += `<div class="act-cell ${cls}" title="${cell.ds}"></div>`;
+      }
+      html += `</div>`;
+    }
+    html += `</div></div></div>`;
+    actGrid.innerHTML = html;
   }
 
   // ── Heatmap — days of week distribution ─────────────────────
