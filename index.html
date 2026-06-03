@@ -2453,6 +2453,70 @@
   .tip .bn-title  { color: var(--accent); }
   .bn-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
+  /* ══ STATS CARDS (trainstats) ════════════════════════════ */
+  .ts-card {
+    background: #14141a;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 20px 18px;
+    margin-bottom: 12px;
+  }
+  .ts-card-hd {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .ts-card-ico {
+    width: 18px; height: 18px;
+    stroke: rgba(255,255,255,0.4);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+  .ts-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.1px;
+  }
+  .ts-card-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 1px;
+  }
+  .ts-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .ts-kpi {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .ts-kpi-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 34px;
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .ts-kpi-lbl {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
   /* ══ ACTIVITY GRID ══════════════════════════════════════ */
   .act-grid-wrap { overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
   .act-grid-wrap::-webkit-scrollbar { display: none; }
@@ -3445,88 +3509,83 @@
     </div>
   </div>
 
-  <!-- KPI СТАТИСТИКА — 2×3 grid -->
-  <div class="prog-block">
-    <div class="blk-hd">
-      <div class="blk-hd-l">
-        <div class="blk-icon c-green">
-          <svg viewBox="0 0 24 24"><path d="M6 4v16M18 4v16M6 12h12M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>
-        </div>
-        <div>
-          <div class="blk-title">Загальна статистика</div>
-          <div class="blk-sub">Підсумки тренувального процесу</div>
-        </div>
+  <!-- ── ЗАГАЛЬНА СТАТИСТИКА ── -->
+  <div class="ts-card">
+    <div class="ts-card-hd">
+      <svg viewBox="0 0 24 24" class="ts-card-ico"><path d="M6 4v16M18 4v16M6 12h12M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>
+      <div>
+        <div class="ts-card-title">Загальна статистика</div>
+        <div class="ts-card-sub">Підсумки тренувального процесу</div>
       </div>
     </div>
-    <div class="stat-grid-2x2" style="grid-template-columns: repeat(3, 1fr)">
-      <div class="stat-tile">
-        <div class="st-val" id="ts-total">0</div>
-        <div class="st-lbl">Тренувань</div>
+    <div class="ts-kpi-row">
+      <div class="ts-kpi">
+        <div class="ts-kpi-val" id="ts-total">0</div>
+        <div class="ts-kpi-lbl">Тренувань</div>
       </div>
-      <div class="stat-tile">
-        <div class="st-val c3" id="ts-week">0</div>
-        <div class="st-lbl">Трен./тиждень</div>
+      <div class="ts-kpi">
+        <div class="ts-kpi-val" style="color:var(--accent3)" id="ts-week">0</div>
+        <div class="ts-kpi-lbl">На тиждень</div>
       </div>
-      <div class="stat-tile">
-        <div class="st-val c2" id="ts-dur">—</div>
-        <div class="st-lbl">Сер. тривалість</div>
-      </div>
-    </div>
-    <div class="stat-grid-2x2" style="grid-template-columns: repeat(3, 1fr); margin-top: 8px">
-      <div class="stat-tile">
-        <div class="st-val cg" id="ts-lost">—</div>
-        <div class="st-lbl">Втрата (кг)</div>
-      </div>
-      <div class="stat-tile">
-        <div class="st-val" id="ts-streak-cur">0</div>
-        <div class="st-lbl">Серія (дні)</div>
-      </div>
-      <div class="stat-tile">
-        <div class="st-val c3" id="ts-streak-month">0</div>
-        <div class="st-lbl">Цього місяця</div>
+      <div class="ts-kpi">
+        <div class="ts-kpi-val" style="color:var(--accent2)" id="ts-dur">—</div>
+        <div class="ts-kpi-lbl">Сер. хв</div>
       </div>
     </div>
-    <!-- Last workout + best streak row -->
-    <div class="ts-streak-row" style="margin-top: 12px">
-      <div class="ts-streak-tile">
-        <div class="st-val c2" id="ts-streak-best">0</div>
-        <div class="st-lbl">Найкраща серія</div>
+    <div class="ts-kpi-row" style="margin-top:8px">
+      <div class="ts-kpi">
+        <div class="ts-kpi-val" style="color:var(--green)" id="ts-lost">—</div>
+        <div class="ts-kpi-lbl">Втрата кг</div>
       </div>
-      <div class="ts-streak-tile">
-        <div class="st-val" id="ts-days-since" style="font-size:16px">—</div>
-        <div class="st-lbl">Останнє трен.</div>
+      <div class="ts-kpi">
+        <div class="ts-kpi-val" id="ts-streak-cur">0</div>
+        <div class="ts-kpi-lbl">Серія днів</div>
       </div>
-    </div>
-    <!-- Best week -->
-    <div style="margin-top:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.07)">
-      <div style="font-size:9px;font-weight:600;letter-spacing:0.8px;color:var(--muted);margin-bottom:4px">НАЙАКТИВНІШИЙ ТИЖДЕНЬ</div>
-      <div style="font-size:13px;font-weight:600;color:var(--accent)" id="ts-best-week">—</div>
-    </div>
-    <!-- Last workout detail -->
-    <div class="ts-last-workout" id="ts-last-block" style="display:none;margin-top:12px">
-      <div style="font-size:9px;font-weight:600;letter-spacing:0.8px;color:var(--muted);margin-bottom:6px">ОСТАННЄ ТРЕНУВАННЯ</div>
-      <div style="font-size:15px;font-weight:600;color:#fff" id="ts-last-name">—</div>
-      <div style="display:flex;gap:12px;margin-top:4px">
-        <span style="font-size:12px;color:var(--muted)" id="ts-last-date">—</span>
-        <span style="font-size:12px;color:var(--accent3)" id="ts-last-dur">—</span>
+      <div class="ts-kpi">
+        <div class="ts-kpi-val" style="color:var(--accent3)" id="ts-streak-month">0</div>
+        <div class="ts-kpi-lbl">Цей місяць</div>
       </div>
     </div>
   </div>
 
-  <!-- PHASE PROGRESS -->
-  <div class="prog-block">
-    <div class="blk-hd">
-      <div class="blk-hd-l">
-        <div class="blk-icon c-accent">
-          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div>
-          <div class="blk-title">Прогрес по фазах</div>
-          <div class="blk-sub">Виконані тренування в кожній фазі програми</div>
-        </div>
+  <!-- ── ОСТАННЄ ТРЕНУВАННЯ ── -->
+  <div class="ts-card" id="ts-last-block" style="display:none">
+    <div class="ts-card-hd">
+      <svg viewBox="0 0 24 24" class="ts-card-ico"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <div>
+        <div class="ts-card-title">Останнє тренування</div>
+        <div class="ts-card-sub" id="ts-last-date">—</div>
+      </div>
+      <div style="margin-left:auto;font-size:12px;color:var(--accent3)" id="ts-last-dur">—</div>
+    </div>
+    <div style="font-size:17px;font-weight:600;color:#fff;margin-top:4px" id="ts-last-name">—</div>
+    <div style="margin-top:8px;display:flex;gap:16px">
+      <div style="font-size:11px;color:var(--muted)">Найкраща серія: <span style="color:var(--accent2);font-weight:600" id="ts-streak-best">0</span> дн.</div>
+      <div style="font-size:11px;color:var(--muted)">Останній раз: <span style="color:#fff;font-weight:500" id="ts-days-since">—</span></div>
+    </div>
+  </div>
+
+  <!-- ── НАЙАКТИВНІШИЙ ТИЖДЕНЬ ── -->
+  <div class="ts-card">
+    <div class="ts-card-hd">
+      <svg viewBox="0 0 24 24" class="ts-card-ico"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <div>
+        <div class="ts-card-title">Найактивніший тиждень</div>
       </div>
     </div>
-    <div class="ts-phase-progress" id="ts-phase-progress">
+    <div style="font-size:16px;font-weight:600;color:var(--accent);margin-top:6px" id="ts-best-week">—</div>
+  </div>
+
+  <!-- ── ПРОГРЕС ФАЗ ── -->
+  <div class="ts-card">
+    <div class="ts-card-hd">
+      <svg viewBox="0 0 24 24" class="ts-card-ico" style="stroke:var(--accent)"><path d="M3 3v18h18"/><polyline points="7 16 11 10 15 14 19 8"/></svg>
+      <div>
+        <div class="ts-card-title">Прогрес по фазах</div>
+        <div class="ts-card-sub">Де ти знаходишся в програмі</div>
+      </div>
+    </div>
+    <div id="ts-phase-progress" style="margin-top:8px">
       <div class="ts-phase-row">
         <div class="ts-phase-label">Фаза 1–4</div>
         <div class="ts-phase-bar"><div class="ts-phase-fill" style="width:0%;background:var(--accent)"></div></div>
@@ -3545,45 +3604,36 @@
     </div>
   </div>
 
-  <!-- ACTIVITY GRID (GitHub-style) -->
-  <div class="prog-block">
-    <div class="blk-hd">
-      <div class="blk-hd-l">
-        <div class="blk-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        </div>
-        <div>
-          <div class="blk-title">Активність</div>
-          <div class="blk-sub">Останні 16 тижнів тренувань</div>
-        </div>
+  <!-- ── ГРАФІК АКТИВНОСТІ ── -->
+  <div class="ts-card">
+    <div class="ts-card-hd">
+      <svg viewBox="0 0 24 24" class="ts-card-ico"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <div>
+        <div class="ts-card-title">Активність</div>
+        <div class="ts-card-sub">Останні 16 тижнів тренувань</div>
       </div>
     </div>
-    <div id="ts-activity-grid"></div>
-    <!-- Legend -->
+    <div id="ts-activity-grid" style="margin-top:12px"></div>
     <div style="display:flex;align-items:center;gap:6px;margin-top:10px;justify-content:flex-end">
-      <span style="font-size:10px;color:var(--muted)">Менше</span>
-      <div style="width:10px;height:10px;border-radius:3px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1)"></div>
-      <div style="width:10px;height:10px;border-radius:3px;background:rgba(232,255,71,0.25)"></div>
-      <div style="width:10px;height:10px;border-radius:3px;background:rgba(232,255,71,0.55)"></div>
-      <div style="width:10px;height:10px;border-radius:3px;background:var(--accent)"></div>
-      <span style="font-size:10px;color:var(--muted)">Більше</span>
+      <span style="font-size:10px;color:var(--muted)">менше</span>
+      <div style="width:11px;height:11px;border-radius:3px;background:rgba(255,255,255,0.1)"></div>
+      <div style="width:11px;height:11px;border-radius:3px;background:rgba(232,255,71,0.3)"></div>
+      <div style="width:11px;height:11px;border-radius:3px;background:rgba(232,255,71,0.65)"></div>
+      <div style="width:11px;height:11px;border-radius:3px;background:#e8ff47"></div>
+      <span style="font-size:10px;color:var(--muted)">більше</span>
     </div>
   </div>
 
-  <!-- DAY OF WEEK HEATMAP -->
-  <div class="prog-block" id="ts-streak-block">
-    <div class="blk-hd">
-      <div class="blk-hd-l">
-        <div class="blk-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </div>
-        <div>
-          <div class="blk-title">По днях тижня</div>
-          <div class="blk-sub">Розподіл тренувань по днях</div>
-        </div>
+  <!-- ── ПО ДНЯХ ТИЖНЯ ── -->
+  <div class="ts-card">
+    <div class="ts-card-hd">
+      <svg viewBox="0 0 24 24" class="ts-card-ico"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <div>
+        <div class="ts-card-title">Розподіл по днях</div>
+        <div class="ts-card-sub">Найчастіші дні тренувань</div>
       </div>
     </div>
-    <div id="ts-heatmap" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"></div>
+    <div id="ts-heatmap" style="display:flex;gap:5px;margin-top:12px"></div>
   </div>
 
 </div>
@@ -4653,7 +4703,6 @@ async function _loadTrainStatsInner() {
   const { data: wos, error: wosErr } = await sb.from('workouts')
     .select('id, duration_seconds, created_at, date, phase, day_name').eq('user_id', currentUser.id)
     .order('date', { ascending: true });
-  console.log('[stats] workouts:', wos?.length ?? 0, wosErr ? 'ERR:' + wosErr.message : 'ok');
   const totalWo = wos ? wos.length : 0;
   const avgDur = totalWo > 0
     ? Math.round(wos.reduce((s, w) => s + (w.duration_seconds || 0), 0) / totalWo / 60) : 0;
@@ -4674,12 +4723,7 @@ async function _loadTrainStatsInner() {
   const lost = latestW !== null && START_WEIGHT ? +(START_WEIGHT - latestW).toFixed(1) : null;
 
   // Fill main tiles
-  const setEl = (id, val) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = val;
-    else console.warn('[stats] element NOT FOUND:', id);
-  };
-  console.log('[stats] filling tiles: total=', totalWo, 'week=', perWeek, 'dur=', avgDur);
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   setEl('ts-total', totalWo);
   setEl('ts-week', perWeek);
   setEl('ts-dur', avgDur || '—');
@@ -4847,24 +4891,27 @@ async function _loadTrainStatsInner() {
 
   // ── Heatmap — days of week distribution ─────────────────────
   const heatmap = document.getElementById('ts-heatmap');
-  if (heatmap && wos && wos.length) {
-    const days = ['Нд','Пн','Вт','Ср','Чт','Пт','Сб'];
+  if (heatmap) {
+    const days = ['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
+    // reorder: Mon=0...Sun=6
     const counts = [0,0,0,0,0,0,0];
-    wos.forEach(w => counts[new Date(w.date).getDay()]++);
+    if (wos) wos.forEach(w => {
+      const day = (new Date(w.date).getDay() + 6) % 7; // Mon=0
+      counts[day]++;
+    });
     const max = Math.max(...counts, 1);
     heatmap.innerHTML = days.map((d, i) => {
       const intensity = counts[i] / max;
       const bg = intensity === 0
-        ? 'rgba(255,255,255,0.04)'
-        : `rgba(232,255,71,${(0.1 + intensity * 0.75).toFixed(2)})`;
-      const color = intensity > 0.5 ? '#0a0a0a' : (intensity > 0 ? 'var(--accent)' : 'var(--muted)');
-      return `<div style="flex:1;min-width:36px;background:${bg};border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 6px;text-align:center;">
-        <div style="font-size:10px;font-weight:600;letter-spacing:0.4px;color:${color};margin-bottom:4px">${d}</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;color:${intensity > 0 ? (intensity > 0.5 ? '#0a0a0a' : 'var(--accent)') : 'var(--muted)'}">${counts[i]}</div>
+        ? 'rgba(255,255,255,0.06)'
+        : `rgba(232,255,71,${(0.15 + intensity * 0.85).toFixed(2)})`;
+      const textColor = intensity > 0.5 ? '#0a0a0a' : (intensity > 0 ? '#e8ff47' : 'rgba(255,255,255,0.3)');
+      return `<div style="flex:1;background:${bg};border-radius:12px;padding:14px 6px 10px;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1;color:${textColor}">${counts[i]}</div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:0.5px;color:${textColor};opacity:${intensity>0?1:0.5};margin-top:5px">${d}</div>
       </div>`;
     }).join('');
   }
-  console.log('[stats] render complete');
 }
 
 // ── TOAST ─────────────────────────────────────────────────
