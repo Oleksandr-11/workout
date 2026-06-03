@@ -141,6 +141,7 @@
     -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
     padding: 0;
+    isolation: isolate;
   }
   body::before {
     content: '';
@@ -317,7 +318,12 @@
   .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
   /* CONTENT */
-  .content { padding: 28px 40px; max-width: 860px; }
+  .content {
+    padding: 28px 40px;
+    max-width: 860px;
+    position: relative;
+    z-index: 1;
+  }
   .section { display: none; }
   .section.active { display: block; }
 
