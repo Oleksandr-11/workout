@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Програма тренувань — 12 тижнів</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap');
 
@@ -527,6 +528,407 @@
     .ex-table th:nth-child(5), .ex-table td:nth-child(5) { display: none; }
   }
 
+  /* ══ AUTH SCREEN ══ */
+  #auth-screen {
+    position: fixed;
+    inset: 0;
+    background: #0f0f0f;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  #auth-screen.hidden { display: none; }
+  .auth-box {
+    background: #181818;
+    border: 1px solid #2e2e2e;
+    border-radius: 8px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 380px;
+  }
+  .auth-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .auth-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .auth-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #2e2e2e;
+  }
+  .auth-tab {
+    flex: 1;
+    padding: 8px;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border: none;
+    background: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+  .auth-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .auth-field { margin-bottom: 14px; }
+  .auth-field label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .auth-field input {
+    width: 100%;
+    background: #222;
+    border: 1px solid #2e2e2e;
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    color: #e8e8e8;
+    outline: none;
+  }
+  .auth-field input:focus { border-color: var(--accent); }
+  .auth-submit {
+    width: 100%;
+    height: 46px;
+    background: var(--accent);
+    border: none;
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #0f0f0f;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity .15s;
+  }
+  .auth-submit:hover { opacity: .88; }
+  .auth-error {
+    font-size: 12px;
+    color: #ff4f4f;
+    margin-top: 10px;
+    min-height: 18px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ══ USER BAR ══ */
+  .user-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 40px;
+    background: #111;
+    border-bottom: 1px solid #1e1e1e;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .user-bar span { flex: 1; }
+  .logout-btn {
+    background: none;
+    border: 1px solid #2e2e2e;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+  .logout-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ══ MY WORKOUTS SECTION ══ */
+  .wo-hist-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .wo-hist-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .wo-hist-date {
+    text-align: center;
+    min-width: 36px;
+  }
+  .wo-hist-date .hday { font-size: 22px; font-weight: 700; color: #fff; line-height: 1; }
+  .wo-hist-date .hmon { font-size: 9px; color: var(--muted); text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; }
+  .wo-hist-info { flex: 1; min-width: 0; }
+  .wo-hist-info strong { font-size: 13px; font-weight: 600; display: block; margin-bottom: 2px; }
+  .wo-hist-info span { font-size: 11px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+  .wo-hist-arrow { color: var(--muted); font-size: 14px; transition: transform .2s; }
+  .wo-hist-card.open .wo-hist-arrow { transform: rotate(90deg); }
+  .wo-hist-body { display: none; border-top: 1px solid var(--border); padding: 12px 16px; }
+  .wo-hist-card.open .wo-hist-body { display: block; }
+  .wo-hist-ex { margin-bottom: 12px; }
+  .wo-hist-ex-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .wo-hist-set {
+    display: flex;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .wo-hist-set .done-mark { color: var(--green); }
+  .load-more-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .load-more-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .empty-hist {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .empty-hist .big { font-size: 48px; display: block; margin-bottom: 12px; }
+
+  /* ══ PROGRESS SECTION ══ */
+  .prog-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .prog-stat-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .prog-stat-tile .val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--accent);
+    line-height: 1;
+    display: block;
+  }
+  .prog-stat-tile .lbl {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+    display: block;
+  }
+
+  .prog-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 16px;
+    margin-bottom: 16px;
+  }
+  .prog-block-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  /* Weight progress bar */
+  .weight-progress-wrap { margin-bottom: 14px; }
+  .weight-progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .weight-progress-bar {
+    height: 8px;
+    background: #222;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .weight-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 4px;
+    transition: width .5s ease;
+  }
+  .weight-inputs-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .weight-input-grp { flex: 1; min-width: 120px; }
+  .weight-input-grp label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .weight-input-grp input {
+    width: 100%;
+    background: #222;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 9px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: #e8e8e8;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+  .weight-input-grp input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .weight-input-grp input:focus { border-color: var(--accent); }
+  .prog-save-btn {
+    height: 40px;
+    padding: 0 16px;
+    background: rgba(232,255,71,0.12);
+    border: 1px solid rgba(232,255,71,0.3);
+    border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--accent);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .prog-save-btn:hover { background: rgba(232,255,71,0.2); }
+
+  /* SVG Chart */
+  .chart-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .chart-wrap svg { display: block; }
+
+  /* Measurements */
+  .measure-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .measure-field label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .measure-field input {
+    width: 100%;
+    background: #222;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 9px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    color: #e8e8e8;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+  .measure-field input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .measure-field input:focus { border-color: var(--accent); }
+
+  .measure-hist-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .measure-hist-table th {
+    color: var(--muted);
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .measure-hist-table td {
+    padding: 8px 8px;
+    border-bottom: 1px solid rgba(46,46,46,0.5);
+    color: #ccc;
+  }
+  .measure-hist-table tr:last-child td { border-bottom: none; }
+
+  /* Saving toast */
+  .save-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #181818;
+    border: 1px solid rgba(232,255,71,0.3);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    z-index: 3000;
+    opacity: 0;
+    transition: opacity .3s;
+    pointer-events: none;
+  }
+  .save-toast.show { opacity: 1; }
+
   /* ══ КНОПКА РОЗПОЧАТИ ТРЕНУВАННЯ ══ */
   .start-workout-btn {
     display: flex;
@@ -858,7 +1260,13 @@
   <button class="nav-btn" onclick="showSection('phase3')">Фаза 3 — Тижні 9–12</button>
   <button class="nav-btn" onclick="showSection('progression')">Прогресія ваг</button>
   <button class="nav-btn" onclick="showSection('nutrition')">Харчування</button>
+  <button class="nav-btn" onclick="showSection('myworkouts')">Мої тренування</button>
+  <button class="nav-btn" onclick="showSection('progress')">Прогрес</button>
 </nav>
+<div class="user-bar" id="user-bar" style="display:none">
+  <span id="user-email"></span>
+  <button class="logout-btn" onclick="authLogout()">Вийти</button>
+</div>
 
 <div class="content">
 
@@ -1537,6 +1945,87 @@
   </div>
 </div>
 
+<!-- MY WORKOUTS -->
+<div id="myworkouts" class="section">
+  <div class="phase-header">
+    <div class="phase-num">📋</div>
+    <div class="phase-info">
+      <div class="phase-badge">ІСТОРІЯ</div>
+      <h2>Мої тренування</h2>
+      <p>Всі завершені тренування з деталями вправ, ваг та підходів.</p>
+    </div>
+  </div>
+  <div id="myworkouts-list">
+    <div class="empty-hist"><span class="big">📋</span>Тут з'являться твої тренування після їх завершення.</div>
+  </div>
+  <button class="load-more-btn" id="load-more-btn" onclick="loadMoreWorkouts()" style="display:none">↓ Завантажити більше</button>
+</div>
+
+<!-- PROGRESS -->
+<div id="progress" class="section">
+  <div class="phase-header">
+    <div class="phase-num">📈</div>
+    <div class="phase-info">
+      <div class="phase-badge">ПРОГРЕС</div>
+      <h2>Мій прогрес</h2>
+      <p>Відстеження ваги, замірів та загальної статистики.</p>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="prog-stat-grid" id="prog-stats">
+    <div class="prog-stat-tile"><span class="val" id="stat-count">0</span><span class="lbl">Тренувань</span></div>
+    <div class="prog-stat-tile"><span class="val" id="stat-avg">0</span><span class="lbl">Сер. хвилин</span></div>
+    <div class="prog-stat-tile"><span class="val" id="stat-lost">—</span><span class="lbl">Втрачено кг</span></div>
+  </div>
+
+  <!-- Weight -->
+  <div class="prog-block">
+    <div class="prog-block-title">⚖️ Вага тіла</div>
+    <div class="weight-progress-wrap">
+      <div class="weight-progress-labels">
+        <span>Старт: 118 кг</span>
+        <span id="prog-current-lbl">Зараз: — кг</span>
+        <span>Ціль: 105 кг</span>
+      </div>
+      <div class="weight-progress-bar">
+        <div class="weight-progress-fill" id="weight-prog-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="weight-inputs-row">
+      <div class="weight-input-grp">
+        <label>Поточна вага (кг)</label>
+        <input type="number" id="prog-weight-input" placeholder="118.0" step="0.1" inputmode="decimal">
+      </div>
+      <button class="prog-save-btn" onclick="saveWeight()">Зберегти</button>
+    </div>
+  </div>
+
+  <!-- Chart -->
+  <div class="prog-block">
+    <div class="prog-block-title">📊 Графік ваги</div>
+    <div class="chart-wrap">
+      <svg id="weight-chart" viewBox="0 0 360 160" width="100%" style="min-width:280px"></svg>
+    </div>
+  </div>
+
+  <!-- Measurements -->
+  <div class="prog-block">
+    <div class="prog-block-title">📏 Заміри тіла (см)</div>
+    <div class="measure-grid">
+      <div class="measure-field"><label>Талія</label><input type="number" id="m-waist" placeholder="—" step="0.1" inputmode="decimal"></div>
+      <div class="measure-field"><label>Груди</label><input type="number" id="m-chest" placeholder="—" step="0.1" inputmode="decimal"></div>
+      <div class="measure-field"><label>Стегна</label><input type="number" id="m-hips" placeholder="—" step="0.1" inputmode="decimal"></div>
+      <div class="measure-field"><label>Біцепс</label><input type="number" id="m-bicep" placeholder="—" step="0.1" inputmode="decimal"></div>
+    </div>
+    <button class="prog-save-btn" onclick="saveMeasurements()">Зберегти заміри</button>
+    <table class="measure-hist-table" id="measure-table">
+      <thead><tr><th>Дата</th><th>Талія</th><th>Груди</th><th>Стегна</th><th>Біцепс</th></tr></thead>
+      <tbody id="measure-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
 </div><!-- /content -->
 
 <!-- ══ WORKOUT OVERLAY ══ -->
@@ -1928,6 +2417,422 @@ function wo_toggleSet(ei, si) {
     }
   }
 }
+
+// ══════════════════════════════════════════════════════════
+// SUPABASE
+// ══════════════════════════════════════════════════════════
+const SUPABASE_URL = 'https://zgxrerjhkzduutipbnng.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_06o0DOR9CXNOVqGc2rjChw_Fh8HPptI';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── AUTH ──────────────────────────────────────────────────
+let currentUser = null;
+let authMode = 'login'; // 'login' | 'register'
+
+async function initAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user) {
+    onLogin(session.user);
+  } else {
+    document.getElementById('auth-screen').classList.remove('hidden');
+  }
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session?.user) onLogin(session.user);
+    if (event === 'SIGNED_OUT') onLogout();
+  });
+}
+
+function onLogin(user) {
+  currentUser = user;
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('user-bar').style.display = 'flex';
+  document.getElementById('user-email').textContent = user.email;
+}
+
+function onLogout() {
+  currentUser = null;
+  document.getElementById('user-bar').style.display = 'none';
+  document.getElementById('auth-screen').classList.remove('hidden');
+}
+
+function switchAuthTab(mode) {
+  authMode = mode;
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('auth-tab-' + mode).classList.add('active');
+  document.getElementById('auth-error').textContent = '';
+  document.getElementById('auth-submit-btn').textContent = mode === 'login' ? 'Увійти' : 'Зареєструватись';
+}
+
+async function authSubmit() {
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const errEl = document.getElementById('auth-error');
+  errEl.textContent = '';
+  if (!email || !password) { errEl.textContent = 'Введіть email та пароль'; return; }
+  const btn = document.getElementById('auth-submit-btn');
+  btn.textContent = '...';
+  btn.disabled = true;
+  let error;
+  if (authMode === 'login') {
+    ({ error } = await sb.auth.signInWithPassword({ email, password }));
+  } else {
+    ({ error } = await sb.auth.signUp({ email, password }));
+    if (!error) { errEl.style.color = '#44ff88'; errEl.textContent = 'Перевір email для підтвердження!'; btn.disabled = false; btn.textContent = 'Зареєструватись'; return; }
+  }
+  btn.disabled = false;
+  btn.textContent = authMode === 'login' ? 'Увійти' : 'Зареєструватись';
+  if (error) { errEl.style.color = '#ff4f4f'; errEl.textContent = error.message; }
+}
+
+async function authLogout() {
+  await sb.auth.signOut();
+}
+
+// ── SAVE WORKOUT ──────────────────────────────────────────
+async function saveWorkoutToSupabase() {
+  if (!currentUser) return;
+  showToast('💾 Зберігаємо...');
+  try {
+    const dateVal = document.getElementById('wo-date').value;
+    const feeling = document.getElementById('wo-feeling').value;
+    const elapsed = wo_running ? Math.floor((Date.now() - wo_t0) / 1000) : wo_elapsed;
+
+    const { data: workout, error: wErr } = await sb.from('workouts').insert({
+      user_id: currentUser.id,
+      date: dateVal,
+      phase: wo_curPhase,
+      day_id: wo_curDayId,
+      day_name: wo_curData.name,
+      duration_seconds: elapsed,
+      feeling
+    }).select().single();
+    if (wErr) throw wErr;
+
+    const sets = [];
+    wo_curData.exercises.forEach((ex, ei) => {
+      for (let si = 0; si < ex.sets; si++) {
+        const k = `${ei}-${si}`;
+        sets.push({
+          workout_id: workout.id,
+          exercise_name: ex.n,
+          set_number: si + 1,
+          weight_kg: wo_setKg[k] ?? ex.kg,
+          reps: ex.reps > 0 ? (wo_setReps[k] ?? ex.reps) : 0,
+          is_time_based: ex.reps < 0,
+          completed: !!wo_setDone[k]
+        });
+      }
+    });
+    if (sets.length > 0) await sb.from('workout_sets').insert(sets);
+
+    const cardioCheck = document.getElementById('wo-cardio-check');
+    if (wo_curData.cardio && cardioCheck) {
+      const cardioType = document.getElementById('wo-cardio-type')?.value || '';
+      const cardioTime = parseInt(document.getElementById('wo-cardio-time')?.value || '0');
+      await sb.from('cardio_sessions').insert({
+        workout_id: workout.id,
+        cardio_type: cardioType,
+        duration_minutes: cardioTime,
+        completed: cardioCheck.classList.contains('done')
+      });
+    }
+    showToast('✓ Тренування збережено!');
+  } catch (e) {
+    showToast('⚠️ Помилка збереження');
+    console.error(e);
+  }
+}
+
+// Store current workout context for saving
+let wo_curPhase = 1;
+let wo_curDayId = 'A';
+
+const _origOpenWorkout = openWorkout;
+// Patch openWorkout to store phase/day
+window.openWorkout = function(phase, dayId) {
+  wo_curPhase = phase;
+  wo_curDayId = dayId;
+  _origOpenWorkout(phase, dayId);
+};
+
+const _origCloseWorkout = closeWorkout;
+window.closeWorkout = async function() {
+  clearInterval(wo_timerInt);
+  wo_running = false;
+  if (currentUser) await saveWorkoutToSupabase();
+  document.getElementById('workout-overlay').classList.remove('visible');
+  window.scrollTo({ top: wo_returnScrollY });
+};
+
+// ── MY WORKOUTS ───────────────────────────────────────────
+let workoutsOffset = 0;
+const WORKOUTS_PER_PAGE = 20;
+
+async function loadWorkouts(reset = false) {
+  if (!currentUser) return;
+  if (reset) { workoutsOffset = 0; document.getElementById('myworkouts-list').innerHTML = ''; }
+  const { data, error } = await sb.from('workouts')
+    .select('*, workout_sets(*), cardio_sessions(*)')
+    .eq('user_id', currentUser.id)
+    .order('date', { ascending: false })
+    .order('created_at', { ascending: false })
+    .range(workoutsOffset, workoutsOffset + WORKOUTS_PER_PAGE - 1);
+  if (error || !data) return;
+
+  const list = document.getElementById('myworkouts-list');
+  if (data.length === 0 && workoutsOffset === 0) {
+    list.innerHTML = '<div class="empty-hist"><span class="big">📋</span>Ще немає завершених тренувань.<br>Почни перше тренування!</div>';
+    document.getElementById('load-more-btn').style.display = 'none';
+    return;
+  }
+
+  data.forEach((w, idx) => {
+    const d = new Date(w.date);
+    const day = d.getDate();
+    const mon = d.toLocaleString('uk', { month: 'short' }).replace('.', '');
+    const mins = Math.floor(w.duration_seconds / 60);
+    const feelingMap = { great: '💪 Відмінно', good: '😊 Добре', ok: '😐 Нормально', hard: '😓 Важко' };
+    const feelingStr = feelingMap[w.feeling] || '';
+    const cardId = `hist-${workoutsOffset + idx}`;
+
+    // Group sets by exercise
+    const exGroups = {};
+    (w.workout_sets || []).forEach(s => {
+      if (!exGroups[s.exercise_name]) exGroups[s.exercise_name] = [];
+      exGroups[s.exercise_name].push(s);
+    });
+    let exHtml = Object.entries(exGroups).map(([name, sets]) => {
+      const setsHtml = sets.sort((a,b) => a.set_number - b.set_number).map(s => {
+        const mark = s.completed ? '<span class="done-mark">✓</span>' : '<span>—</span>';
+        const detail = s.is_time_based ? s.exercise_name : `${s.weight_kg > 0 ? s.weight_kg + ' кг × ' : ''}${s.reps} пов.`;
+        return `<div class="wo-hist-set">${mark}<span>Підхід ${s.set_number}:</span><span>${detail}</span></div>`;
+      }).join('');
+      return `<div class="wo-hist-ex"><div class="wo-hist-ex-name">${name}</div>${setsHtml}</div>`;
+    }).join('');
+
+    (w.cardio_sessions || []).forEach(c => {
+      const typeMap = { bike: '🚴 Велотренажер', orbit: '🌀 Орбітрек', treadmill: '🚶 Бігова доріжка' };
+      if (c.completed) {
+        exHtml += `<div class="wo-hist-ex"><div class="wo-hist-ex-name">Кардіо</div>
+          <div class="wo-hist-set"><span class="done-mark">✓</span><span>${typeMap[c.cardio_type] || c.cardio_type}</span><span>${c.duration_minutes} хв</span></div></div>`;
+      }
+    });
+
+    const card = document.createElement('div');
+    card.className = 'wo-hist-card';
+    card.id = cardId;
+    card.innerHTML = `
+      <div class="wo-hist-header" onclick="toggleHistCard('${cardId}')">
+        <div class="wo-hist-date"><div class="hday">${day}</div><div class="hmon">${mon}</div></div>
+        <div class="wo-hist-info">
+          <strong>${w.day_name}</strong>
+          <span>Фаза ${w.phase} · ${mins} хв${feelingStr ? ' · ' + feelingStr : ''}</span>
+        </div>
+        <span class="wo-hist-arrow">›</span>
+      </div>
+      <div class="wo-hist-body">${exHtml || '<div style="color:#555;font-size:12px">Немає даних</div>'}</div>`;
+    list.appendChild(card);
+  });
+
+  workoutsOffset += data.length;
+  document.getElementById('load-more-btn').style.display = data.length === WORKOUTS_PER_PAGE ? 'block' : 'none';
+}
+
+function loadMoreWorkouts() { loadWorkouts(false); }
+
+function toggleHistCard(id) {
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+// ── PROGRESS ─────────────────────────────────────────────
+async function loadProgress() {
+  if (!currentUser) return;
+
+  // Stats
+  const { data: wData } = await sb.from('workouts').select('duration_seconds').eq('user_id', currentUser.id);
+  if (wData) {
+    const count = wData.length;
+    const avgMins = count > 0 ? Math.round(wData.reduce((a, w) => a + w.duration_seconds, 0) / count / 60) : 0;
+    document.getElementById('stat-count').textContent = count;
+    document.getElementById('stat-avg').textContent = avgMins;
+  }
+
+  // Weight logs
+  const { data: wLogs } = await sb.from('weight_logs')
+    .select('*').eq('user_id', currentUser.id)
+    .order('date', { ascending: true });
+
+  if (wLogs && wLogs.length > 0) {
+    const latest = wLogs[wLogs.length - 1].weight_kg;
+    const first = 118;
+    const goal = 105;
+    const lost = (first - latest).toFixed(1);
+    document.getElementById('stat-lost').textContent = lost > 0 ? '-' + lost : '+' + Math.abs(lost);
+    document.getElementById('prog-current-lbl').textContent = `Зараз: ${latest} кг`;
+    document.getElementById('prog-weight-input').value = latest;
+
+    // Progress bar
+    const total = first - goal;
+    const done = first - latest;
+    const pct = Math.max(0, Math.min(100, (done / total) * 100));
+    document.getElementById('weight-prog-fill').style.width = pct + '%';
+
+    // Chart
+    renderWeightChart(wLogs);
+  }
+
+  // Measurements
+  const { data: mData } = await sb.from('measurements')
+    .select('*').eq('user_id', currentUser.id)
+    .order('date', { ascending: false }).limit(4);
+  renderMeasurementsTable(mData || []);
+}
+
+async function saveWeight() {
+  if (!currentUser) return;
+  const val = parseFloat(document.getElementById('prog-weight-input').value);
+  if (!val || val < 30 || val > 300) { showToast('⚠️ Введи коректну вагу'); return; }
+  const today = new Date().toISOString().split('T')[0];
+  const { error } = await sb.from('weight_logs').upsert({ user_id: currentUser.id, date: today, weight_kg: val }, { onConflict: 'user_id,date' });
+  if (!error) { showToast('✓ Вагу збережено!'); loadProgress(); }
+  else showToast('⚠️ Помилка збереження');
+}
+
+async function saveMeasurements() {
+  if (!currentUser) return;
+  const today = new Date().toISOString().split('T')[0];
+  const waist = parseFloat(document.getElementById('m-waist').value) || null;
+  const chest = parseFloat(document.getElementById('m-chest').value) || null;
+  const hips  = parseFloat(document.getElementById('m-hips').value)  || null;
+  const bicep = parseFloat(document.getElementById('m-bicep').value) || null;
+  if (!waist && !chest && !hips && !bicep) { showToast('⚠️ Введи хоча б один замір'); return; }
+  const { error } = await sb.from('measurements').upsert(
+    { user_id: currentUser.id, date: today, waist_cm: waist, chest_cm: chest, hips_cm: hips, bicep_cm: bicep },
+    { onConflict: 'user_id,date' }
+  );
+  if (!error) { showToast('✓ Заміри збережено!'); loadProgress(); }
+  else showToast('⚠️ Помилка збереження');
+}
+
+function renderMeasurementsTable(rows) {
+  const tbody = document.getElementById('measure-tbody');
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="5" style="color:#555;text-align:center;padding:12px">Немає записів</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => {
+    const d = new Date(r.date);
+    const dateStr = `${d.getDate()} ${d.toLocaleString('uk', { month: 'short' }).replace('.', '')}`;
+    return `<tr>
+      <td>${dateStr}</td>
+      <td>${r.waist_cm || '—'}</td>
+      <td>${r.chest_cm || '—'}</td>
+      <td>${r.hips_cm || '—'}</td>
+      <td>${r.bicep_cm || '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderWeightChart(logs) {
+  const svg = document.getElementById('weight-chart');
+  const W = 360, H = 160, padL = 36, padR = 12, padT = 14, padB = 28;
+  const pts = logs.slice(-12); // last 12 entries
+  if (pts.length < 2) { svg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="#555" font-size="12" font-family="IBM Plex Mono">Потрібно більше записів</text>'; return; }
+
+  const weights = pts.map(p => parseFloat(p.weight_kg));
+  const minW = Math.min(...weights) - 1;
+  const maxW = Math.max(...weights) + 1;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+
+  const xScale = i => padL + (i / (pts.length - 1)) * chartW;
+  const yScale = v => padT + (1 - (v - minW) / (maxW - minW)) * chartH;
+
+  // Grid lines
+  let grid = '';
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + (i / 4) * chartH;
+    const val = (maxW - (i / 4) * (maxW - minW)).toFixed(1);
+    grid += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#222" stroke-width="1"/>
+             <text x="${padL - 4}" y="${y + 4}" text-anchor="end" fill="#555" font-size="9" font-family="IBM Plex Mono">${val}</text>`;
+  }
+
+  // Line path
+  const pathD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${xScale(i).toFixed(1)},${yScale(parseFloat(p.weight_kg)).toFixed(1)}`).join(' ');
+
+  // Area fill
+  const areaD = pathD + ` L ${xScale(pts.length - 1)},${H - padB} L ${xScale(0)},${H - padB} Z`;
+
+  // Points + labels
+  let circles = '';
+  pts.forEach((p, i) => {
+    const x = xScale(i), y = yScale(parseFloat(p.weight_kg));
+    const d = new Date(p.date);
+    const label = `${d.getDate()}/${d.getMonth() + 1}`;
+    circles += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#e8ff47"/>`;
+    if (i % Math.ceil(pts.length / 6) === 0 || i === pts.length - 1) {
+      circles += `<text x="${x.toFixed(1)}" y="${H - padB + 14}" text-anchor="middle" fill="#555" font-size="8" font-family="IBM Plex Mono">${label}</text>`;
+    }
+  });
+
+  svg.innerHTML = `
+    <defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8ff47" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#e8ff47" stop-opacity="0"/>
+    </linearGradient></defs>
+    ${grid}
+    <path d="${areaD}" fill="url(#areaGrad)"/>
+    <path d="${pathD}" fill="none" stroke="#e8ff47" stroke-width="2" stroke-linejoin="round"/>
+    ${circles}`;
+}
+
+// ── SECTION SWITCHING (extended) ─────────────────────────
+const _origShowSection = showSection;
+window.showSection = function(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (id === 'myworkouts') loadWorkouts(true);
+  if (id === 'progress') loadProgress();
+};
+
+// ── TOAST ─────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('save-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── INIT ──────────────────────────────────────────────────
+initAuth();
 </script>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="hidden">
+  <div class="auth-box">
+    <div class="auth-logo">WORKOUT</div>
+    <div class="auth-sub">Трекер тренувань</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="auth-tab-login" onclick="switchAuthTab('login')">Вхід</button>
+      <button class="auth-tab" id="auth-tab-register" onclick="switchAuthTab('register')">Реєстрація</button>
+    </div>
+    <div class="auth-field">
+      <label>Email</label>
+      <input type="email" id="auth-email" placeholder="your@email.com" autocomplete="email">
+    </div>
+    <div class="auth-field">
+      <label>Пароль</label>
+      <input type="password" id="auth-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="auth-submit" id="auth-submit-btn" onclick="authSubmit()">Увійти</button>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="save-toast" id="save-toast"></div>
+
 </body>
 </html>
