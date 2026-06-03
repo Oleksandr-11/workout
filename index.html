@@ -4668,7 +4668,12 @@ async function _loadTrainStatsInner() {
   const lost = latestW !== null && START_WEIGHT ? +(START_WEIGHT - latestW).toFixed(1) : null;
 
   // Fill main tiles
-  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  const setEl = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+    else console.warn('[stats] element NOT FOUND:', id);
+  };
+  console.log('[stats] filling tiles: total=', totalWo, 'week=', perWeek, 'dur=', avgDur);
   setEl('ts-total', totalWo);
   setEl('ts-week', perWeek);
   setEl('ts-dur', avgDur || '—');
