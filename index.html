@@ -325,7 +325,8 @@
     z-index: 1;
   }
   .section { display: none; }
-  .section.active { display: block; }
+  .section.active { display: block !important; min-height: 100px; }
+  #trainstats.active { outline: 3px solid #e8ff47; }
 
   /* PHASE HEADER */
   .phase-header {
