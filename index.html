@@ -2104,65 +2104,272 @@
     box-shadow: 0 12px 32px rgba(232,255,71,0.45);
   }
   .wo-finish-btn:active { transform: scale(0.98); box-shadow: none; }
+
+  /* ══ APP CHROME — UNIFIED TOP BAR ══════════════════════ */
+  .app-chrome {
+    background: rgba(7,7,9,0.88);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 101;
+  }
+  /* Override individual backgrounds — chrome handles them */
+  .app-chrome .header {
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: none;
+    padding: 14px 28px 10px;
+  }
+  .app-chrome .nav-main {
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: none;
+    position: relative;
+    top: auto;
+    z-index: auto;
+    padding: 6px 22px 8px;
+  }
+  .app-chrome .nav-sub {
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    position: relative;
+    top: auto;
+    z-index: auto;
+    border-bottom: none;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 0 22px;
+  }
+  .app-chrome .user-bar {
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: none;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 5px 28px;
+  }
+  /* Subtle accent line under active section */
+  .app-chrome .nav-btn.active {
+    border-bottom-color: var(--accent);
+  }
+
+  /* ══ SEGMENTED CONTROL — UNIFIED SWITCH SYSTEM ══════════ */
+  .seg-ctrl {
+    display: inline-flex;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 12px;
+    padding: 3px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .seg-btn {
+    padding: 5px 13px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.4);
+    background: none;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .2s cubic-bezier(.34,1.2,.64,1);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .seg-btn:hover {
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.07);
+  }
+  .seg-btn.active {
+    color: #0a0a0a;
+    background: var(--accent);
+    box-shadow: 0 2px 8px rgba(232,255,71,0.28);
+  }
+
+  /* ══ UNIFIED BLOCK HEADER ════════════════════════════════ */
+  .blk-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .blk-hd-l {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .blk-icon {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: rgba(232,255,71,0.08);
+    border: 1px solid rgba(232,255,71,0.14);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .blk-icon svg { width: 15px; height: 15px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .blk-icon.c-blue  { background: rgba(71,200,255,0.08); border-color: rgba(71,200,255,0.14); }
+  .blk-icon.c-blue svg  { stroke: var(--accent3); }
+  .blk-icon.c-orange{ background: rgba(255,107,53,0.08); border-color: rgba(255,107,53,0.14); }
+  .blk-icon.c-orange svg{ stroke: var(--accent2); }
+  .blk-icon.c-green { background: rgba(68,255,136,0.08); border-color: rgba(68,255,136,0.14); }
+  .blk-icon.c-green svg { stroke: var(--green); }
+  .blk-icon.c-muted { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+  .blk-icon.c-muted svg { stroke: var(--muted); }
+  .blk-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.2px;
+    line-height: 1.2;
+  }
+  .blk-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ══ PROG-BLOCK CLEANUP ══════════════════════════════════ */
+  /* Remove old emoji-based title style — replaced by .blk-hd */
+  .prog-block-title { display: none; }
+
+  /* ══ STATS SECTION (TRAINING) ═══════════════════════════ */
+  .stat-grid-2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .stat-tile {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 18px 14px;
+    text-align: center;
+  }
+  .stat-tile .st-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-tile .st-val.c2 { color: var(--accent2); }
+  .stat-tile .st-val.c3 { color: var(--accent3); }
+  .stat-tile .st-val.cg { color: var(--green); }
+  .stat-tile .st-lbl {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ══ MEASUREMENT FILTER ══════════════════════════════════ */
+  .meas-filter-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .meas-filter-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  /* ══ MOBILE OVERRIDES ════════════════════════════════════ */
+  @media (max-width: 700px) {
+    .app-chrome .header { padding: 12px 16px 8px; }
+    .app-chrome .nav-main { padding: 6px 12px 8px; }
+    .app-chrome .nav-sub { padding: 0 8px; }
+    .app-chrome .user-bar { padding: 5px 16px; }
+    .blk-title { font-size: 13px; }
+  }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>BUILD <span>YOURSELF</span></h1>
-  <div class="header-sub">Результат починається там, де закінчуються виправдання.</div>
-</div>
+<div class="app-chrome">
 
-<!-- MAIN NAV -->
-<nav class="nav-main">
-  <button class="nav-main-btn active" id="main-btn-progress" onclick="showMainSection('progress')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    Прогрес
-  </button>
-  <button class="nav-main-btn" id="main-btn-plan" onclick="showMainSection('plan')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    План
-  </button>
-  <button class="nav-main-btn" id="main-btn-train" onclick="showMainSection('train')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16M18 4v16M6 12h12M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>
-    Тренування
-  </button>
-</nav>
+  <div class="header">
+    <h1>BUILD <span>YOURSELF</span></h1>
+    <div class="header-sub">Результат починається там, де закінчуються виправдання.</div>
+  </div>
 
-<!-- SUB NAV: Прогрес -->
-<nav class="nav-sub" id="sub-progress">
-  <button class="nav-btn active" id="subbtn-progress" onclick="showSection('progress', this)">Огляд</button>
-  <button class="nav-btn" id="subbtn-myworkouts" onclick="showSection('myworkouts', this)">Історія</button>
-</nav>
+  <nav class="nav-main">
+    <button class="nav-main-btn active" id="main-btn-progress" onclick="showMainSection('progress')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Прогрес
+    </button>
+    <button class="nav-main-btn" id="main-btn-plan" onclick="showMainSection('plan')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      План
+    </button>
+    <button class="nav-main-btn" id="main-btn-train" onclick="showMainSection('train')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16M18 4v16M6 12h12M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>
+      Тренування
+    </button>
+  </nav>
 
-<!-- SUB NAV: План -->
-<nav class="nav-sub hidden" id="sub-plan">
-  <button class="nav-btn active" id="subbtn-schedule" onclick="showSection('schedule', this)">Розклад</button>
-  <button class="nav-btn" id="subbtn-progression" onclick="showSection('progression', this)">Прогресія ваг</button>
-  <button class="nav-btn" id="subbtn-nutrition" onclick="showSection('nutrition', this)">Харчування</button>
-</nav>
+  <!-- SUB NAV: Прогрес -->
+  <nav class="nav-sub" id="sub-progress">
+    <button class="nav-btn active" id="subbtn-progress" onclick="showSection('progress', this)">Огляд</button>
+    <button class="nav-btn" id="subbtn-myworkouts" onclick="showSection('myworkouts', this)">Історія</button>
+  </nav>
 
-<!-- SUB NAV: Тренування -->
-<nav class="nav-sub hidden" id="sub-train">
-  <button class="nav-btn active" id="subbtn-phase1" onclick="showSection('phase1', this)">Фаза 1 — Тижні 1–4</button>
-  <button class="nav-btn" id="subbtn-phase2" onclick="showSection('phase2', this)">Фаза 2 — Тижні 5–8</button>
-  <button class="nav-btn" id="subbtn-phase3" onclick="showSection('phase3', this)">Фаза 3 — Тижні 9–12</button>
-</nav>
-<div class="user-bar" id="user-bar" style="display:none">
-  <span id="user-email"></span>
-  <button class="logout-btn" onclick="authLogout()">Вийти</button>
-</div>
+  <!-- SUB NAV: План -->
+  <nav class="nav-sub hidden" id="sub-plan">
+    <button class="nav-btn active" id="subbtn-schedule" onclick="showSection('schedule', this)">Розклад</button>
+    <button class="nav-btn" id="subbtn-progression" onclick="showSection('progression', this)">Прогресія ваг</button>
+    <button class="nav-btn" id="subbtn-nutrition" onclick="showSection('nutrition', this)">Харчування</button>
+  </nav>
+
+  <!-- SUB NAV: Тренування -->
+  <nav class="nav-sub hidden" id="sub-train">
+    <button class="nav-btn active" id="subbtn-phase1" onclick="showSection('phase1', this)">Фаза 1–4</button>
+    <button class="nav-btn" id="subbtn-phase2" onclick="showSection('phase2', this)">Фаза 5–8</button>
+    <button class="nav-btn" id="subbtn-phase3" onclick="showSection('phase3', this)">Фаза 9–12</button>
+    <button class="nav-btn" id="subbtn-trainstats" onclick="showSection('trainstats', this)">Статистика</button>
+  </nav>
+
+  <div class="user-bar" id="user-bar" style="display:none">
+    <span id="user-email"></span>
+    <button class="logout-btn" onclick="authLogout()">Вийти</button>
+  </div>
+
+</div><!-- /app-chrome -->
 
 <div class="content">
 
 <!-- SCHEDULE -->
 <div id="schedule" class="section">
-  <div class="phase-header">
-    <div class="phase-num">W</div>
-    <div class="phase-info">
-      <div class="phase-badge">ТИЖНЕВИЙ РОЗКЛАД</div>
-      <h2>Структура тижня</h2>
-      <p>4 активних дні + 3 дні відновлення. Upper/Lower сплітт — кожна група м'язів отримує 2 стимули на тиждень. Оптимально для жироспалювання та збереження м'язів після 40.</p>
+  <div class="prog-block" style="margin-bottom:16px">
+    <div class="blk-hd" style="margin-bottom:0">
+      <div class="blk-hd-l">
+        <div class="blk-icon c-blue">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Структура тижня</div>
+          <div class="blk-sub">4 активних дні + 3 дні відновлення · Upper/Lower сплітт</div>
+        </div>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent);opacity:0.4;line-height:1">W</div>
     </div>
   </div>
 
@@ -2240,12 +2447,18 @@
 
 <!-- PHASE 1 -->
 <div id="phase1" class="section">
-  <div class="phase-header">
-    <div class="phase-num">1</div>
-    <div class="phase-info">
-      <div class="phase-badge">ТИЖНІ 1–4 · АДАПТАЦІЯ</div>
-      <h2>Відновлення техніки та адаптація</h2>
-      <p>Ваги легкі — 50–60% від можливого максимуму. Пріоритет — правильна техніка, без болю. Суглоби та зв'язки адаптуються повільніше, ніж м'язи. Не намагайся зробити "як раніше" з першого тижня — це головна помилка повернення.</p>
+  <div class="prog-block" style="margin-bottom:16px">
+    <div class="blk-hd" style="margin-bottom:0">
+      <div class="blk-hd-l">
+        <div class="blk-icon c-green">
+          <svg viewBox="0 0 24 24"><path d="M6 4v16M18 4v16M6 12h12M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Тижні 1–4 · Адаптація</div>
+          <div class="blk-sub">Відновлення техніки · 50–60% від максимуму · Пріоритет — форма</div>
+        </div>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--green);opacity:0.2;line-height:1;flex-shrink:0">1</div>
     </div>
   </div>
 
@@ -2502,12 +2715,18 @@
 
 <!-- PHASE 2 -->
 <div id="phase2" class="section">
-  <div class="phase-header">
-    <div class="phase-num">2</div>
-    <div class="phase-info">
-      <div class="phase-badge">ТИЖНІ 5–8 · ПРОГРЕС</div>
-      <h2>Нарощування навантаження</h2>
-      <p>Тіло адаптувалося. Тепер збільшуємо ваги та об'єм. Додаємо 4-й підхід у ключових вправах. Кардіо зростає до 30 хв після силового. Ти маєш відчувати прогрес — і в дзеркалі, і у щоденнику.</p>
+  <div class="prog-block" style="margin-bottom:16px">
+    <div class="blk-hd" style="margin-bottom:0">
+      <div class="blk-hd-l">
+        <div class="blk-icon">
+          <svg viewBox="0 0 24 24"><path d="M6 4v16M18 4v16M6 12h12M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Тижні 5–8 · Прогрес</div>
+          <div class="blk-sub">Нарощування навантаження · 4-й підхід · Кардіо 30 хв</div>
+        </div>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--accent);opacity:0.2;line-height:1;flex-shrink:0">2</div>
     </div>
   </div>
 
@@ -2597,12 +2816,18 @@
 
 <!-- PHASE 3 -->
 <div id="phase3" class="section">
-  <div class="phase-header">
-    <div class="phase-num">3</div>
-    <div class="phase-info">
-      <div class="phase-badge">ТИЖНІ 9–12 · ІНТЕНСИФІКАЦІЯ</div>
-      <h2>Максимальне жироспалювання</h2>
-      <p>Ти вже 2 місяці в режимі. Тіло адаптоване. Тепер підвищуємо інтенсивність: більше ваги, більше кардіо, додаємо суперсети в ізолюючих вправах. За цей місяць має бути помітний прогрес у дзеркалі.</p>
+  <div class="prog-block" style="margin-bottom:16px">
+    <div class="blk-hd" style="margin-bottom:0">
+      <div class="blk-hd-l">
+        <div class="blk-icon c-orange">
+          <svg viewBox="0 0 24 24"><path d="M6 4v16M18 4v16M6 12h12M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Тижні 9–12 · Інтенсифікація</div>
+          <div class="blk-sub">Максимальне жироспалювання · Суперсети · Більше ваги</div>
+        </div>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--accent2);opacity:0.2;line-height:1;flex-shrink:0">3</div>
     </div>
   </div>
 
@@ -2690,12 +2915,18 @@
 
 <!-- PROGRESSION -->
 <div id="progression" class="section">
-  <div class="phase-header">
-    <div class="phase-num">↑</div>
-    <div class="phase-info">
-      <div class="phase-badge">ЗВЕДЕНА ТАБЛИЦЯ</div>
-      <h2>Прогресія ваг по тижнях</h2>
-      <p>Якщо в якомусь тижні не вдається виконати задану вагу чисто — залишайся на попередній ще тиждень. Техніка важливіша за цифру. Якщо ваги ростуть швидше — чудово, додавай!</p>
+  <div class="prog-block" style="margin-bottom:16px">
+    <div class="blk-hd" style="margin-bottom:0">
+      <div class="blk-hd-l">
+        <div class="blk-icon">
+          <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Прогресія ваг по тижнях</div>
+          <div class="blk-sub">Техніка важливіша за цифру — не жертвуй формою заради ваги</div>
+        </div>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent);opacity:0.35;line-height:1">↑</div>
     </div>
   </div>
 
@@ -2733,12 +2964,17 @@
 
 <!-- NUTRITION -->
 <div id="nutrition" class="section">
-  <div class="phase-header">
-    <div class="phase-num">🥗</div>
-    <div class="phase-info">
-      <div class="phase-badge">ХАРЧУВАННЯ</div>
-      <h2>План харчування для схуднення</h2>
-      <p>Головне правило: помірний дефіцит калорій + достатньо білка. Білок захищає м'язи під час схуднення — це не опція, це обов'язково.</p>
+  <div class="prog-block" style="margin-bottom:16px">
+    <div class="blk-hd" style="margin-bottom:0">
+      <div class="blk-hd-l">
+        <div class="blk-icon c-green">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 8v4l3 3"/><path d="M20 2v6h-6"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">План харчування</div>
+          <div class="blk-sub">Помірний дефіцит + достатньо білка · Білок захищає м'язи</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2765,8 +3001,15 @@
     </div>
   </div>
 
-  <div style="background:var(--surface);border:1px solid var(--border);padding:24px;margin-bottom:24px;">
-    <div style="font-family:'Inter',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:16px;">Приклад розподілу їжі на день</div>
+  <div class="prog-block" style="margin-bottom:16px">
+    <div class="blk-hd">
+      <div class="blk-hd-l">
+        <div class="blk-icon c-orange">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="blk-title">Приклад розподілу їжі на день</div>
+      </div>
+    </div>
     <div class="meal-header">
       <span>Час</span><span>Що їсти</span><span style="text-align:right">Ккал</span><span style="text-align:right;min-width:50px">Білок</span>
     </div>
@@ -2812,7 +3055,7 @@
       <div class="meal-kcal" style="color:var(--accent);font-weight:600">~2330 ккал</div>
       <div class="meal-protein" style="color:var(--green);font-weight:600">~206 г</div>
     </div>
-  </div>
+  </div><!-- /prog-block meal -->
 
   <div class="rules-grid">
     <div class="rule-card">
@@ -2832,12 +3075,17 @@
 
 <!-- MY WORKOUTS -->
 <div id="myworkouts" class="section">
-  <div class="phase-header">
-    <div class="phase-num">📋</div>
-    <div class="phase-info">
-      <div class="phase-badge">ІСТОРІЯ</div>
-      <h2>Мої тренування</h2>
-      <p>Всі завершені тренування — вправи, підходи, ваги.</p>
+  <div class="prog-block" style="margin-bottom:16px">
+    <div class="blk-hd">
+      <div class="blk-hd-l">
+        <div class="blk-icon c-muted">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Мої тренування</div>
+          <div class="blk-sub">Всі завершені сесії — вправи, підходи, ваги</div>
+        </div>
+      </div>
     </div>
   </div>
   <div id="myworkouts-list">
@@ -2892,48 +3140,54 @@
     </div>
   </div>
 
-  <!-- ГРАФІК -->
+  <!-- ГРАФІК ВАГИ -->
   <div class="prog-block">
-    <div class="prog-block-title" style="display:flex;align-items:center;justify-content:space-between">
-      <span>📊 Графік ваги</span>
-      <div class="chart-tabs">
-        <button class="chart-tab active" id="ctab-dates" onclick="switchChartTab('dates')">По датах</button>
-        <button class="chart-tab" id="ctab-weeks" onclick="switchChartTab('weeks')">По тижнях</button>
+    <div class="blk-hd">
+      <div class="blk-hd-l">
+        <div class="blk-icon">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="blk-title">Графік ваги</div>
+      </div>
+      <div class="seg-ctrl">
+        <button class="seg-btn active" id="ctab-dates" onclick="switchChartTab('dates')">По датах</button>
+        <button class="seg-btn" id="ctab-weeks" onclick="switchChartTab('weeks')">По тижнях</button>
       </div>
     </div>
     <div class="chart-wrap" id="chart-wrap">
       <svg id="weight-chart" viewBox="0 0 360 180" width="100%" style="min-width:280px"></svg>
     </div>
-    <div id="chart-empty" style="display:none;text-align:center;padding:32px 20px">
-      <div style="font-size:36px;margin-bottom:10px">📉</div>
-      <div style="font-family:'Inter',sans-serif;font-size:11px;color:var(--muted);letter-spacing:1px">ДОДАЙ ПЕРШИЙ ЗАПИС ВАГИ<br>І ГРАФІК З'ЯВИТЬСЯ ТУТ</div>
+    <div id="chart-empty" style="display:none;text-align:center;padding:32px 20px;color:var(--muted);font-size:13px">
+      Додай перший запис ваги — і графік з'явиться тут
     </div>
     <div class="forecast-row" id="forecast-row" style="display:none">
-      <span class="forecast-icon">🎯</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span id="forecast-text"></span>
     </div>
   </div>
 
   <!-- ПОРІВНЯННЯ РЕЗУЛЬТАТІВ -->
   <div class="prog-block">
-    <div class="prog-block-title">📊 Порівняння результатів</div>
+    <div class="blk-hd">
+      <div class="blk-hd-l">
+        <div class="blk-icon c-blue">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div class="blk-title">Порівняння результатів</div>
+      </div>
+    </div>
     <div style="overflow-x:auto">
       <table class="compare-table" id="compare-table">
         <thead>
-          <tr>
-            <th>Параметр</th>
-            <th>Старт</th>
-            <th>Зараз</th>
-            <th>Зміна</th>
-          </tr>
+          <tr><th>Параметр</th><th>Старт</th><th>Зараз</th><th>Зміна</th></tr>
         </thead>
         <tbody id="compare-tbody">
-          <tr><td colspan="4" style="color:#555;text-align:center;padding:16px;font-family:'Inter',sans-serif;font-size:11px">Заповни профіль та додай заміри</td></tr>
+          <tr><td colspan="4" style="color:#555;text-align:center;padding:16px;font-size:12px">Заповни профіль та додай заміри</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="weight-progress-wrap" style="margin-top:14px">
-      <div class="weight-progress-labels" style="display:flex;justify-content:space-between;font-family:'Inter',sans-serif;font-size:10px;color:var(--muted);margin-bottom:6px">
+    <div class="weight-progress-wrap" style="margin-top:16px">
+      <div class="weight-progress-labels">
         <span id="prog-start-lbl">Старт</span>
         <span id="prog-pct-lbl">0%</span>
         <span id="prog-goal-lbl">Ціль</span>
@@ -2946,7 +3200,17 @@
 
   <!-- ЗАМІРИ ТІЛА -->
   <div class="prog-block">
-    <div class="prog-block-title">📏 Оновити заміри</div>
+    <div class="blk-hd">
+      <div class="blk-hd-l">
+        <div class="blk-icon c-orange">
+          <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Оновити заміри</div>
+          <div class="blk-sub">Введи сьогоднішні показники</div>
+        </div>
+      </div>
+    </div>
     <div class="measure-grid">
       <div class="measure-field"><label>Вага (кг)</label><input type="number" id="m-weight" placeholder="—" step="0.1" inputmode="decimal"></div>
       <div class="measure-field"><label>Талія (см)</label><input type="number" id="m-waist" placeholder="—" step="0.1" inputmode="decimal"></div>
@@ -2954,22 +3218,83 @@
       <div class="measure-field"><label>Стегна (см)</label><input type="number" id="m-hips" placeholder="—" step="0.1" inputmode="decimal"></div>
       <div class="measure-field"><label>Біцепс (см)</label><input type="number" id="m-bicep" placeholder="—" step="0.1" inputmode="decimal"></div>
     </div>
-    <button class="prog-save-btn" style="margin-top:10px;width:100%;height:42px" onclick="saveMeasurements()">Зберегти заміри</button>
-    <table class="measure-hist-table" style="margin-top:16px" id="measure-table">
+    <button class="prog-save-btn" style="margin-top:12px;width:100%;height:44px" onclick="saveMeasurements()">Зберегти заміри</button>
+
+    <!-- Фільтр історії -->
+    <div class="meas-filter-row">
+      <span class="meas-filter-label">Історія</span>
+      <div class="seg-ctrl">
+        <button class="seg-btn active" id="mf-last"  onclick="switchMeasFilter('last')">Останні</button>
+        <button class="seg-btn" id="mf-week"  onclick="switchMeasFilter('week')">Тиждень</button>
+        <button class="seg-btn" id="mf-month" onclick="switchMeasFilter('month')">Місяць</button>
+        <button class="seg-btn" id="mf-all"   onclick="switchMeasFilter('all')">Усі</button>
+      </div>
+    </div>
+    <table class="measure-hist-table" id="measure-table">
       <thead><tr><th>Дата</th><th>Вага</th><th>Талія</th><th>Груди</th><th>Стегна</th><th>Біцепс</th></tr></thead>
       <tbody id="measure-tbody"></tbody>
     </table>
   </div>
 
-  <!-- СТАТИСТИКА -->
-  <div class="prog-block">
-    <div class="prog-block-title">📋 Статистика тренувань</div>
-    <div class="stats-detail-grid" id="stats-detail">
-      <div class="sd-item"><div class="sd-val" id="sd-total">0</div><div class="sd-lbl">Всього тренувань</div></div>
-      <div class="sd-item"><div class="sd-val" id="sd-week">0</div><div class="sd-lbl">Сер. тренувань/тиждень</div></div>
-      <div class="sd-item"><div class="sd-val" id="sd-dur">—</div><div class="sd-lbl">Сер. тривалість (хв)</div></div>
-      <div class="sd-item"><div class="sd-val" id="sd-lost">—</div><div class="sd-lbl">Втрата ваги (кг)</div></div>
+<!-- ══ TRAINING STATS ══ -->
+<div id="trainstats" class="section">
+
+  <!-- ПРОФІЛЬ -->
+  <div class="progress-profile-header" id="ts-pph-block" style="display:none">
+    <div class="pph-name" id="ts-pph-name">—</div>
+    <div class="pph-meta">
+      <div class="pph-goal" id="ts-pph-goal">—</div>
+      <div class="pph-since" id="ts-pph-since"></div>
     </div>
+  </div>
+
+  <!-- KPI СТАТИСТИКА -->
+  <div class="prog-block">
+    <div class="blk-hd">
+      <div class="blk-hd-l">
+        <div class="blk-icon c-green">
+          <svg viewBox="0 0 24 24"><path d="M6 4v16M18 4v16M6 12h12M3 8h3M18 8h3M3 16h3M18 16h3"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Статистика тренувань</div>
+          <div class="blk-sub">Підсумки тренувального процесу</div>
+        </div>
+      </div>
+    </div>
+    <div class="stat-grid-2x2">
+      <div class="stat-tile">
+        <div class="st-val" id="ts-total">0</div>
+        <div class="st-lbl">Всього тренувань</div>
+      </div>
+      <div class="stat-tile">
+        <div class="st-val c3" id="ts-week">0</div>
+        <div class="st-lbl">Сер. тренувань/тиждень</div>
+      </div>
+      <div class="stat-tile">
+        <div class="st-val c2" id="ts-dur">—</div>
+        <div class="st-lbl">Сер. тривалість (хв)</div>
+      </div>
+      <div class="stat-tile">
+        <div class="st-val cg" id="ts-lost">—</div>
+        <div class="st-lbl">Втрата ваги (кг)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- НАЙКРАЩИЙ ТИЖДЕНЬ -->
+  <div class="prog-block" id="ts-streak-block">
+    <div class="blk-hd">
+      <div class="blk-hd-l">
+        <div class="blk-icon">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="blk-title">Активність</div>
+          <div class="blk-sub">Розподіл тренувань по днях тижня</div>
+        </div>
+      </div>
+    </div>
+    <div id="ts-heatmap" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"></div>
   </div>
 
 </div>
@@ -3022,24 +3347,19 @@
 const SECTION_GROUP = {
   progress: 'progress', myworkouts: 'progress',
   schedule: 'plan', progression: 'plan', nutrition: 'plan',
-  phase1: 'train', phase2: 'train', phase3: 'train'
+  phase1: 'train', phase2: 'train', phase3: 'train', trainstats: 'train'
 };
 
 function showMainSection(group) {
-  // Activate main btn
   document.querySelectorAll('.nav-main-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('main-btn-' + group).classList.add('active');
-  // Show correct sub-nav
   document.querySelectorAll('.nav-sub').forEach(n => n.classList.add('hidden'));
   document.getElementById('sub-' + group).classList.remove('hidden');
-  // Activate default section for group
   const defaults = { progress: 'progress', plan: 'schedule', train: 'phase1' };
   const defaultSection = defaults[group];
-  // Activate first sub-btn
   const subNav = document.getElementById('sub-' + group);
   subNav.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   subNav.querySelector('.nav-btn').classList.add('active');
-  // Show section
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(defaultSection).classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3050,7 +3370,6 @@ function showMainSection(group) {
 function showSection(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  // Update sub-nav active btn
   if (btn) {
     const subNav = btn.closest('.nav-sub');
     if (subNav) subNav.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -3059,6 +3378,7 @@ function showSection(id, btn) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (id === 'myworkouts') loadWorkouts(true);
   if (id === 'progress') loadProgress();
+  if (id === 'trainstats') loadTrainStats();
 }
 
 function toggleDay(id) {
@@ -3822,7 +4142,8 @@ async function loadProgress() {
     if (latestMeas.bicep_cm) document.getElementById('m-bicep').value = latestMeas.bicep_cm;
   }
 
-  renderMeasurementsTable(measDesc.slice(0, 10));
+  measAllData = measDesc;
+  applyMeasFilter();
 }
 
 function renderCompareTable(profile, latestMeas) {
@@ -3975,6 +4296,114 @@ function renderWeightChart(logs) {
   <path d="${areaD}" fill="url(#areaGrad)"/>
   <path d="${pathD}" fill="none" stroke="#e8ff47" stroke-width="2" stroke-linejoin="round"/>
   ${circles}${labels}`;
+}
+
+// ── MEASUREMENT FILTER ────────────────────────────────────
+let measAllData = [];
+let measFilter = 'last';
+
+function switchMeasFilter(mode) {
+  measFilter = mode;
+  ['last','week','month','all'].forEach(m => {
+    const el = document.getElementById('mf-' + m);
+    if (el) el.classList.toggle('active', m === mode);
+  });
+  applyMeasFilter();
+}
+
+function applyMeasFilter() {
+  if (!measAllData.length) { renderMeasurementsTable([]); return; }
+  const now = new Date();
+  let filtered;
+  if (measFilter === 'last') {
+    filtered = measAllData.slice(0, 10);
+  } else if (measFilter === 'week') {
+    const cutoff = new Date(now - 7 * 86400000);
+    filtered = measAllData.filter(r => new Date(r.date) >= cutoff);
+  } else if (measFilter === 'month') {
+    const cutoff = new Date(now - 30 * 86400000);
+    filtered = measAllData.filter(r => new Date(r.date) >= cutoff);
+  } else {
+    filtered = measAllData;
+  }
+  renderMeasurementsTable(filtered);
+}
+
+// ── TRAINING STATS ─────────────────────────────────────────
+async function loadTrainStats() {
+  if (!currentUser) return;
+
+  // Load profile for name/goal
+  const { data: profile } = await sb.from('user_profiles')
+    .select('*').eq('user_id', currentUser.id).single();
+
+  if (profile) {
+    const goalMap = {
+      weight_loss: '🔥 Схуднення', muscle_gain: '💪 Набір м\'язів',
+      maintenance: '⚖️ Підтримка форми', health: '❤️ Здоров\'я', custom: '🎯 Індивідуальна ціль'
+    };
+    const tsName = document.getElementById('ts-pph-name');
+    const tsGoal = document.getElementById('ts-pph-goal');
+    const tsSince = document.getElementById('ts-pph-since');
+    const tsBlock = document.getElementById('ts-pph-block');
+    if (tsName) tsName.textContent = profile.nickname || currentUser.email;
+    if (tsGoal) tsGoal.textContent = goalMap[profile.goal_type] || profile.goal_type;
+    if (tsSince) {
+      const since = new Date(profile.created_at);
+      tsSince.textContent = 'З ' + since.toLocaleDateString('uk', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+    if (tsBlock) tsBlock.style.display = 'flex';
+  }
+
+  // Load workouts
+  const { data: wos } = await sb.from('workouts')
+    .select('duration_seconds, created_at, date').eq('user_id', currentUser.id)
+    .order('date', { ascending: true });
+  const totalWo = wos ? wos.length : 0;
+  const avgDur = totalWo > 0
+    ? Math.round(wos.reduce((s, w) => s + (w.duration_seconds || 0), 0) / totalWo / 60) : 0;
+  let perWeek = 0;
+  if (totalWo > 0) {
+    const dates = wos.map(w => new Date(w.created_at));
+    const minDate = new Date(Math.min(...dates));
+    const weeks = Math.max(1, Math.ceil((Date.now() - minDate) / (7 * 86400000)));
+    perWeek = (totalWo / weeks).toFixed(1);
+  }
+
+  // Load weight loss
+  const { data: meas } = await sb.from('measurements')
+    .select('date, weight_kg').eq('user_id', currentUser.id).not('weight_kg', 'is', null)
+    .order('date', { ascending: true });
+  const START_WEIGHT = profile ? parseFloat(profile.start_weight_kg) || 0 : 0;
+  const latestW = (meas && meas.length) ? parseFloat(meas[meas.length - 1].weight_kg) : null;
+  const lost = latestW !== null && START_WEIGHT ? +(START_WEIGHT - latestW).toFixed(1) : null;
+
+  // Fill tiles
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setEl('ts-total', totalWo);
+  setEl('ts-week', perWeek);
+  setEl('ts-dur', avgDur || '—');
+  setEl('ts-lost', lost !== null ? (lost > 0 ? lost : '0') : '—');
+
+  // Heatmap — days of week distribution
+  const heatmap = document.getElementById('ts-heatmap');
+  if (heatmap && wos && wos.length) {
+    const days = ['Нд','Пн','Вт','Ср','Чт','Пт','Сб'];
+    const counts = [0,0,0,0,0,0,0];
+    wos.forEach(w => counts[new Date(w.date).getDay()]++);
+    const max = Math.max(...counts, 1);
+    heatmap.innerHTML = days.map((d, i) => {
+      const intensity = counts[i] / max;
+      const bg = intensity === 0
+        ? 'rgba(255,255,255,0.04)'
+        : `rgba(232,255,71,${(0.1 + intensity * 0.75).toFixed(2)})`;
+      const color = intensity > 0.5 ? '#0a0a0a' : (intensity > 0 ? 'var(--accent)' : 'var(--muted)');
+      return `<div style="flex:1;min-width:36px;background:${bg};border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 6px;text-align:center;">
+        <div style="font-size:10px;font-weight:600;letter-spacing:0.4px;color:${color};margin-bottom:4px">${d}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;color:${intensity > 0 ? (intensity > 0.5 ? '#0a0a0a' : 'var(--accent)') : 'var(--muted)'}">${counts[i]}</div>
+      </div>`;
+    }).join('');
+  }
 }
 
 // ── TOAST ─────────────────────────────────────────────────
