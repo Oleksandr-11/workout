@@ -4889,12 +4889,11 @@ async function saveMeasurements() {
 }
 
 function renderProgressChart() {
-  if (!measAllData && !weightLogsAll) return;
+  if (!measAllData) return;
   const svg = document.getElementById('weight-chart');
   const empty = document.getElementById('chart-empty');
   if (!svg) return;
 
-  // metric config
   const metricCfg = {
     weight: { field: 'weight_kg', unit: 'кг', label: 'Вага' },
     waist:  { field: 'waist_cm',  unit: 'см', label: 'Талія' },
@@ -4903,21 +4902,66 @@ function renderProgressChart() {
     bicep:  { field: 'bicep_cm',  unit: 'см', label: 'Біцепс' },
   };
   const cfg = metricCfg[mpMetric] || metricCfg.weight;
-  const allRaw = measAllData || [];
+  const allRaw = (measAllData || []).filter(m => m[cfg.field] != null)
+    .sort((a,b) => a.date < b.date ? -1 : 1);
 
-  // filter by period
+  const byDate = {};
+  allRaw.forEach(m => { byDate[m.date] = parseFloat(m[cfg.field]); });
+
   const now = new Date();
-  let cutoff = null;
-  if (mpPeriod === 'week')  { cutoff = new Date(now); cutoff.setDate(now.getDate() - 7); }
-  if (mpPeriod === 'month') { cutoff = new Date(now); cutoff.setMonth(now.getMonth() - 1); }
-  if (mpPeriod === '3m')    { cutoff = new Date(now); cutoff.setMonth(now.getMonth() - 3); }
-  if (mpPeriod === 'year')  { cutoff = new Date(now); cutoff.setFullYear(now.getFullYear() - 1); }
+  now.setHours(0,0,0,0);
+  const toKey = d => d.toISOString().slice(0,10);
+  let slots = [];
 
-  let filtered = allRaw.filter(m => m[cfg.field] != null);
-  if (cutoff) filtered = filtered.filter(m => new Date(m.date) >= cutoff);
-  filtered = [...filtered].sort((a,b) => a.date < b.date ? -1 : 1);
+  if (mpPeriod === 'week') {
+    const dayMs = 86400000;
+    const dow = (now.getDay() + 6) % 7;
+    const monday = new Date(now - dow * dayMs);
+    const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(monday.getTime() + i * dayMs);
+      const key = toKey(d);
+      slots.push({ key, label: dayNames[i], value: byDate[key] ?? null, date: d });
+    }
+  } else if (mpPeriod === 'month') {
+    const dayMs = 86400000;
+    const start = new Date(now - 29 * dayMs);
+    const weekMap = {};
+    for (let d = new Date(start); d <= now; d = new Date(d.getTime() + dayMs)) {
+      const dow = (d.getDay() + 6) % 7;
+      const mon = new Date(d.getTime() - dow * dayMs);
+      const wk = toKey(mon);
+      if (!weekMap[wk]) weekMap[wk] = { vals: [], mon: new Date(mon) };
+      const v = byDate[toKey(d)];
+      if (v != null) weekMap[wk].vals.push(v);
+    }
+    slots = Object.entries(weekMap).sort((a,b) => a[0]<b[0]?-1:1).map(([wk, { vals, mon }]) => {
+      const lbl = mon.toLocaleDateString('uk',{day:'numeric',month:'short'});
+      return { key: wk, label: lbl, value: vals.length ? +(vals.reduce((s,v)=>s+v,0)/vals.length).toFixed(1) : null, date: mon };
+    });
+  } else if (mpPeriod === '3m') {
+    for (let i = 2; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const y = d.getFullYear(), mo = d.getMonth();
+      const label = d.toLocaleDateString('uk',{month:'short'});
+      const vals = allRaw.filter(m => { const md = new Date(m.date); return md.getFullYear()===y && md.getMonth()===mo; }).map(m => parseFloat(m[cfg.field]));
+      slots.push({ key: `${y}-${mo}`, label, value: vals.length ? +(vals.reduce((s,v)=>s+v,0)/vals.length).toFixed(1) : null, date: d });
+    }
+  } else if (mpPeriod === 'year') {
+    for (let i = 11; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const y = d.getFullYear(), mo = d.getMonth();
+      const label = d.toLocaleDateString('uk',{month:'short'});
+      const vals = allRaw.filter(m => { const md = new Date(m.date); return md.getFullYear()===y && md.getMonth()===mo; }).map(m => parseFloat(m[cfg.field]));
+      slots.push({ key: `${y}-${mo}`, label, value: vals.length ? +(vals.reduce((s,v)=>s+v,0)/vals.length).toFixed(1) : null, date: d });
+    }
+  } else {
+    slots = allRaw.map(m => ({ key: m.date, label: new Date(m.date).toLocaleDateString('uk',{day:'numeric',month:'short'}), value: parseFloat(m[cfg.field]), date: new Date(m.date) }));
+  }
 
-  if (filtered.length < 1) {
+  const periodVals = slots.filter(s => s.value !== null).map(s => s.value);
+
+  if (periodVals.length === 0) {
     svg.style.display = 'none';
     if (empty) { empty.style.display = 'block'; empty.textContent = 'Немає даних за обраний період'; }
     document.getElementById('mp-summary-val').textContent = '—';
@@ -4928,76 +4972,74 @@ function renderProgressChart() {
   svg.style.display = 'block';
   if (empty) empty.style.display = 'none';
 
-  const vals = filtered.map(m => parseFloat(m[cfg.field]));
-  const avg = +(vals.reduce((s,v)=>s+v,0)/vals.length).toFixed(1);
-  const firstDate = new Date(filtered[0].date);
-  const lastDate  = new Date(filtered[filtered.length-1].date);
-  const fmtDate = d => d.toLocaleDateString('uk', { day:'numeric', month:'short', year: d.getFullYear() !== now.getFullYear() ? 'numeric' : undefined });
-
-  document.getElementById('mp-summary-label').textContent = 'СЕРЕДНЄ · ' + cfg.label.toUpperCase();
+  const avg = +(periodVals.reduce((s,v)=>s+v,0)/periodVals.length).toFixed(1);
+  const fmtDate = d => d.toLocaleDateString('uk',{day:'numeric',month:'short',year:d.getFullYear()!==now.getFullYear()?'numeric':undefined});
+  const firstSlotWithVal = slots.find(s=>s.value!==null);
+  const lastSlotWithVal  = [...slots].reverse().find(s=>s.value!==null);
+  document.getElementById('mp-summary-label').textContent = 'СЕРЕДНЄ \xb7 ' + cfg.label.toUpperCase();
   document.getElementById('mp-summary-val').textContent = avg + ' ' + cfg.unit;
-  document.getElementById('mp-summary-period').textContent = filtered.length === 1
-    ? fmtDate(firstDate)
-    : fmtDate(firstDate) + ' – ' + fmtDate(lastDate);
+  document.getElementById('mp-summary-period').textContent = firstSlotWithVal === lastSlotWithVal
+    ? fmtDate(firstSlotWithVal.date)
+    : fmtDate(firstSlotWithVal.date) + ' – ' + fmtDate(lastSlotWithVal.date);
 
-  // Chart dimensions
-  const W=360, H=160, padL=42, padR=12, padT=10, padB=28;
-  const minV = Math.min(...vals), maxV = Math.max(...vals);
-  const range = maxV - minV || 1;
-  const lo = minV - range * 0.12, hi = maxV + range * 0.12;
-  const xOf = i => padL + (i / Math.max(filtered.length-1, 1)) * (W - padL - padR);
+  const W=360, H=160, padL=42, padR=12, padT=14, padB=28;
+  const minV = Math.min(...periodVals), maxV = Math.max(...periodVals);
+  const minRange = mpMetric === 'weight' ? 5 : 10;
+  const center = (minV + maxV) / 2;
+  const halfSpan = Math.max((maxV - minV) / 2 * 1.5, minRange / 2);
+  const lo = center - halfSpan, hi = center + halfSpan;
   const yOf = v => padT + (1 - (v - lo) / (hi - lo)) * (H - padT - padB);
 
-  // Grid lines (4 horizontal)
+  const N = slots.length;
+  const xOf = i => padL + (N <= 1 ? 0.5 : i / (N - 1)) * (W - padL - padR);
+
+  const rawStep = (hi - lo) / 3;
+  const mag = Math.pow(10, Math.floor(Math.log10(rawStep || 1)));
+  const niceStep = Math.ceil(rawStep / mag) * mag;
+  const gridStart = Math.ceil(lo / niceStep) * niceStep;
   let grid = '';
-  for (let i=0; i<=3; i++) {
-    const v = lo + (hi-lo)*i/3;
+  for (let v = gridStart; v <= hi + 0.001; v += niceStep) {
     const y = yOf(v);
+    if (y < padT - 2 || y > H - padB + 2) continue;
     grid += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
-    grid += `<text x="${padL-5}" y="${(y+3.5).toFixed(1)}" text-anchor="end" font-size="9" fill="rgba(255,255,255,0.3)" font-family="Inter,sans-serif">${v.toFixed(v > 10 ? 0 : 1)}</text>`;
+    grid += `<text x="${padL-5}" y="${(y+3.5).toFixed(1)}" text-anchor="end" font-size="9" fill="rgba(255,255,255,0.28)" font-family="Inter,sans-serif">${v%1===0?v:v.toFixed(1)}</text>`;
   }
 
-  // Path
-  const pts = filtered.map((m,i) => ({ x: xOf(i), y: yOf(parseFloat(m[cfg.field])), v: parseFloat(m[cfg.field]), d: m.date }));
-  const pathD = pts.map((p,i) => `${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
-  const areaD = pathD + ` L${pts[pts.length-1].x.toFixed(1)},${H-padB} L${padL},${H-padB} Z`;
+  const pts = slots.map((s,i) => ({ x: xOf(i), y: s.value!==null?yOf(s.value):null, v: s.value, d: s.date, label: s.label, idx: i }));
 
-  // X-axis labels
-  const step = Math.max(1, Math.ceil(pts.length / 5));
+  let pathD = '', areaSegs = '', segPts = [];
+  const flushSeg = () => {
+    if (segPts.length < 1) return;
+    const line = segPts.map((p,j)=>`${j===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+    pathD += line + ' ';
+    const area = line + ` L${segPts[segPts.length-1].x.toFixed(1)},${H-padB} L${segPts[0].x.toFixed(1)},${H-padB} Z`;
+    areaSegs += `<path d="${area}" fill="url(#mpGrad)"/>`;
+    segPts = [];
+  };
+  pts.forEach(p => { if (p.v!==null) segPts.push(p); else flushSeg(); });
+  flushSeg();
+
+  const labelIdx = new Set([0, N-1]);
+  const labelStep = Math.max(1, Math.ceil(N / 5));
+  for (let i = 0; i < N; i += labelStep) labelIdx.add(i);
   let labels = '';
   pts.forEach((p,i) => {
-    if (i % step === 0 || i === pts.length-1) {
-      const d = new Date(p.d);
-      const lbl = d.toLocaleDateString('uk', { day:'numeric', month:'short' });
-      labels += `<text x="${p.x.toFixed(1)}" y="${H-padB+14}" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.3)" font-family="Inter,sans-serif">${lbl}</text>`;
-    }
+    if (!labelIdx.has(i)) return;
+    labels += `<text x="${p.x.toFixed(1)}" y="${H-padB+14}" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.28)" font-family="Inter,sans-serif">${p.label}</text>`;
   });
 
-  // Dots with hover targets
-  const dots = pts.map((p,i) =>
-    `<g class="mp-dot-group" style="cursor:pointer" onmouseenter="showMpTooltip(event,${i})" onmouseleave="hideMpTooltip()" ontouchstart="showMpTooltip(event,${i})" data-i="${i}">
-      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="8" fill="transparent"/>
-      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${i===pts.length-1?3.5:2.5}" fill="${i===pts.length-1?'#e8ff47':'rgba(232,255,71,0.6)'}" stroke="${i===pts.length-1?'rgba(0,0,0,0.5)':'none'}" stroke-width="${i===pts.length-1?1.5:0}">
-        <title>${new Date(p.d).toLocaleDateString('uk',{day:'numeric',month:'long'})}: ${p.v} ${cfg.unit}</title>
-      </circle>
-    </g>`
-  ).join('');
+  const realPts = pts.filter(p => p.v!==null);
+  const lastReal = realPts[realPts.length-1];
+  const dots = realPts.map(p => {
+    const isLast = p===lastReal;
+    return `<g style="cursor:pointer" onmouseenter="showMpTooltip(event,${p.idx})" onmouseleave="hideMpTooltip()" ontouchstart="showMpTooltip(event,${p.idx})"><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="10" fill="transparent"/><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isLast?4:2.5}" fill="${isLast?'#e8ff47':'rgba(232,255,71,0.55)'}" ${isLast?'stroke="rgba(0,0,0,0.4)" stroke-width="1.5"':''}/></g>`;
+  }).join('');
 
-  svg.innerHTML = `<defs>
-    <linearGradient id="mpGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#e8ff47" stop-opacity="0.15"/>
-      <stop offset="100%" stop-color="#e8ff47" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
-  ${grid}
-  <path d="${areaD}" fill="url(#mpGrad)"/>
-  <path d="${pathD}" fill="none" stroke="#e8ff47" stroke-width="1.5" stroke-linejoin="round"/>
-  ${dots}${labels}`;
-
-  // store pts for tooltip
+  svg.innerHTML = `<defs><linearGradient id="mpGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8ff47" stop-opacity="0.14"/><stop offset="100%" stop-color="#e8ff47" stop-opacity="0"/></linearGradient></defs>${grid}${areaSegs}<path d="${pathD.trim()}" fill="none" stroke="#e8ff47" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>${dots}${labels}`;
   svg._pts = pts;
   svg._cfg = cfg;
 }
+
 
 // keep old name as alias for backward compat
 function renderWeightChart(logs) { renderProgressChart(); }
