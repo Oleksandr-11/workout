@@ -4914,32 +4914,31 @@ function renderProgressChart() {
   let slots = [];
 
   if (mpPeriod === 'week') {
+    // Current calendar week: Mon–Sun
     const dayMs = 86400000;
-    const dow = (now.getDay() + 6) % 7;
-    const monday = new Date(now - dow * dayMs);
+    const dow = (now.getDay() + 6) % 7; // 0=Mon
+    const monday = new Date(now.getTime() - dow * dayMs);
+    monday.setHours(0,0,0,0);
     const dayNames = ['Пн','Вт','Ср','Чт','Пт','Сб','Нд'];
     for (let i = 0; i < 7; i++) {
       const d = new Date(monday.getTime() + i * dayMs);
       const key = toKey(d);
-      slots.push({ key, label: dayNames[i], value: byDate[key] ?? null, date: d });
+      const isFuture = d > now;
+      slots.push({ key, label: dayNames[i], value: isFuture ? null : (byDate[key] ?? null), date: d });
     }
   } else if (mpPeriod === 'month') {
-    const dayMs = 86400000;
-    const start = new Date(now - 29 * dayMs);
-    const weekMap = {};
-    for (let d = new Date(start); d <= now; d = new Date(d.getTime() + dayMs)) {
-      const dow = (d.getDay() + 6) % 7;
-      const mon = new Date(d.getTime() - dow * dayMs);
-      const wk = toKey(mon);
-      if (!weekMap[wk]) weekMap[wk] = { vals: [], mon: new Date(mon) };
-      const v = byDate[toKey(d)];
-      if (v != null) weekMap[wk].vals.push(v);
+    // Current calendar month: each day = 1 slot
+    const y = now.getFullYear(), mo = now.getMonth();
+    const daysInMonth = new Date(y, mo + 1, 0).getDate();
+    for (let day = 1; day <= daysInMonth; day++) {
+      const d = new Date(y, mo, day);
+      const key = toKey(d);
+      const isFuture = d > now;
+      const lbl = day % 5 === 1 || day === daysInMonth ? String(day) : '';
+      slots.push({ key, label: lbl, value: isFuture ? null : (byDate[key] ?? null), date: d });
     }
-    slots = Object.entries(weekMap).sort((a,b) => a[0]<b[0]?-1:1).map(([wk, { vals, mon }]) => {
-      const lbl = mon.toLocaleDateString('uk',{day:'numeric',month:'short'});
-      return { key: wk, label: lbl, value: vals.length ? +(vals.reduce((s,v)=>s+v,0)/vals.length).toFixed(1) : null, date: mon };
-    });
   } else if (mpPeriod === '3m') {
+    // Current quarter: this month + 2 previous months (3 calendar months total)
     for (let i = 2; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const y = d.getFullYear(), mo = d.getMonth();
@@ -4948,11 +4947,13 @@ function renderProgressChart() {
       slots.push({ key: `${y}-${mo}`, label, value: vals.length ? +(vals.reduce((s,v)=>s+v,0)/vals.length).toFixed(1) : null, date: d });
     }
   } else if (mpPeriod === 'year') {
-    for (let i = 11; i >= 0; i--) {
-      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const y = d.getFullYear(), mo = d.getMonth();
+    // Current calendar year: Jan–Dec
+    const y = now.getFullYear();
+    for (let mo = 0; mo <= 11; mo++) {
+      const d = new Date(y, mo, 1);
       const label = d.toLocaleDateString('uk',{month:'short'});
-      const vals = allRaw.filter(m => { const md = new Date(m.date); return md.getFullYear()===y && md.getMonth()===mo; }).map(m => parseFloat(m[cfg.field]));
+      const isFuture = mo > now.getMonth();
+      const vals = isFuture ? [] : allRaw.filter(m => { const md = new Date(m.date); return md.getFullYear()===y && md.getMonth()===mo; }).map(m => parseFloat(m[cfg.field]));
       slots.push({ key: `${y}-${mo}`, label, value: vals.length ? +(vals.reduce((s,v)=>s+v,0)/vals.length).toFixed(1) : null, date: d });
     }
   } else {
