@@ -776,10 +776,41 @@
     .nav-sub { padding: 0 8px; }
     .nav { padding: 0 8px; }
     .content { padding: 16px; }
+    /* Week grid: 4 cols on mobile (2 rows: Mon-Thu / Fri-Sun+gap) */
     .week-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .week-day { padding: 10px 6px; border-radius: 14px; }
+    .week-day-name { font-size: 8px; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .week-day-type { font-size: 18px; }
+    .week-day-sub { font-size: 9px; }
+    /* Exercise table → card layout on mobile */
+    .ex-table thead { display: none; }
+    .ex-table, .ex-table tbody, .ex-table tr, .ex-table td { display: block; width: 100%; }
+    .ex-table tr {
+      display: grid;
+      grid-template-columns: 24px 1fr auto;
+      grid-template-rows: auto auto;
+      column-gap: 10px;
+      row-gap: 0;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(46,46,46,0.5);
+      align-items: start;
+    }
+    .ex-table tr:last-child { border-bottom: none; }
+    /* col 1: number */
+    .ex-table td:nth-child(1) { grid-column: 1; grid-row: 1 / 3; padding: 2px 0 0; font-size: 10px; }
+    /* col 2: name+tip */
+    .ex-table td:nth-child(2) { grid-column: 2; grid-row: 1; padding: 0; }
+    /* col 3: sets */
+    .ex-table td:nth-child(3) { grid-column: 3; grid-row: 1; padding: 0; text-align: right; white-space: nowrap; font-size: 12px; }
+    /* col 4: weight — full width below name */
+    .ex-table td:nth-child(4) { grid-column: 2 / 4; grid-row: 2; padding: 4px 0 0; font-size: 12px; }
+    /* col 5 (rest): hidden */
+    .ex-table td:nth-child(5) { display: none; }
+    .ex-name { font-size: 13px; line-height: 1.3; }
+    .ex-tip { font-size: 11px; margin-top: 2px; }
+    .weight-cell { white-space: normal; word-break: break-all; }
     .meal-row { grid-template-columns: 80px 1fr; }
     .meal-kcal, .meal-protein { display: none; }
-    .ex-table th:nth-child(5), .ex-table td:nth-child(5) { display: none; }
     .prog-block { padding: 18px 16px; }
     .kpi-grid { gap: 8px; }
     .kpi-card { padding: 14px 10px; }
@@ -2722,10 +2753,35 @@
     .nav-sub { padding: 0 8px; }
     .nav { padding: 0 8px; }
     .content { padding: 16px; }
+    /* Week grid */
     .week-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .week-day { padding: 10px 6px; border-radius: 14px; }
+    .week-day-name { font-size: 8px; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .week-day-type { font-size: 18px; }
+    .week-day-sub { font-size: 9px; }
+    /* Exercise table card layout */
+    .ex-table thead { display: none; }
+    .ex-table, .ex-table tbody, .ex-table tr, .ex-table td { display: block; width: 100%; }
+    .ex-table tr {
+      display: grid;
+      grid-template-columns: 24px 1fr auto;
+      grid-template-rows: auto auto;
+      column-gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(46,46,46,0.5);
+      align-items: start;
+    }
+    .ex-table tr:last-child { border-bottom: none; }
+    .ex-table td:nth-child(1) { grid-column: 1; grid-row: 1 / 3; padding: 2px 0 0; font-size: 10px; }
+    .ex-table td:nth-child(2) { grid-column: 2; grid-row: 1; padding: 0; }
+    .ex-table td:nth-child(3) { grid-column: 3; grid-row: 1; padding: 0; text-align: right; white-space: nowrap; font-size: 12px; }
+    .ex-table td:nth-child(4) { grid-column: 2 / 4; grid-row: 2; padding: 4px 0 0; font-size: 12px; }
+    .ex-table td:nth-child(5) { display: none; }
+    .ex-name { font-size: 13px; line-height: 1.3; }
+    .ex-tip { font-size: 11px; margin-top: 2px; }
+    .weight-cell { white-space: normal; word-break: break-word; }
     .meal-row { grid-template-columns: 80px 1fr; }
     .meal-kcal, .meal-protein { display: none; }
-    .ex-table th:nth-child(5), .ex-table td:nth-child(5) { display: none; }
     .prog-block { padding: 18px 16px; }
     .kpi-grid { gap: 8px; }
     .kpi-card { padding: 14px 10px; }
