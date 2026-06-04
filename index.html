@@ -2704,6 +2704,14 @@
   .act-cell-future { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); }
   .act-cell-empty { background: transparent; }
 
+  /* ══ MY PROGRESS BLOCK ══════════════════════════════════ */
+  .my-progress-block {}
+  .mp-metric-ctrl .seg-btn, .mp-period-ctrl .seg-btn { flex: 1; text-align: center; }
+  @media (max-width: 500px) {
+    .mp-metric-ctrl .seg-btn { font-size: 10px; padding: 5px 4px; letter-spacing: 0; }
+    .mp-period-ctrl .seg-btn { font-size: 10px; padding: 5px 4px; }
+  }
+
   /* ══ MOBILE OVERRIDES ════════════════════════════════════ */
   @media (max-width: 700px) {
     .header { padding: 14px 16px 10px; }
@@ -3574,26 +3582,50 @@
     </div>
   </div>
 
-  <!-- ГРАФІК ВАГИ -->
-  <div class="prog-block">
-    <div class="blk-hd">
+  <!-- МІЙ ПРОГРЕС -->
+  <div class="prog-block my-progress-block">
+    <div class="blk-hd" style="margin-bottom:14px">
       <div class="blk-hd-l">
         <div class="blk-icon">
-          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><polyline points="7 16 11 10 15 14 19 8"/></svg>
         </div>
-        <div class="blk-title">Графік ваги</div>
-      </div>
-      <div class="seg-ctrl">
-        <button class="seg-btn active" id="ctab-dates" onclick="switchChartTab('dates')">По датах</button>
-        <button class="seg-btn" id="ctab-weeks" onclick="switchChartTab('weeks')">По тижнях</button>
+        <div class="blk-title">Мій прогрес</div>
       </div>
     </div>
-    <div class="chart-wrap" id="chart-wrap">
-      <svg id="weight-chart" viewBox="0 0 360 180" width="100%" style="min-width:280px"></svg>
+    <!-- Metric selector -->
+    <div class="seg-ctrl mp-metric-ctrl" style="width:100%;margin-bottom:14px;display:flex">
+      <button class="seg-btn active" id="mp-m-weight" onclick="switchMetric('weight')">Вага</button>
+      <button class="seg-btn" id="mp-m-waist"  onclick="switchMetric('waist')">Талія</button>
+      <button class="seg-btn" id="mp-m-chest"  onclick="switchMetric('chest')">Груди</button>
+      <button class="seg-btn" id="mp-m-hips"   onclick="switchMetric('hips')">Стегна</button>
+      <button class="seg-btn" id="mp-m-bicep"  onclick="switchMetric('bicep')">Біцепс</button>
+    </div>
+    <!-- Period selector -->
+    <div class="seg-ctrl mp-period-ctrl" style="width:100%;margin-bottom:16px;display:flex">
+      <button class="seg-btn active" id="mp-p-week"   onclick="switchPeriod('week')">Тиждень</button>
+      <button class="seg-btn" id="mp-p-month"  onclick="switchPeriod('month')">Місяць</button>
+      <button class="seg-btn" id="mp-p-3m"     onclick="switchPeriod('3m')">3 місяці</button>
+      <button class="seg-btn" id="mp-p-year"   onclick="switchPeriod('year')">Рік</button>
+      <button class="seg-btn" id="mp-p-all"    onclick="switchPeriod('all')">Усі</button>
+    </div>
+    <!-- Apple Health style summary header -->
+    <div id="mp-summary" style="margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:2px" id="mp-summary-label">СЕРЕДНЄ</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums" id="mp-summary-val">—</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:3px" id="mp-summary-period">—</div>
+    </div>
+    <!-- Chart -->
+    <div class="chart-wrap" id="chart-wrap" style="position:relative">
+      <svg id="weight-chart" viewBox="0 0 360 180" width="100%" style="min-width:280px;overflow:visible"></svg>
+      <div id="mp-tooltip" style="display:none;position:absolute;background:rgba(20,20,26,0.95);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px 10px;pointer-events:none;z-index:10">
+        <div style="font-size:10px;color:var(--muted)" id="mp-tt-date"></div>
+        <div style="font-size:14px;font-weight:700;color:#fff" id="mp-tt-val"></div>
+      </div>
     </div>
     <div id="chart-empty" style="display:none;text-align:center;padding:32px 20px;color:var(--muted);font-size:13px">
-      Додай перший запис ваги — і графік з'явиться тут
+      Додай перший замір — і графік з'явиться тут
     </div>
+    <!-- Forecast row (for weight only) -->
     <div class="forecast-row" id="forecast-row" style="display:none">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span id="forecast-text"></span>
@@ -3637,13 +3669,17 @@
     <div class="blk-hd">
       <div class="blk-hd-l">
         <div class="blk-icon c-orange">
-          <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M2 12h3m14 0h3M5 12a7 7 0 1 0 14 0A7 7 0 0 0 5 12zM8 12h8M12 8v8"/><line x1="2" y1="4" x2="22" y2="4"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
         </div>
         <div>
           <div class="blk-title">Оновити заміри</div>
-          <div class="blk-sub">Введи сьогоднішні показники</div>
+          <div class="blk-sub">Введи показники для обраної дати</div>
         </div>
       </div>
+    </div>
+    <div class="measure-field" style="margin-bottom:10px">
+      <label>Дата заміру</label>
+      <input type="date" id="m-date" style="color-scheme:dark">
     </div>
     <div class="measure-grid">
       <div class="measure-field"><label>Вага (кг)</label><input type="number" id="m-weight" placeholder="—" step="0.1" inputmode="decimal"></div>
@@ -4632,11 +4668,29 @@ let weightLogsAll = [];
 let chartMode = 'dates';
 let userProfile = null;
 
+// chart state
+let mpMetric = 'weight';
+let mpPeriod = 'all';
+
+function switchMetric(m) {
+  mpMetric = m;
+  ['weight','waist','chest','hips','bicep'].forEach(k => {
+    const el = document.getElementById('mp-m-' + k);
+    if (el) el.classList.toggle('active', k === m);
+  });
+  renderProgressChart();
+}
+function switchPeriod(p) {
+  mpPeriod = p;
+  ['week','month','3m','year','all'].forEach(k => {
+    const el = document.getElementById('mp-p-' + k);
+    if (el) el.classList.toggle('active', k === p);
+  });
+  renderProgressChart();
+}
 function switchChartTab(mode) {
   chartMode = mode;
-  document.getElementById('ctab-dates').classList.toggle('active', mode === 'dates');
-  document.getElementById('ctab-weeks').classList.toggle('active', mode === 'weeks');
-  renderWeightChart(weightLogsAll);
+  renderProgressChart();
 }
 
 async function loadProgress() {
@@ -4739,9 +4793,13 @@ async function loadProgress() {
   setElPr('sd-lost', lost !== null ? (lost > 0 ? lost : '0') : '—');
 
   // Chart
-  renderWeightChart(weightLogsAll);
+  renderProgressChart();
 
   // Fill measurement inputs with latest values
+  // Set date picker to today
+  const dateEl = document.getElementById('m-date');
+  if (dateEl && !dateEl.value) dateEl.value = new Date().toISOString().split('T')[0];
+
   if (latestMeas) {
     if (latestMeas.weight_kg) document.getElementById('m-weight').value = latestMeas.weight_kg;
     if (latestMeas.waist_cm) document.getElementById('m-waist').value = latestMeas.waist_cm;
@@ -4807,7 +4865,8 @@ function renderMeasurementsTable(rows) {
 
 async function saveMeasurements() {
   if (!currentUser) return;
-  const today = new Date().toISOString().split('T')[0];
+  const dateEl = document.getElementById('m-date');
+  const today = (dateEl && dateEl.value) ? dateEl.value : new Date().toISOString().split('T')[0];
   const weight = parseFloat(document.getElementById('m-weight').value) || null;
   const waist  = parseFloat(document.getElementById('m-waist').value)  || null;
   const chest  = parseFloat(document.getElementById('m-chest').value)  || null;
@@ -4829,81 +4888,147 @@ async function saveMeasurements() {
   else { showToast('⚠️ Помилка збереження'); console.error(error); }
 }
 
-function renderWeightChart(logs) {
+function renderProgressChart() {
+  if (!measAllData && !weightLogsAll) return;
   const svg = document.getElementById('weight-chart');
   const empty = document.getElementById('chart-empty');
+  if (!svg) return;
 
-  if (!logs || logs.length < 2) {
+  // metric config
+  const metricCfg = {
+    weight: { field: 'weight_kg', unit: 'кг', label: 'Вага' },
+    waist:  { field: 'waist_cm',  unit: 'см', label: 'Талія' },
+    chest:  { field: 'chest_cm',  unit: 'см', label: 'Груди' },
+    hips:   { field: 'hips_cm',   unit: 'см', label: 'Стегна' },
+    bicep:  { field: 'bicep_cm',  unit: 'см', label: 'Біцепс' },
+  };
+  const cfg = metricCfg[mpMetric] || metricCfg.weight;
+  const allRaw = measAllData || [];
+
+  // filter by period
+  const now = new Date();
+  let cutoff = null;
+  if (mpPeriod === 'week')  { cutoff = new Date(now); cutoff.setDate(now.getDate() - 7); }
+  if (mpPeriod === 'month') { cutoff = new Date(now); cutoff.setMonth(now.getMonth() - 1); }
+  if (mpPeriod === '3m')    { cutoff = new Date(now); cutoff.setMonth(now.getMonth() - 3); }
+  if (mpPeriod === 'year')  { cutoff = new Date(now); cutoff.setFullYear(now.getFullYear() - 1); }
+
+  let filtered = allRaw.filter(m => m[cfg.field] != null);
+  if (cutoff) filtered = filtered.filter(m => new Date(m.date) >= cutoff);
+  filtered = [...filtered].sort((a,b) => a.date < b.date ? -1 : 1);
+
+  if (filtered.length < 1) {
     svg.style.display = 'none';
-    empty.style.display = 'block';
+    if (empty) { empty.style.display = 'block'; empty.textContent = 'Немає даних за обраний період'; }
+    document.getElementById('mp-summary-val').textContent = '—';
+    document.getElementById('mp-summary-period').textContent = '—';
+    document.getElementById('mp-summary-label').textContent = cfg.label.toUpperCase();
     return;
   }
   svg.style.display = 'block';
-  empty.style.display = 'none';
+  if (empty) empty.style.display = 'none';
 
-  let points = [];
-  if (chartMode === 'weeks') {
-    const weeks = {};
-    logs.forEach(l => {
-      const d = new Date(l.date);
-      const weekStart = new Date(d);
-      weekStart.setDate(d.getDate() - d.getDay() + 1);
-      const key = weekStart.toISOString().split('T')[0];
-      if (!weeks[key]) weeks[key] = [];
-      weeks[key].push(parseFloat(l.weight_kg));
-    });
-    points = Object.entries(weeks)
-      .sort((a,b) => a[0] < b[0] ? -1 : 1)
-      .map(([date, vals]) => ({
-        weight: +(vals.reduce((s,v) => s+v, 0) / vals.length).toFixed(1),
-        label: 'Тиж ' + new Date(date).toLocaleDateString('uk', {day:'numeric', month:'short'})
-      }));
-  } else {
-    points = logs.map(l => ({
-      weight: parseFloat(l.weight_kg),
-      label: new Date(l.date).toLocaleDateString('uk', {day:'numeric', month:'short'})
-    }));
-  }
+  const vals = filtered.map(m => parseFloat(m[cfg.field]));
+  const avg = +(vals.reduce((s,v)=>s+v,0)/vals.length).toFixed(1);
+  const firstDate = new Date(filtered[0].date);
+  const lastDate  = new Date(filtered[filtered.length-1].date);
+  const fmtDate = d => d.toLocaleDateString('uk', { day:'numeric', month:'short', year: d.getFullYear() !== now.getFullYear() ? 'numeric' : undefined });
 
-  if (points.length < 2) { svg.style.display = 'none'; empty.style.display = 'block'; return; }
+  document.getElementById('mp-summary-label').textContent = 'СЕРЕДНЄ · ' + cfg.label.toUpperCase();
+  document.getElementById('mp-summary-val').textContent = avg + ' ' + cfg.unit;
+  document.getElementById('mp-summary-period').textContent = filtered.length === 1
+    ? fmtDate(firstDate)
+    : fmtDate(firstDate) + ' – ' + fmtDate(lastDate);
 
-  const W = 360, H = 180, padL = 38, padR = 10, padT = 14, padB = 32;
-  const weights = points.map(p => p.weight);
-  const minW = Math.min(...weights) - 1;
-  const maxW = Math.max(...weights) + 1;
-  const xOf = i => padL + (i / (points.length - 1)) * (W - padL - padR);
-  const yOf = w => padT + (1 - (w - minW) / (maxW - minW)) * (H - padT - padB);
+  // Chart dimensions
+  const W=360, H=160, padL=42, padR=12, padT=10, padB=28;
+  const minV = Math.min(...vals), maxV = Math.max(...vals);
+  const range = maxV - minV || 1;
+  const lo = minV - range * 0.12, hi = maxV + range * 0.12;
+  const xOf = i => padL + (i / Math.max(filtered.length-1, 1)) * (W - padL - padR);
+  const yOf = v => padT + (1 - (v - lo) / (hi - lo)) * (H - padT - padB);
 
+  // Grid lines (4 horizontal)
   let grid = '';
-  for (let i = 0; i <= 4; i++) {
-    const w = minW + (maxW - minW) * i / 4;
-    const y = yOf(w);
-    grid += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#222" stroke-width="1"/>`;
-    grid += `<text x="${padL-4}" y="${y+4}" text-anchor="end" font-size="8" fill="#555" font-family="Inter,sans-serif">${w.toFixed(0)}</text>`;
+  for (let i=0; i<=3; i++) {
+    const v = lo + (hi-lo)*i/3;
+    const y = yOf(v);
+    grid += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+    grid += `<text x="${padL-5}" y="${(y+3.5).toFixed(1)}" text-anchor="end" font-size="9" fill="rgba(255,255,255,0.3)" font-family="Inter,sans-serif">${v.toFixed(v > 10 ? 0 : 1)}</text>`;
   }
 
-  const pathD = points.map((p, i) => `${i===0?'M':'L'}${xOf(i).toFixed(1)},${yOf(p.weight).toFixed(1)}`).join(' ');
-  const areaD = pathD + ` L${xOf(points.length-1)},${H-padB} L${padL},${H-padB} Z`;
+  // Path
+  const pts = filtered.map((m,i) => ({ x: xOf(i), y: yOf(parseFloat(m[cfg.field])), v: parseFloat(m[cfg.field]), d: m.date }));
+  const pathD = pts.map((p,i) => `${i===0?'M':'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  const areaD = pathD + ` L${pts[pts.length-1].x.toFixed(1)},${H-padB} L${padL},${H-padB} Z`;
 
-  const step = Math.max(1, Math.ceil(points.length / 6));
+  // X-axis labels
+  const step = Math.max(1, Math.ceil(pts.length / 5));
   let labels = '';
-  points.forEach((p, i) => {
-    if (i % step === 0 || i === points.length - 1)
-      labels += `<text x="${xOf(i)}" y="${H-padB+14}" text-anchor="middle" font-size="8" fill="#555" font-family="Inter,sans-serif">${p.label}</text>`;
+  pts.forEach((p,i) => {
+    if (i % step === 0 || i === pts.length-1) {
+      const d = new Date(p.d);
+      const lbl = d.toLocaleDateString('uk', { day:'numeric', month:'short' });
+      labels += `<text x="${p.x.toFixed(1)}" y="${H-padB+14}" text-anchor="middle" font-size="8.5" fill="rgba(255,255,255,0.3)" font-family="Inter,sans-serif">${lbl}</text>`;
+    }
   });
 
-  const circles = points.map((p, i) =>
-    `<circle cx="${xOf(i).toFixed(1)}" cy="${yOf(p.weight).toFixed(1)}" r="3" fill="#e8ff47"><title>${p.label}: ${p.weight} кг</title></circle>`
+  // Dots with hover targets
+  const dots = pts.map((p,i) =>
+    `<g class="mp-dot-group" style="cursor:pointer" onmouseenter="showMpTooltip(event,${i})" onmouseleave="hideMpTooltip()" ontouchstart="showMpTooltip(event,${i})" data-i="${i}">
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="8" fill="transparent"/>
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${i===pts.length-1?3.5:2.5}" fill="${i===pts.length-1?'#e8ff47':'rgba(232,255,71,0.6)'}" stroke="${i===pts.length-1?'rgba(0,0,0,0.5)':'none'}" stroke-width="${i===pts.length-1?1.5:0}">
+        <title>${new Date(p.d).toLocaleDateString('uk',{day:'numeric',month:'long'})}: ${p.v} ${cfg.unit}</title>
+      </circle>
+    </g>`
   ).join('');
 
-  svg.innerHTML = `<defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0%" stop-color="#e8ff47" stop-opacity="0.18"/>
-    <stop offset="100%" stop-color="#e8ff47" stop-opacity="0"/>
-  </linearGradient></defs>
+  svg.innerHTML = `<defs>
+    <linearGradient id="mpGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8ff47" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#e8ff47" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
   ${grid}
-  <path d="${areaD}" fill="url(#areaGrad)"/>
-  <path d="${pathD}" fill="none" stroke="#e8ff47" stroke-width="2" stroke-linejoin="round"/>
-  ${circles}${labels}`;
+  <path d="${areaD}" fill="url(#mpGrad)"/>
+  <path d="${pathD}" fill="none" stroke="#e8ff47" stroke-width="1.5" stroke-linejoin="round"/>
+  ${dots}${labels}`;
+
+  // store pts for tooltip
+  svg._pts = pts;
+  svg._cfg = cfg;
+}
+
+// keep old name as alias for backward compat
+function renderWeightChart(logs) { renderProgressChart(); }
+
+// Tooltip helpers
+function showMpTooltip(e, i) {
+  const svg = document.getElementById('weight-chart');
+  const tt = document.getElementById('mp-tooltip');
+  if (!svg || !tt || !svg._pts) return;
+  const p = svg._pts[i];
+  const cfg = svg._cfg;
+  document.getElementById('mp-tt-date').textContent = new Date(p.d).toLocaleDateString('uk',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('mp-tt-val').textContent = p.v + ' ' + cfg.unit;
+  // position relative to chart-wrap
+  const wrap = document.getElementById('chart-wrap');
+  const wRect = wrap.getBoundingClientRect();
+  const svgEl = svg.getBoundingClientRect();
+  const scaleX = svgEl.width / 360;
+  const scaleY = svgEl.height / 160;
+  let tx = p.x * scaleX + (svgEl.left - wRect.left);
+  let ty = p.y * scaleY + (svgEl.top - wRect.top);
+  tt.style.display = 'block';
+  const ttW = tt.offsetWidth || 100;
+  if (tx + ttW + 10 > wRect.width) tx -= ttW + 8;
+  else tx += 8;
+  tt.style.left = Math.max(0, tx) + 'px';
+  tt.style.top = Math.max(0, ty - 30) + 'px';
+}
+function hideMpTooltip() {
+  const tt = document.getElementById('mp-tooltip');
+  if (tt) tt.style.display = 'none';
 }
 
 // ── MEASUREMENT FILTER ────────────────────────────────────
